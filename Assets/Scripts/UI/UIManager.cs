@@ -20,7 +20,7 @@ public class UIManager : MonoBehaviour
     }
     private void Awake()
     {
-        //uiOnlineLobby.Setup();
+        uiOnlineLobby.OnSetUp();
         _instance = GameObject.FindAnyObjectByType<UIManager>();
         DontDestroyOnLoad(this);
     }
