@@ -27,6 +27,7 @@ public class SocketCommunication
         [field: SerializeField] public Vector3 position;
         [field: SerializeField] public Vector3 direction;
         public Room[] rooms;
+        public string error;
     }
 
     [System.Serializable]
@@ -70,10 +71,10 @@ public class SocketCommunication
                     break;
                 case "rooms":
                     //do sth
-                    Debug.Log(response);
-                    Debug.Log(json.rooms[0].name);
-                    Debug.Log(json.rooms[0].id);
-                    Debug.Log(json.rooms[0].game_mode);
+                    //UIManger.Instance.ShowRoom(json.rooms);
+                    break;
+                case "errpr":
+                    //handle error
                     break;
             }
             Debug.Log(json.event_name);

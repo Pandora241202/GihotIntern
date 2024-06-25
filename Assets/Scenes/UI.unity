@@ -1464,7 +1464,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btnCreateRoom: {fileID: 425991159}
-  btnGetRooms: {fileID: 0}
+  btnGetRooms: {fileID: 1883085806}
 --- !u!1 &883567282
 GameObject:
   m_ObjectHideFlags: 0
@@ -4486,7 +4486,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 830798376}
         m_TargetAssemblyTypeName: UIOnlineLobby, Assembly-CSharp
-        m_MethodName: OnClickCreateRoom_Clicked
+        m_MethodName: OnGetRoom_Clicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
