@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -6,7 +7,6 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     public UIOnlineLobby uiOnlineLobby;
-    
     public static UIManager _instance { get; private set; }
 
 
@@ -27,7 +27,7 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-       // Debug.Log(Player_ID.MyPlayerID);
+        // Debug.Log(Player_ID.MyPlayerID);
     }
 
 }

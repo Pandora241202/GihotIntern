@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Net.Sockets;
 using System.Threading;
 using System.Text;
+using System;
 
 [System.Serializable]
 class ReceivedData
@@ -72,7 +73,10 @@ public class SocketCommunication
                     break;
                 case "rooms":
                     //do sth
-                    UIManager._instance.uiOnlineLobby.InitListRoom(json.rooms);
+                    Dispatcher.EnqueueToMainThread(() =>
+                    {
+                        UIManager._instance.uiOnlineLobby.InitListRoom(json.rooms);
+                    });
                     break;
             }
             Debug.Log(json.event_name);

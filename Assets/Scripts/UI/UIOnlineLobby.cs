@@ -54,10 +54,10 @@ public class UIOnlineLobby : MonoBehaviour
 
     public void InitListRoom(Room[] rooms)
     {
-        Debug.Log("Length"+rooms.Length);
+        //Debug.Log("Length"+rooms.Length);
         for (int i = 0; i < rooms.Length; i++)
         {
-            Debug.Log(rooms[i].game_mode+" "+rooms[i].name);
+            //Debug.Log(rooms[i].game_mode+" "+rooms[i].name);
             GameObject btnContent = Instantiate(prefabBtnRoom, scrollViewContent.transform.position, Quaternion.identity);
             btnContent.transform.SetParent(scrollViewContent.transform);
         }
