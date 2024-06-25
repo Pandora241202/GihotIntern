@@ -59,7 +59,7 @@ public class SocketCommunication
     {
         while (true)
         {
-            var buffer = new byte[1_024];
+            var buffer = new byte[1_024 * 64]; //64 KB for receiving data
             var received = await socket.ReceiveAsync(buffer, SocketFlags.None);
             var response = Encoding.UTF8.GetString(buffer, 0, received);
 
