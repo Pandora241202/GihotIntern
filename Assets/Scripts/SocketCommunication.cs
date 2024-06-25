@@ -26,6 +26,15 @@ public class SocketCommunication
         public string player_id;
         [field: SerializeField] public Vector3 position;
         [field: SerializeField] public Vector3 direction;
+        public Room[] rooms;
+    }
+
+    [System.Serializable]
+    class Room
+    {
+        public string id;
+        public string name;
+        public string game_mode;
     }
 
     public SocketCommunication()
@@ -61,8 +70,14 @@ public class SocketCommunication
                     break;
                 case "rooms":
                     //do sth
+                    Debug.Log(response);
+                    Debug.Log(json.rooms[0].name);
+                    Debug.Log(json.rooms[0].id);
+                    Debug.Log(json.rooms[0].game_mode);
                     break;
             }
+            Debug.Log(json.event_name);
+        
         }
     }
 
