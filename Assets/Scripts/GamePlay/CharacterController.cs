@@ -18,6 +18,9 @@ public class CharacterController : MonoBehaviour
         return _instance;
     }
 
+    private void Awake() {
+      //  SocketCommunication.GetInstance();
+    }
     private void Update() {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
@@ -26,13 +29,7 @@ public class CharacterController : MonoBehaviour
     }
     public void ShootAtTarget(GameObject target)
     {
-        // Shoot at target
-        //GameObject bullet = Instantiate(prefabBullet,transform.position, Quaternion.identity);
-        Vector3 shootDirection = (target.transform.position - transform.position).normalized;
-        GameObject bullet = Instantiate(prefabBullet, transform.position , Quaternion.LookRotation(shootDirection));
-        bullet.transform.Translate(shootDirection*5f);
-
-        Debug.Log("Bang! Bang! Bang!"+target.name);
-
+        Debug.Log("ShootAtTarget");
+        AllManager.Instance().bulletManager.SpawnBullet(transform.position,target.transform.position,1);
     }
 }

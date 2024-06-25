@@ -2,46 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using UnityEngine;
+
 public class BulletInfo
 {
     public Transform bulletObj;
-    float speed;
+    private float speed = 5f;
     public bool isNeedDestroy;
+    private Vector3 direction;
 
-    public BulletInfo()
-    {
-    }
-
-    public BulletInfo(Transform obj)
+    public BulletInfo(Transform obj, Vector3 targetDirection)
     {
         this.bulletObj = obj;
+        this.direction = targetDirection.normalized;
         Setup();
     }
 
     public void Setup()
     {
         isNeedDestroy = false;
-        //meteoObj.localScale = Vector3.one * Random.Range(1, 3);
-        speed = 5;
     }
 
     public void Move()
     {
-        bulletObj.Translate(Vector3.up * speed * Time.deltaTime);
-
-        if (bulletObj.position.y > 10)
-        {
-            isNeedDestroy = true;
-        }
+        bulletObj.position+= direction * speed * Time.deltaTime;
     }
 }
-
 public class BulletManager
 {
     public List<BulletInfo> bulletInfoList = new List<BulletInfo>();
-
-    //public BulletConfig bulletConfig, beamBulletConfig, burstBulletConfig;
-
+    public GunConfig bulletConfig;
 
     public void MyUpdate()
     {
@@ -65,7 +55,7 @@ public class BulletManager
         {
             if (bulletInfoList[i].isNeedDestroy)
             {
-                GameObject.Destroy(bulletInfoList[i].bulletObj.gameObject);
+                //GameObject.Destroy(bulletInfoList[i].bulletObj.gameObject);
                 bulletInfoList.RemoveAt(i);
             }
         }
@@ -82,9 +72,16 @@ public class BulletManager
         }
     }
 
-    public void SpawnBullet(Vector3 posSpawn, int bulletId)
+    public void SpawnBullet(Vector3 posSpawn,Vector3 target,int gunId)
     {
         Debug.Log("Spawn Bullet");
-        GameObject obj;
+        Vector3 direction = (target - posSpawn).normalized;
+        Quaternion rotation = Quaternion.LookRotation(direction);
+
+        GameObject obj = GameObject.Instantiate(bulletConfig.lsBulletType[gunId].bulletPrefab, posSpawn,Quaternion.identity);
+     
+        BulletInfo newBullet = new BulletInfo(obj.transform, direction);
+        bulletInfoList.Add(newBullet);
+        Debug.Log($"Spawned Bullet. Total bullets: {bulletInfoList.Count}");   
     }
-}
+}   

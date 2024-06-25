@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Gun
+  m_EditorClassIdentifier: Assembly-CSharp::GunConfig
+  lsBulletType:
+  - Damage: 1
+    Firerate: 1
+    BulletSpeed: 1
+    gunPrefab: {fileID: 2978130384556725872, guid: d4ea61f929d4eb440be2721626ac92a7, type: 3}
+    bulletPrefab: {fileID: 4236135470487450587, guid: 42e84ec822706c34084434b507d93673, type: 3}
+  - Damage: 1
+    Firerate: 1
+    BulletSpeed: 1
+    gunPrefab: {fileID: 8901172656677072605, guid: a92941620d7cefc41a9622c861eea0c1, type: 3}
+    bulletPrefab: {fileID: 5369569127531060987, guid: d77e4580d31e4224cade8400822672f3, type: 3}
