@@ -30,7 +30,7 @@ public class SocketCommunication
     }
 
     [System.Serializable]
-    class Room
+    public class Room
     {
         public string id;
         public string name;
@@ -70,10 +70,8 @@ public class SocketCommunication
                     break;
                 case "rooms":
                     //do sth
-                    Debug.Log(response);
-                    Debug.Log(json.rooms[0].name);
-                    Debug.Log(json.rooms[0].id);
-                    Debug.Log(json.rooms[0].game_mode);
+                    Debug.Log("Con c");
+                    UIManager.GetInstance().uiOnlineLobby.InitListRoom(json.rooms);
                     break;
             }
             Debug.Log(json.event_name);

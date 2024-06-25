@@ -7,6 +7,8 @@ public class UIOnlineLobby : MonoBehaviour
 {
     public Button btnCreateRoom;
     public Button btnGetRooms;
+    [SerializeField] private GameObject prefabBtnRoom;
+    public GameObject scrollViewContent;
 
     [System.Serializable]
     class MainMenuEvent 
@@ -38,12 +40,26 @@ public class UIOnlineLobby : MonoBehaviour
     public void OnGetRoom_Clicked()
     {
         SendData data = new SendData(new MainMenuEvent("get_rooms", true));
+        
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
+        
     }
     public void OnClickCreateRoom_Clicked()
     {
         SendData data = new SendData(new MainMenuEvent("create_rooms", true, "Room 1", "hard"));
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
+        
         //SocketCommunication.GetInstance().CreateRoom();
+    }
+
+    public void InitListRoom(SocketCommunication.Room[] rooms)
+    {
+        Debug.Log("Length"+rooms.Length);
+        for (int i = 0; i < rooms.Length; i++)
+        {
+            Debug.Log(rooms[i].game_mode+" "+rooms[i].name);
+            GameObject btnContent = Instantiate(prefabBtnRoom, scrollViewContent.transform.position, Quaternion.identity);
+            btnContent.transform.SetParent(scrollViewContent.transform);
+        }
     }
 }
