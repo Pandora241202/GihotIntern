@@ -9,17 +9,27 @@ public class SocketCommunication
     private static SocketCommunication instance;
     public static SocketCommunication GetInstance()
     {
-        if(instance == null) instance = new SocketCommunication();
+        if (instance == null) instance = new SocketCommunication();
         return instance;
     }
     Socket socket;
-    public string address = "192.168.43.174";
+    public string address = "127.0.0.1";
     public int port = 9999;
     Thread receiveData;
+    public string player_id;
+
+    [System.Serializable]
+    class ReceivedData
+    {
+        public string event_name;
+        public string id;
+        public string player_id;
+        [field: SerializeField] public Vector3 position;
+        [field: SerializeField] public Vector3 direction;
+    }
 
     public SocketCommunication()
     {
-        Debug.Log("SocketCommunication");
         ConnectToServer();
     }
 
@@ -40,7 +50,19 @@ public class SocketCommunication
             var buffer = new byte[1_024];
             var received = await socket.ReceiveAsync(buffer, SocketFlags.None);
             var response = Encoding.UTF8.GetString(buffer, 0, received);
-            Debug.Log(response);
+
+            ReceivedData json = JsonUtility.FromJson<ReceivedData>(response);
+
+            switch (json.event_name)
+            {
+                case "provide id":
+                    //set player id
+                    Player_ID.MyPlayerID = json.id;
+                    break;
+                case "rooms":
+                    //do sth
+                    break;
+            }
         }
     }
 
