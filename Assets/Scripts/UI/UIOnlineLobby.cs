@@ -52,7 +52,7 @@ public class UIOnlineLobby : MonoBehaviour
         //SocketCommunication.GetInstance().CreateRoom();
     }
 
-    public void InitListRoom(SocketCommunication.Room[] rooms)
+    public void InitListRoom(Room[] rooms)
     {
         Debug.Log("Length"+rooms.Length);
         for (int i = 0; i < rooms.Length; i++)

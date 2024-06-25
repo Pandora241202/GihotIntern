@@ -4,6 +4,26 @@ using UnityEngine;
 using System.Net.Sockets;
 using System.Threading;
 using System.Text;
+
+[System.Serializable]
+class ReceivedData
+{
+    public string event_name;
+    public string id;
+    public string player_id;
+    [field: SerializeField] public Vector3 position;
+    [field: SerializeField] public Vector3 direction;
+    public Room[] rooms;
+}
+
+[System.Serializable]
+public class Room
+{
+    public string id;
+    public string name;
+    public string game_mode;
+}
+
 public class SocketCommunication
 {
     private static SocketCommunication instance;
@@ -18,24 +38,6 @@ public class SocketCommunication
     Thread receiveData;
     public string player_id;
 
-    [System.Serializable]
-    class ReceivedData
-    {
-        public string event_name;
-        public string id;
-        public string player_id;
-        [field: SerializeField] public Vector3 position;
-        [field: SerializeField] public Vector3 direction;
-        public Room[] rooms;
-    }
-
-    [System.Serializable]
-    public class Room
-    {
-        public string id;
-        public string name;
-        public string game_mode;
-    }
 
     public SocketCommunication()
     {
@@ -70,8 +72,7 @@ public class SocketCommunication
                     break;
                 case "rooms":
                     //do sth
-                    Debug.Log("Con c");
-                    UIManager.GetInstance().uiOnlineLobby.InitListRoom(json.rooms);
+                    UIManager._instance.uiOnlineLobby.InitListRoom(json.rooms);
                     break;
             }
             Debug.Log(json.event_name);
