@@ -36,7 +36,7 @@ public class SocketCommunication
         if (instance == null) instance = new SocketCommunication();
         return instance;
     }
-    Socket socket;
+    UdpClient udpClient;
     public string address = "127.0.0.1";
     public int port = 9999;
     Thread receiveData;
@@ -50,9 +50,13 @@ public class SocketCommunication
 
     async void ConnectToServer()
     {
-        socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-        await socket.ConnectAsync(address, port);
-        socket.ReceiveBufferSize = 1024 * 64; //set max 64KB for receiving
+        udpClient = new UdpClient();
+        udpClient.Client.ReceiveBufferSize = 1024 * 64;
+
+        string message = "{ \"_event\" : {\"event_name\" : \"first connect\"}}";
+        byte[] data = Encoding.UTF8.GetBytes(message);
+        await udpClient.SendAsync(data, data.Length, address, 9999);
+
         Debug.Log("Connected to server");
         receiveData = new Thread(new ThreadStart(handleReceivedData));
         receiveData.IsBackground = true;
@@ -63,9 +67,8 @@ public class SocketCommunication
     {
         while (true)
         {
-            var buffer = new byte[65536]; //64 KB for receiving data
-            var received = await socket.ReceiveAsync(buffer, SocketFlags.None);
-            var response = Encoding.UTF8.GetString(buffer, 0, received);
+            var received = await udpClient.ReceiveAsync();
+            var response = Encoding.UTF8.GetString(received.Buffer);
 
             ReceivedData json = JsonUtility.FromJson<ReceivedData>(response);
 
@@ -82,12 +85,18 @@ public class SocketCommunication
                     Dispatcher.EnqueueToMainThread(() => UIManager._instance.uiOnlineLobby.InitListRoom(json.rooms));
                     break;
                 case "new player join":
-                    Dispatcher.EnqueueToMainThread(() => AllManager.Instance().playerManager.AddPlayer(json.player_name, json.player_id));
-                    UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
+                    Dispatcher.EnqueueToMainThread(() =>
+                    {
+                        AllManager.Instance().playerManager.AddPlayer(json.player_name, json.player_id);
+                        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
+                    });
                     break;
                 case "joined":
-                    Dispatcher.EnqueueToMainThread(() => AllManager.Instance().playerManager.AddPlayer(json.player_name, json.player_id));
-                    UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
+                    Dispatcher.EnqueueToMainThread(() =>
+                    {
+                        AllManager.Instance().playerManager.AddPlayer(json.player_name, json.player_id);
+                        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
+                    });
                     break;
             }
             Debug.Log(json.event_name);
@@ -98,7 +107,7 @@ public class SocketCommunication
     public async void Send(string msg)
     {
         var messageBytes = Encoding.UTF8.GetBytes(msg);
-        await socket.SendAsync(messageBytes, SocketFlags.None);
+        await udpClient.SendAsync(messageBytes, messageBytes.Length, address, port);
     }
 
 }
