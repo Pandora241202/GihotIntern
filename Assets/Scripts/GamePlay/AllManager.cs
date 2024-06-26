@@ -23,10 +23,10 @@ public class AllManager : MonoBehaviour
         bulletManager.bulletConfig = bulletConfig;
     }
     private void Update() {
-        bulletManager.MyUpdate();
+        //bulletManager.MyUpdate();
 
     }
     private void LateUpdate() {
-        bulletManager.LateUpdate();
+        //bulletManager.LateUpdate();
     }
 }

@@ -34,7 +34,12 @@ public class UIMainMenu : MonoBehaviour
 
     public void ChangeLobbyListName(List<Player> players)
     {
-        
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            goPlayerList[i].SetActive(false);
+        }
+
         for (int i = 0; i < players.Count; i++)
         {
             lsTxtName[i].text = players[i].name;

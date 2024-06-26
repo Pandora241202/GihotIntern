@@ -74,18 +74,20 @@ public class SocketCommunication
                 case "provide id":
                     //set player id
                     Player_ID.MyPlayerID = json.id;
+                    Debug.Log(json.player_name);
+                    Dispatcher.EnqueueToMainThread(() => AllManager.Instance().playerManager.AddPlayer(json.player_name, json.id));
                     break;
                 case "rooms":
                     //do sth
                     Dispatcher.EnqueueToMainThread(() => UIManager._instance.uiOnlineLobby.InitListRoom(json.rooms));
                     break;
                 case "new player join":
-                    Debug.Log(json.player_id);
-                    Debug.Log(json.player_name);
+                    Dispatcher.EnqueueToMainThread(() => AllManager.Instance().playerManager.AddPlayer(json.player_name, json.player_id));
+                    UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
                     break;
                 case "joined":
-                    Debug.Log(json.player_id);
-                    Debug.Log(json.player_name);
+                    Dispatcher.EnqueueToMainThread(() => AllManager.Instance().playerManager.AddPlayer(json.player_name, json.player_id));
+                    UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
                     break;
             }
             Debug.Log(json.event_name);
