@@ -24,6 +24,7 @@ public class UIManager : MonoBehaviour
         uiOnlineLobby.OnSetUp();
         uiMainMenu.OnSetUp();
         _instance = GameObject.FindAnyObjectByType<UIManager>();
+        //new
         DontDestroyOnLoad(this);
     }
 

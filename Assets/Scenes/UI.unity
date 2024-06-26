@@ -393,6 +393,12 @@ MonoBehaviour:
   lsBtnForPlayer:
   - {fileID: 1648057674}
   - {fileID: 1210110017}
+  lsTxtName:
+  - {fileID: 531007583}
+  - {fileID: 1139516359}
+  goPlayerList:
+  - {fileID: 30275047}
+  - {fileID: 1455998674}
 --- !u!1 &81157918
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,7 +568,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &200232479
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5989,7 +5995,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1713628629
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6404,6 +6410,7 @@ GameObject:
   - component: {fileID: 1856316313}
   - component: {fileID: 1856316312}
   - component: {fileID: 1856316311}
+  - component: {fileID: 1856316314}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -6461,6 +6468,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1856316314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856316310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79c6db8e6cef36249845e648c1cc10d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletConfig: {fileID: 11400000, guid: 469f8991a5b8512489dac724d9bfa3df, type: 2}
 --- !u!1 &1876620804
 GameObject:
   m_ObjectHideFlags: 0

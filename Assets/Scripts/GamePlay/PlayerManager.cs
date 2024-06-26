@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class Player
 {
@@ -9,19 +10,24 @@ public class Player
 
 public class PlayerManager
 {
-    Player[] players;
+    public List<Player>lsPlayers=new List<Player>();
     int controlPlayerId;
 
     public PlayerManager()
     {
 
     }
-
-    public Player[] Players => players;
-
-
+    
     public Player GetControlPlayer()
     {
-        return players[controlPlayerId];
+        return lsPlayers[controlPlayerId];
+    }
+
+    public void AddPlayer(string name, string id)
+    {
+        Player newplayer = new Player();
+        newplayer.name = name;
+        newplayer.id = id;
+        lsPlayers.Add(newplayer);
     }
 }
