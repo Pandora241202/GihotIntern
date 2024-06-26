@@ -65,16 +65,19 @@ public class SocketCommunication
     async void ConnectToServer()
     {
         udpClient = new UdpClient();
+        Debug.Log("Buffer before set: " + udpClient.Client.ReceiveBufferSize);
         udpClient.Client.ReceiveBufferSize = 1024 * 64;
-
+        Debug.Log("Buffer after set: " + udpClient.Client.ReceiveBufferSize);
         string message = "{ \"_event\" : {\"event_name\" : \"first connect\"}}";
         byte[] data = Encoding.UTF8.GetBytes(message);
         await udpClient.SendAsync(data, data.Length, address, 9999);
 
-        Debug.Log("Connected to server");
-        receiveData = new Thread(new ThreadStart(handleReceivedData));
-        receiveData.IsBackground = true;
-        receiveData.Start();
+        //Debug.Log("Connected to server");
+        //receiveData = new Thread(new ThreadStart(handleReceivedData));
+        //receiveData.IsBackground = true;
+        //receiveData.Start();
+
+        handleReceivedData();
     }
 
     async void handleReceivedData()
@@ -92,37 +95,28 @@ public class SocketCommunication
                     //set player id in first connect
                     First_Connect data = JsonUtility.FromJson<First_Connect>(response);
                     Player_ID.MyPlayerID = data.id;
-                    Dispatcher.EnqueueToMainThread(() =>
-                    {
-                        AllManager.Instance().playerManager.AddPlayer(data.player_name, data.id);
-                        UIManager._instance.uiMainMenu.JoinCall(0);
-                    });
+                    AllManager.Instance().playerManager.AddPlayer(data.player_name, data.id);
+                    UIManager._instance.uiMainMenu.JoinCall(0);
                     break;
                 case "rooms":
                     //get available rooms
                     Rooms rooms = JsonUtility.FromJson<Rooms>(response);
-                    Dispatcher.EnqueueToMainThread(() => UIManager._instance.uiOnlineLobby.InitListRoom(rooms.rooms));
+                    UIManager._instance.uiOnlineLobby.InitListRoom(rooms.rooms);
                     break;
                 case "new player join":
                     //other player join room
                     SimplePlayerInfo playerInfo = JsonUtility.FromJson<SimplePlayerInfo>(response);
-                    Dispatcher.EnqueueToMainThread(() =>
-                    {
-                        AllManager.Instance().playerManager.AddPlayer(playerInfo.player_name, playerInfo.player_id);
-                        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
-                        UIManager._instance.uiMainMenu.JoinCall(0);
-                    });
+                    AllManager.Instance().playerManager.AddPlayer(playerInfo.player_name, playerInfo.player_id);
+                    UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
+                    UIManager._instance.uiMainMenu.JoinCall(0);
                     break;
                 case "joined":
                     //join a room
                     SimplePlayerInfo playerIn4 = JsonUtility.FromJson<SimplePlayerInfo>(response);
-                    Dispatcher.EnqueueToMainThread(() =>
-                    {
-                        AllManager.Instance().playerManager.AddPlayer(playerIn4.player_name, playerIn4.player_id);
-                        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
-                        UIManager._instance.uiOnlineLobby.OnGuessJoin();
-                        UIManager._instance.uiMainMenu.JoinCall(1);
-                    });
+                    AllManager.Instance().playerManager.AddPlayer(playerIn4.player_name, playerIn4.player_id);
+                    UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
+                    UIManager._instance.uiOnlineLobby.OnGuessJoin();
+                    UIManager._instance.uiMainMenu.JoinCall(1);
                     break;
             }
             Debug.Log(_event.event_name);
