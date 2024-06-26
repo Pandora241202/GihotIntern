@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 
-class Player
+public class Player
 {
     public Transform playerTrans;
+    public string name;
+    public string id;
 }
 
-class PlayerManager
+public class PlayerManager
 {
     Player[] players;
     int controlPlayerId;

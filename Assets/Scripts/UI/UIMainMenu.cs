@@ -9,13 +9,23 @@ public class UIMainMenu : MonoBehaviour
     [SerializeField] private List<GameObject> lsGOPlayer = new List<GameObject>();
     [SerializeField] private GameObject goOnline;
     [SerializeField] private Button btnOnline;
+    [SerializeField] private List<GameObject> lsBtnForPlayer = new List<GameObject>();
     public void OnSetUp()
     {
         lsGOPlayer[0].SetActive(true);
         lsGOPlayer[1].SetActive(false);
         goOnline.SetActive(false);
+        lsBtnForPlayer[0].SetActive(true);
+        lsBtnForPlayer[1].SetActive(false);
     }
 
+    public void ShowPlayerBtn()
+    {
+        lsBtnForPlayer[1].SetActive(true);
+        lsBtnForPlayer[0].SetActive(false);
+    }
+    
+    
     public void OnBtnClick(int index)
     {
         if (index == 0)
@@ -34,4 +44,5 @@ public class UIMainMenu : MonoBehaviour
     {
         goOnline.SetActive(true);
     }
+    
 }

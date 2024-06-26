@@ -6,10 +6,15 @@ using UnityEngine.UI;
 
 public class UIOnlineLobby : MonoBehaviour
 {
+    [Header("================Button For Online UI===============")]
     public Button btnCreateRoom;
     public Button btnGetRooms;
     [SerializeField] private GameObject prefabBtnRoom;
     public GameObject scrollViewContent;
+    [SerializeField] private Button btnCloseOnline;
+    
+    
+    [Header("==================PopUpCreate========================")]
     private List<GameObject> lsBtn = new List<GameObject>();
     [SerializeField] private GameObject popupCreate;
     [SerializeField] private Button btnPopUpCreate;
@@ -17,6 +22,7 @@ public class UIOnlineLobby : MonoBehaviour
     [SerializeField] private TMP_InputField inRoomName;
     [SerializeField] private TMP_Dropdown ddGameMode;
     [SerializeField] private Button btnCloseCreatePU;
+   
     [System.Serializable]
     class MainMenuEvent 
     {
@@ -44,6 +50,11 @@ public class UIOnlineLobby : MonoBehaviour
         }
     }
 
+    public void OnClose()
+    {
+        Debug.Log(gameObject.name);
+        gameObject.SetActive(false);
+    }
     public void OnPopUpCreate_Clicked()
     {
         popupCreate.SetActive(true);
