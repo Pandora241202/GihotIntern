@@ -18,6 +18,8 @@ class ReceivedData
     public Room[] rooms;
 }
 
+
+
 [System.Serializable]
 public class Room
 {
@@ -78,8 +80,12 @@ public class SocketCommunication
                     Dispatcher.EnqueueToMainThread(() => UIManager._instance.uiOnlineLobby.InitListRoom(json.rooms));
                     break;
                 case "new player join":
+                    Debug.Log(json.player_id);
+                    Debug.Log(json.player_name);
                     break;
                 case "joined":
+                    Debug.Log(json.player_id);
+                    Debug.Log(json.player_name);
                     break;
             }
             Debug.Log(json.event_name);

@@ -80,7 +80,7 @@ public class UIOnlineLobby : MonoBehaviour
             Destroy(lsBtn[i].button.gameObject);
             lsBtn.RemoveAt(i);
         }
-        Debug.Log("Length"+lsBtn.Count);
+        //Debug.Log("Length"+lsBtn.Count);
         for (int i = 0; i < rooms.Length; i++)
         {
             //Debug.Log(rooms[i].game_mode+" "+rooms[i].name);
@@ -89,6 +89,6 @@ public class UIOnlineLobby : MonoBehaviour
             btnContent.transform.SetParent(scrollViewContent.transform);
             lsBtn.Add(btn);
         }
-        Debug.Log("Length"+lsBtn.Count);
+        //Debug.Log("Length"+lsBtn.Count);
     }
 }
