@@ -7,17 +7,31 @@ using System.Text;
 using System;
 
 [System.Serializable]
-class ReceivedData
+class EventName
 {
     public string event_name;
+
+}
+
+[System.Serializable]
+class First_Connect
+{
     public string id;
-    public string player_id;
     public string player_name;
-    [field: SerializeField] public Vector3 position;
-    [field: SerializeField] public Vector3 direction;
+}
+
+[System.Serializable]
+class Rooms
+{
     public Room[] rooms;
 }
 
+[System.Serializable]
+class SimplePlayerInfo
+{
+    public string player_id;
+    public string player_name;
+}
 
 
 [System.Serializable]
@@ -70,43 +84,48 @@ public class SocketCommunication
             var received = await udpClient.ReceiveAsync();
             var response = Encoding.UTF8.GetString(received.Buffer);
 
-            ReceivedData json = JsonUtility.FromJson<ReceivedData>(response);
+            EventName _event = JsonUtility.FromJson<EventName>(response);
 
-            switch (json.event_name)
+            switch (_event.event_name)
             {
                 case "provide id":
-                    //set player id
-                    Player_ID.MyPlayerID = json.id;
-                    Debug.Log(json.player_name);
+                    //set player id in first connect
+                    First_Connect data = JsonUtility.FromJson<First_Connect>(response);
+                    Player_ID.MyPlayerID = data.id;
                     Dispatcher.EnqueueToMainThread(() =>
                     {
-                        AllManager.Instance().playerManager.AddPlayer(json.player_name, json.id);
+                        AllManager.Instance().playerManager.AddPlayer(data.player_name, data.id);
                         UIManager._instance.uiMainMenu.JoinCall(0);
                     });
                     break;
                 case "rooms":
-                    //do sth
-                    Dispatcher.EnqueueToMainThread(() => UIManager._instance.uiOnlineLobby.InitListRoom(json.rooms));
+                    //get available rooms
+                    Rooms rooms = JsonUtility.FromJson<Rooms>(response);
+                    Dispatcher.EnqueueToMainThread(() => UIManager._instance.uiOnlineLobby.InitListRoom(rooms.rooms));
                     break;
                 case "new player join":
+                    //other player join room
+                    SimplePlayerInfo playerInfo = JsonUtility.FromJson<SimplePlayerInfo>(response);
                     Dispatcher.EnqueueToMainThread(() =>
                     {
-                        AllManager.Instance().playerManager.AddPlayer(json.player_name, json.player_id);
+                        AllManager.Instance().playerManager.AddPlayer(playerInfo.player_name, playerInfo.player_id);
                         UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
                         UIManager._instance.uiMainMenu.JoinCall(0);
                     });
                     break;
                 case "joined":
+                    //join a room
+                    SimplePlayerInfo playerIn4 = JsonUtility.FromJson<SimplePlayerInfo>(response);
                     Dispatcher.EnqueueToMainThread(() =>
                     {
-                        AllManager.Instance().playerManager.AddPlayer(json.player_name, json.player_id);
+                        AllManager.Instance().playerManager.AddPlayer(playerIn4.player_name, playerIn4.player_id);
                         UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
                         UIManager._instance.uiOnlineLobby.OnGuessJoin();
                         UIManager._instance.uiMainMenu.JoinCall(1);
                     });
                     break;
             }
-            Debug.Log(json.event_name);
+            Debug.Log(_event.event_name);
         
         }
     }
