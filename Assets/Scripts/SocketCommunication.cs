@@ -12,6 +12,7 @@ class ReceivedData
     public string event_name;
     public string id;
     public string player_id;
+    public string player_name;
     [field: SerializeField] public Vector3 position;
     [field: SerializeField] public Vector3 direction;
     public Room[] rooms;
@@ -74,10 +75,11 @@ public class SocketCommunication
                     break;
                 case "rooms":
                     //do sth
-                    Dispatcher.EnqueueToMainThread(() =>
-                    {
-                        UIManager._instance.uiOnlineLobby.InitListRoom(json.rooms);
-                    });
+                    Dispatcher.EnqueueToMainThread(() => UIManager._instance.uiOnlineLobby.InitListRoom(json.rooms));
+                    break;
+                case "new player join":
+                    break;
+                case "joined":
                     break;
             }
             Debug.Log(json.event_name);
