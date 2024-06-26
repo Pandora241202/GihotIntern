@@ -7,6 +7,7 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     public UIOnlineLobby uiOnlineLobby;
+    public UIMainMenu uiMainMenu;
     public static UIManager _instance { get; private set; }
 
 
@@ -21,6 +22,7 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         uiOnlineLobby.OnSetUp();
+        uiMainMenu.OnSetUp();
         _instance = GameObject.FindAnyObjectByType<UIManager>();
         DontDestroyOnLoad(this);
     }
