@@ -32,4 +32,8 @@ public class UIManager : MonoBehaviour
         // Debug.Log(Player_ID.MyPlayerID);
     }
 
+    public void OnClose_Clicked()
+    {
+        this.gameObject.SetActive(false);
+    }
 }

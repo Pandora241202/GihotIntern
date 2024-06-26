@@ -6,6 +6,7 @@ public class AllManager : MonoBehaviour
 {
     public static AllManager _instance { get; private set; }
     public BulletManager bulletManager;
+    public PlayerManager playerManager;
     [SerializeField] private GunConfig bulletConfig;
     public static AllManager Instance()
     {
@@ -18,6 +19,7 @@ public class AllManager : MonoBehaviour
     }
     private void Start() {
         bulletManager = new BulletManager();
+        playerManager = new PlayerManager();
         bulletManager.bulletConfig = bulletConfig;
     }
     private void Update() {
