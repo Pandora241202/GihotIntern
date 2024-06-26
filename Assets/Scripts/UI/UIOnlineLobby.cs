@@ -69,7 +69,7 @@ public class UIOnlineLobby : MonoBehaviour
         
         SendData data = new SendData(new MainMenuEvent("create_rooms", true, inRoomName.text, ddGameMode.options[ddGameMode.value].text));
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
-        
+        popupCreate.SetActive(false);
         //SocketCommunication.GetInstance().CreateRoom();
     }
 
