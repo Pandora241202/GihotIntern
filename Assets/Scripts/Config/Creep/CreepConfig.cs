@@ -44,5 +44,7 @@ public class CreepConfig : ScriptableObject
 
     public virtual void Move(Transform creepTransform, float speed) { }
 
-    public virtual void Attack() { }
+    public virtual void Attack(Creep creep) { }
+
+    public virtual void OnDead(Transform creepTransform) { } 
 }
