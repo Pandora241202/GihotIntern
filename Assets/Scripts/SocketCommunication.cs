@@ -78,7 +78,11 @@ public class SocketCommunication
                     //set player id
                     Player_ID.MyPlayerID = json.id;
                     Debug.Log(json.player_name);
-                    Dispatcher.EnqueueToMainThread(() => AllManager.Instance().playerManager.AddPlayer(json.player_name, json.id));
+                    Dispatcher.EnqueueToMainThread(() =>
+                    {
+                        AllManager.Instance().playerManager.AddPlayer(json.player_name, json.id);
+                        UIManager._instance.uiMainMenu.JoinCall(0);
+                    });
                     break;
                 case "rooms":
                     //do sth
@@ -89,6 +93,7 @@ public class SocketCommunication
                     {
                         AllManager.Instance().playerManager.AddPlayer(json.player_name, json.player_id);
                         UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
+                        UIManager._instance.uiMainMenu.JoinCall(0);
                     });
                     break;
                 case "joined":
@@ -96,6 +101,8 @@ public class SocketCommunication
                     {
                         AllManager.Instance().playerManager.AddPlayer(json.player_name, json.player_id);
                         UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
+                        UIManager._instance.uiOnlineLobby.OnGuessJoin();
+                        UIManager._instance.uiMainMenu.JoinCall(1);
                     });
                     break;
             }

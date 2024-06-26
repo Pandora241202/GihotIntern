@@ -22,7 +22,7 @@ public class UIOnlineLobby : MonoBehaviour
     [SerializeField] private TMP_InputField inRoomName;
     [SerializeField] private TMP_Dropdown ddGameMode;
     [SerializeField] private Button btnCloseCreatePU;
-   
+ 
     [System.Serializable]
     class OnlineLobbyEvent 
     {
@@ -56,6 +56,7 @@ public class UIOnlineLobby : MonoBehaviour
             popupCreate.SetActive(false);
         });
     }
+    
 
     public void OnGetRoom_Clicked()
     {
@@ -71,10 +72,16 @@ public class UIOnlineLobby : MonoBehaviour
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
         popupCreate.SetActive(false);
         //SocketCommunication.GetInstance().CreateRoom();
-        Debug.Log(AllManager.Instance().playerManager.lsPlayers[0].name);
         UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
         UIManager._instance.uiMainMenu.AfterCreate();
         
+        gameObject.SetActive(false);
+    }
+
+    public void OnGuessJoin()
+    {
+        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
+        UIManager._instance.uiMainMenu.AfterCreateGuess();
         gameObject.SetActive(false);
     }
 

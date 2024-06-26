@@ -34,6 +34,7 @@ public class BtnLobby
         {
             SendData<JoinRequestEvent> data = new SendData<JoinRequestEvent>(new JoinRequestEvent(room_id));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
+            
         });
     }
 }

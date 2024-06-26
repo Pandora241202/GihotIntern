@@ -14,6 +14,8 @@ public class UIMainMenu : MonoBehaviour
     [SerializeField] private List<GameObject> lsBtnForPlayer = new List<GameObject>();
     [SerializeField] private List<TextMeshProUGUI> lsTxtName = new List<TextMeshProUGUI>();
     [SerializeField] private List<GameObject> goPlayerList = new List<GameObject>();
+    [SerializeField] public Button btnKickForHost;
+    [SerializeField] private List<GameObject> goBorderMe = new List<GameObject>();
     public void OnSetUp()
     {
         
@@ -24,6 +26,7 @@ public class UIMainMenu : MonoBehaviour
         lsGOPlayer[1].SetActive(false);
         goPlayerList[0].SetActive(false);
         goPlayerList[1].SetActive(false);
+        btnKickForHost.gameObject.SetActive(true);
     }
 
     public void ShowPlayerBtn()
@@ -53,6 +56,27 @@ public class UIMainMenu : MonoBehaviour
         lsBtnForPlayer[0].SetActive(true);
         lsBtnForPlayer[1].SetActive(false);
         lsGOPlayer[0].SetActive(true);
+    }
+    public void AfterCreateGuess()
+    {
+        btnOnline.gameObject.SetActive(false);
+        lsBtnForPlayer[1].SetActive(true);
+        lsBtnForPlayer[0].SetActive(false);
+        lsGOPlayer[0].SetActive(true);
+    }
+
+    public void JoinCall(int i)
+    {
+        if (i == 0)
+        {
+            goBorderMe[i].SetActive(true);
+            btnKickForHost.gameObject.SetActive(true);
+        }
+        else
+        {
+            goBorderMe[i].SetActive(true);
+            btnKickForHost.gameObject.SetActive(false);
+        }
     }
     public void OnBtnClick(int index)
     {
