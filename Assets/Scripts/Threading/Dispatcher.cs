@@ -24,6 +24,7 @@ public class Dispatcher : MonoBehaviour
     private void Start()
     {
         _instance = FindObjectOfType<Dispatcher>();
+        DontDestroyOnLoad( _instance );
     }
 
     private void Update()
