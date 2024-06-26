@@ -49,7 +49,7 @@ public class SocketCommunication
     {
         socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
         await socket.ConnectAsync(address, port);
-
+        socket.ReceiveBufferSize = 1024 * 64; //set max 64KB to receive
         Debug.Log("Connected to server");
         receiveData = new Thread(new ThreadStart(handleReceivedData));
         receiveData.Start();
