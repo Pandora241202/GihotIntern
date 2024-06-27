@@ -33,6 +33,11 @@ class SimplePlayerInfo
     public string player_name;
 }
 
+[System.Serializable]
+class SimplePlayerInfoList
+{
+    SimplePlayerInfo[] players;
+}
 
 [System.Serializable]
 public class Room
@@ -106,22 +111,19 @@ public class SocketCommunication
                 case "new player join":
                     //other player join room
                     SimplePlayerInfo playerInfo = JsonUtility.FromJson<SimplePlayerInfo>(response);
+                    Debug.Log(response);
                     Dispatcher.EnqueueToMainThread(() =>
                     {
-                        AllManager.Instance().playerManager.AddPlayer(playerInfo.player_name, playerInfo.player_id);
-                        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
-                        UIManager._instance.uiMainMenu.JoinCall(0);
+                        
                     });
                     break;
                 case "joined":
                     //join a room
-                    SimplePlayerInfo playerIn4 = JsonUtility.FromJson<SimplePlayerInfo>(response);
+                    SimplePlayerInfoList playerIn4List = JsonUtility.FromJson<SimplePlayerInfoList>(response);
+                    Debug.Log(response);
                     Dispatcher.EnqueueToMainThread(() =>
                     {
-                        AllManager.Instance().playerManager.AddPlayer(playerIn4.player_name, playerIn4.player_id);
-                        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
-                        UIManager._instance.uiOnlineLobby.OnGuessJoin();
-                        UIManager._instance.uiMainMenu.JoinCall(1);
+                        
                     });
                     break;
             }
