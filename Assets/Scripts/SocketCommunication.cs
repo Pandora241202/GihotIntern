@@ -53,6 +53,7 @@ public class CreepSpawnInfo
     public int creepTypeInt;
     [field: SerializeField] public Vector3 spawnPos;
     public float time;
+    public int spawnNum;
 }
 
 public class SocketCommunication
@@ -144,7 +145,10 @@ public class SocketCommunication
                     var creepSpawnInfo = JsonUtility.FromJson<CreepSpawnInfo>(response);
                     Dispatcher.EnqueueToMainThread(() =>
                         {
-                            AllManager._instance.creepManager.SpawnCreep(creepSpawnInfo.spawnPos, (CreepManager.CreepType)creepSpawnInfo.creepTypeInt, creepSpawnInfo.time);
+                            for (int i = 0; i < creepSpawnInfo.spawnNum; i++)
+                            {
+                                AllManager._instance.creepManager.SpawnCreep(creepSpawnInfo.spawnPos, (CreepManager.CreepType)creepSpawnInfo.creepTypeInt, creepSpawnInfo.time);
+                            }
                         }
                     );
                     break;
