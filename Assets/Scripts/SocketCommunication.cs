@@ -36,7 +36,7 @@ class SimplePlayerInfo
 [System.Serializable]
 class SimplePlayerInfoList
 {
-    SimplePlayerInfo[] players;
+    public SimplePlayerInfo[] players;
 }
 
 [System.Serializable]
@@ -119,7 +119,7 @@ public class SocketCommunication
                 case "new player join":
                     //other player join room
                     SimplePlayerInfo playerInfo = JsonUtility.FromJson<SimplePlayerInfo>(response);
-                    Debug.Log(response);
+                    //Debug.Log(response);
                     Dispatcher.EnqueueToMainThread(() =>
                     {
 
@@ -128,7 +128,7 @@ public class SocketCommunication
                 case "joined":
                     //join a room
                     SimplePlayerInfoList playerIn4List = JsonUtility.FromJson<SimplePlayerInfoList>(response);
-                    Debug.Log(response);
+                    //Debug.Log(playerIn4List.players.Length);
                     Dispatcher.EnqueueToMainThread(() =>
                     {
                         
@@ -136,7 +136,10 @@ public class SocketCommunication
                     break;
                 case "spawn creep":
                     var creepSpawnInfo = JsonUtility.FromJson<CreepSpawnInfo>(response);
-                    AllManager._instance.creepManager.SpawnCreep(creepSpawnInfo.spawnPos, (CreepManager.CreepType)creepSpawnInfo.creepTypeInt, creepSpawnInfo.time);
+                    Dispatcher.EnqueueToMainThread(() =>
+                    {
+                        AllManager._instance.creepManager.SpawnCreep(creepSpawnInfo.spawnPos, (CreepManager.CreepType)creepSpawnInfo.creepTypeInt, creepSpawnInfo.time);
+                    });
                     break;
             }
             Debug.Log(_event.event_name);
