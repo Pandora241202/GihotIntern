@@ -1221,6 +1221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletConfig: {fileID: 11400000, guid: 9367a8116c9b2f340b8437542c624fdc, type: 2}
+  allCreepConfig: {fileID: 0}
 --- !u!4 &1918626540
 Transform:
   m_ObjectHideFlags: 0
