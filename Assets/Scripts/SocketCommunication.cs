@@ -132,17 +132,21 @@ public class SocketCommunication
                     Debug.Log(response);
                     Dispatcher.EnqueueToMainThread(() =>
                     {
-                        for (int i = 0; i < playerIn4List.players.Length ; i++)
+                        for (int i = 0; i < playerIn4List.players.Length; i++)
                         {
-                            if(playerIn4List.players[i].player_id==Player_ID.MyPlayerID) continue;
-                            AllManager.Instance().playerManager.AddPlayer(playerIn4List.players[i].player_name,playerIn4List.players[i].player_id);
+                            if (playerIn4List.players[i].player_id == Player_ID.MyPlayerID) continue;
+                            AllManager.Instance().playerManager.AddPlayer(playerIn4List.players[i].player_name, playerIn4List.players[i].player_id);
                         }
                         UIManager._instance.uiOnlineLobby.OnGuessJoin();
                     });
                     break;
                 case "spawn creep":
                     var creepSpawnInfo = JsonUtility.FromJson<CreepSpawnInfo>(response);
-                    AllManager._instance.creepManager.SpawnCreep(creepSpawnInfo.spawnPos, (CreepManager.CreepType)creepSpawnInfo.creepTypeInt, creepSpawnInfo.time);
+                    Dispatcher.EnqueueToMainThread(() =>
+                        {
+                            AllManager._instance.creepManager.SpawnCreep(creepSpawnInfo.spawnPos, (CreepManager.CreepType)creepSpawnInfo.creepTypeInt, creepSpawnInfo.time);
+                        }
+                    );
                     break;
             }
             Debug.Log(_event.event_name);
