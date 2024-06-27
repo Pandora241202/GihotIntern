@@ -34,6 +34,12 @@ class SimplePlayerInfo
 }
 
 [System.Serializable]
+class SimplePlayerInfoList
+{
+    SimplePlayerInfo[] players;
+}
+
+[System.Serializable]
 public class Room
 {
     public string id;
@@ -45,7 +51,7 @@ public class Room
 public class CreepSpawnInfo
 {
     public int creepTypeInt;
-    public Vector3 spawnPos;
+    [field: Serializable] public Vector3 spawnPos;
     public float time;
 }
 
@@ -113,22 +119,19 @@ public class SocketCommunication
                 case "new player join":
                     //other player join room
                     SimplePlayerInfo playerInfo = JsonUtility.FromJson<SimplePlayerInfo>(response);
+                    Debug.Log(response);
                     Dispatcher.EnqueueToMainThread(() =>
                     {
-                        AllManager.Instance().playerManager.AddPlayer(playerInfo.player_name, playerInfo.player_id);
-                        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
-                        UIManager._instance.uiMainMenu.JoinCall(0);
+
                     });
                     break;
                 case "joined":
                     //join a room
-                    SimplePlayerInfo playerIn4 = JsonUtility.FromJson<SimplePlayerInfo>(response);
+                    SimplePlayerInfoList playerIn4List = JsonUtility.FromJson<SimplePlayerInfoList>(response);
+                    Debug.Log(response);
                     Dispatcher.EnqueueToMainThread(() =>
                     {
-                        AllManager.Instance().playerManager.AddPlayer(playerIn4.player_name, playerIn4.player_id);
-                        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
-                        UIManager._instance.uiOnlineLobby.OnGuessJoin();
-                        UIManager._instance.uiMainMenu.JoinCall(1);
+                        
                     });
                     break;
                 case "spawn creep":

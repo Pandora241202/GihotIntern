@@ -54,7 +54,7 @@ public class UIMainMenu : MonoBehaviour
             else
             {
                 lsTxtName[index].text = pair.Value.name;
-                goPlayerList[index].SetActive(false);
+                goPlayerList[index].SetActive(true);
                 index++;
             }
         }
