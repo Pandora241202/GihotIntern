@@ -76,8 +76,9 @@ public class CreepManager
         creepIdsToDestroy.Add(creep.creepTrans.gameObject.GetInstanceID());
     }
 
-    public void SpawnCreep(Vector3 spawnPos, CreepConfig config, float time)
+    public void SpawnCreep(Vector3 spawnPos, CreepType creepType, float time)
     {
+        CreepConfig config = GetCreepConfigByType(creepType);
         GameObject creepObj = GameObject.Instantiate(config.CreepPrefab, spawnPos, Quaternion.identity);
         Creep creep = new Creep(creepObj.transform, config, time);
         creepDict.Add(creepObj.GetInstanceID(), creep);
