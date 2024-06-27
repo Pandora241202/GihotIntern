@@ -7,16 +7,32 @@ using System.Text;
 using System;
 
 [System.Serializable]
-class ReceivedData
+class EventName
 {
     public string event_name;
+
+}
+
+[System.Serializable]
+class First_Connect
+{
     public string id;
-    public string player_id;
     public string player_name;
-    [field: SerializeField] public Vector3 position;
-    [field: SerializeField] public Vector3 direction;
+}
+
+[System.Serializable]
+class Rooms
+{
     public Room[] rooms;
 }
+
+[System.Serializable]
+class SimplePlayerInfo
+{
+    public string player_id;
+    public string player_name;
+}
+
 
 [System.Serializable]
 public class Room
@@ -34,7 +50,7 @@ public class SocketCommunication
         if (instance == null) instance = new SocketCommunication();
         return instance;
     }
-    Socket socket;
+    UdpClient udpClient;
     public string address = "127.0.0.1";
     public int port = 9999;
     Thread receiveData;
@@ -48,9 +64,13 @@ public class SocketCommunication
 
     async void ConnectToServer()
     {
-        socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-        await socket.ConnectAsync(address, port);
-        socket.ReceiveBufferSize = 1024 * 64; //set max 64KB for receiving
+        udpClient = new UdpClient();
+        udpClient.Client.ReceiveBufferSize = 1024 * 64;
+
+        string message = "{ \"_event\" : {\"event_name\" : \"first connect\"}}";
+        byte[] data = Encoding.UTF8.GetBytes(message);
+        await udpClient.SendAsync(data, data.Length, address, 9999);
+
         Debug.Log("Connected to server");
         receiveData = new Thread(new ThreadStart(handleReceivedData));
         receiveData.IsBackground = true;
@@ -61,28 +81,51 @@ public class SocketCommunication
     {
         while (true)
         {
-            var buffer = new byte[65536]; //64 KB for receiving data
-            var received = await socket.ReceiveAsync(buffer, SocketFlags.None);
-            var response = Encoding.UTF8.GetString(buffer, 0, received);
+            var received = await udpClient.ReceiveAsync();
+            var response = Encoding.UTF8.GetString(received.Buffer);
 
-            ReceivedData json = JsonUtility.FromJson<ReceivedData>(response);
+            EventName _event = JsonUtility.FromJson<EventName>(response);
 
-            switch (json.event_name)
+            switch (_event.event_name)
             {
                 case "provide id":
-                    //set player id
-                    Player_ID.MyPlayerID = json.id;
+                    //set player id in first connect
+                    First_Connect data = JsonUtility.FromJson<First_Connect>(response);
+                    Player_ID.MyPlayerID = data.id;
+                    Dispatcher.EnqueueToMainThread(() =>
+                    {
+                        AllManager.Instance().playerManager.AddPlayer(data.player_name, data.id);
+                        UIManager._instance.uiMainMenu.JoinCall(0);
+                    });
                     break;
                 case "rooms":
-                    //do sth
-                    Dispatcher.EnqueueToMainThread(() => UIManager._instance.uiOnlineLobby.InitListRoom(json.rooms));
+                    //get available rooms
+                    Rooms rooms = JsonUtility.FromJson<Rooms>(response);
+                    Dispatcher.EnqueueToMainThread(() => UIManager._instance.uiOnlineLobby.InitListRoom(rooms.rooms));
                     break;
                 case "new player join":
+                    //other player join room
+                    SimplePlayerInfo playerInfo = JsonUtility.FromJson<SimplePlayerInfo>(response);
+                    Dispatcher.EnqueueToMainThread(() =>
+                    {
+                        AllManager.Instance().playerManager.AddPlayer(playerInfo.player_name, playerInfo.player_id);
+                        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
+                        UIManager._instance.uiMainMenu.JoinCall(0);
+                    });
                     break;
                 case "joined":
+                    //join a room
+                    SimplePlayerInfo playerIn4 = JsonUtility.FromJson<SimplePlayerInfo>(response);
+                    Dispatcher.EnqueueToMainThread(() =>
+                    {
+                        AllManager.Instance().playerManager.AddPlayer(playerIn4.player_name, playerIn4.player_id);
+                        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
+                        UIManager._instance.uiOnlineLobby.OnGuessJoin();
+                        UIManager._instance.uiMainMenu.JoinCall(1);
+                    });
                     break;
             }
-            Debug.Log(json.event_name);
+            Debug.Log(_event.event_name);
         
         }
     }
@@ -90,7 +133,7 @@ public class SocketCommunication
     public async void Send(string msg)
     {
         var messageBytes = Encoding.UTF8.GetBytes(msg);
-        await socket.SendAsync(messageBytes, SocketFlags.None);
+        await udpClient.SendAsync(messageBytes, messageBytes.Length, address, port);
     }
 
 }

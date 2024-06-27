@@ -22,7 +22,7 @@ public class UIOnlineLobby : MonoBehaviour
     [SerializeField] private TMP_InputField inRoomName;
     [SerializeField] private TMP_Dropdown ddGameMode;
     [SerializeField] private Button btnCloseCreatePU;
-   
+ 
     [System.Serializable]
     class OnlineLobbyEvent 
     {
@@ -56,6 +56,7 @@ public class UIOnlineLobby : MonoBehaviour
             popupCreate.SetActive(false);
         });
     }
+    
 
     public void OnGetRoom_Clicked()
     {
@@ -71,6 +72,17 @@ public class UIOnlineLobby : MonoBehaviour
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
         popupCreate.SetActive(false);
         //SocketCommunication.GetInstance().CreateRoom();
+        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
+        UIManager._instance.uiMainMenu.AfterCreate();
+        
+        gameObject.SetActive(false);
+    }
+
+    public void OnGuessJoin()
+    {
+        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
+        UIManager._instance.uiMainMenu.AfterCreateGuess();
+        gameObject.SetActive(false);
     }
 
     public void InitListRoom(Room[] rooms)
@@ -80,7 +92,7 @@ public class UIOnlineLobby : MonoBehaviour
             Destroy(lsBtn[i].button.gameObject);
             lsBtn.RemoveAt(i);
         }
-        Debug.Log("Length"+lsBtn.Count);
+        //Debug.Log("Length"+lsBtn.Count);
         for (int i = 0; i < rooms.Length; i++)
         {
             //Debug.Log(rooms[i].game_mode+" "+rooms[i].name);
@@ -89,6 +101,6 @@ public class UIOnlineLobby : MonoBehaviour
             btnContent.transform.SetParent(scrollViewContent.transform);
             lsBtn.Add(btn);
         }
-        Debug.Log("Length"+lsBtn.Count);
+        //Debug.Log("Length"+lsBtn.Count);
     }
 }
