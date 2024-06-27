@@ -35,31 +35,46 @@ public class UIMainMenu : MonoBehaviour
         lsBtnForPlayer[0].SetActive(false);
     }
 
-    public void ChangeLobbyListName(Dictionary<string,Player> players)
+    public void HostChangeLobbyListName(Dictionary<string,Player> players)
     {
 
         for (int i = 0; i < players.Count; i++)
         {
             goPlayerList[i].SetActive(false);
         }
-        int index = 1;
+        int index = 0;
         foreach (var pair in players)
         {
+            lsTxtName[index].text = pair.Value.name;
+            goPlayerList[index].SetActive(true);
+            btnKickForHost.gameObject.SetActive(true);
             
-            if (pair.Key == Player_ID.MyPlayerID)
-            {
-                lsTxtName[0].text = pair.Value.name;
-                goPlayerList[0].SetActive(true);
-            }
-            else
-            {
-                lsTxtName[index].text = pair.Value.name;
-                goPlayerList[index].SetActive(true);
-                index++;
-            }
+            index++;
         }
+        goBorderMe[0].SetActive(true);
     }
 
+    public void ChangeLobbyListName(Dictionary<string, Player> players)
+    {
+        for (int i = 0; i < players.Count; i++)
+        {
+            goPlayerList[i].SetActive(false);
+        }
+        int index = 0;
+        foreach (var pair in players)
+        {
+            goPlayerList[index].SetActive(true);
+            if (index != 0)
+            {
+                lsTxtName[index-1].text = pair.Value.name;
+            }
+            btnKickForHost.gameObject.SetActive(false);
+            index++;
+        }
+
+        lsTxtName[index-1].text = players[Player_ID.MyPlayerID].name; 
+        goBorderMe[1].SetActive(true);
+    }
     public void AfterCreate()
     {
         btnOnline.gameObject.SetActive(false);
@@ -75,19 +90,19 @@ public class UIMainMenu : MonoBehaviour
         lsGOPlayer[0].SetActive(true);
     }
 
-    public void JoinCall(int i)
-    {
-        if (i == 0)
-        {
-            goBorderMe[i].SetActive(true);
-            btnKickForHost.gameObject.SetActive(true);
-        }
-        else
-        {
-            goBorderMe[i].SetActive(true);
-            btnKickForHost.gameObject.SetActive(false);
-        }
-    }
+    // public void JoinCall(int i)
+    // {
+    //     if (i == 0)
+    //     {
+    //         goBorderMe[i].SetActive(true);
+    //         btnKickForHost.gameObject.SetActive(true);
+    //     }
+    //     else
+    //     {
+    //         goBorderMe[i].SetActive(true);
+    //         btnKickForHost.gameObject.SetActive(false);
+    //     }
+    // }
     public void OnBtnClick(int index)
     {
         if (index == 0)

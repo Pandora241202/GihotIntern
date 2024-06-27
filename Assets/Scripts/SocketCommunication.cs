@@ -108,7 +108,7 @@ public class SocketCommunication
                     Dispatcher.EnqueueToMainThread(() =>
                     {
                         AllManager.Instance().playerManager.AddPlayer(data.player_name, data.id);
-                        UIManager._instance.uiMainMenu.JoinCall(0);
+                        //UIManager._instance.uiMainMenu.JoinCall(0);
                     });
                     break;
                 case "rooms":
@@ -122,16 +122,23 @@ public class SocketCommunication
                     //Debug.Log(response);
                     Dispatcher.EnqueueToMainThread(() =>
                     {
-
+                        AllManager.Instance().playerManager.AddPlayer(playerInfo.player_name, playerInfo.player_id);
+                        UIManager._instance.uiMainMenu.HostChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
+                        //UIManager._instance.uiMainMenu.JoinCall(0);
                     });
                     break;
                 case "joined":
                     //join a room
                     SimplePlayerInfoList playerIn4List = JsonUtility.FromJson<SimplePlayerInfoList>(response);
-                    //Debug.Log(playerIn4List.players.Length);
+                    Debug.Log(playerIn4List.players.Length);
                     Dispatcher.EnqueueToMainThread(() =>
                     {
-                        
+                        for (int i = 0; i < playerIn4List.players.Length ; i++)
+                        {
+                            if(playerIn4List.players[i].player_id==Player_ID.MyPlayerID) continue;
+                            AllManager.Instance().playerManager.AddPlayer(playerIn4List.players[i].player_name,playerIn4List.players[i].player_id);
+                        }
+                        UIManager._instance.uiOnlineLobby.OnGuessJoin();
                     });
                     break;
                 case "spawn creep":

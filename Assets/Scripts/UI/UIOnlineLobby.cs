@@ -72,7 +72,8 @@ public class UIOnlineLobby : MonoBehaviour
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
         popupCreate.SetActive(false);
         //SocketCommunication.GetInstance().CreateRoom();
-        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
+        Debug.Log(AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].name);
+        UIManager._instance.uiMainMenu.HostChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
         UIManager._instance.uiMainMenu.AfterCreate();
         
         gameObject.SetActive(false);

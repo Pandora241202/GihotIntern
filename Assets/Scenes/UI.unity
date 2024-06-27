@@ -3623,7 +3623,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: A GAME
+  m_text: My Game
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 50c12c23294124aa48490c44ac65a9e4, type: 2}
   m_sharedMaterial: {fileID: 7746803525459343344, guid: 50c12c23294124aa48490c44ac65a9e4, type: 2}
@@ -3634,13 +3634,13 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 0
+  m_enableVertexGradient: 1
   m_colorMode: 3
   m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+    topLeft: {r: 1, g: 0, b: 0, a: 1}
+    topRight: {r: 0, g: 0.5114727, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 0.9086325, b: 0, a: 1}
+    bottomRight: {r: 1, g: 0, b: 0.81903887, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
@@ -3650,12 +3650,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 100
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 100
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -6562,7 +6562,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79c6db8e6cef36249845e648c1cc10d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletConfig: {fileID: 11400000, guid: 469f8991a5b8512489dac724d9bfa3df, type: 2}
+  bulletConfig: {fileID: 11400000, guid: 9367a8116c9b2f340b8437542c624fdc, type: 2}
+  allCreepConfig: {fileID: 11400000, guid: 92cd18033a673d042a6b96cfd0bfecd0, type: 2}
 --- !u!1 &1876620804
 GameObject:
   m_ObjectHideFlags: 0
