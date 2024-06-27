@@ -8,8 +8,8 @@ public class Creep4Config : MoveTowardPlayerCreepConfig
 
     public override void Attack(Creep creep)
     {
-        (string _, float dis) = GetNearestPlayerWithDis(creep.creepTrans);
-        //float dis = (CharacterController.Instance().transform.position - creep.creepTrans.position).magnitude;
+        //(string _, float dis) = GetNearestPlayerWithDis(creep.creepTrans);
+        float dis = (CharacterController.Instance().transform.position - creep.creepTrans.position).magnitude;
 
         if (dis <= startIncreaseSpeedDis)
         {

@@ -10,12 +10,12 @@ public class MoveFarPlayerCreepConfig : CreepConfig
     {
         Dictionary<string, Player> dictPlayers = AllManager.Instance().playerManager.dictPlayers;
 
-        (string playerId, float minDis) = GetNearestPlayerWithDis(creepTransform);
+        //(string playerId, float minDis) = GetNearestPlayerWithDis(creepTransform);
 
-        if (minDis <= startMoveAwayDistance)
+        //if (minDis <= startMoveAwayDistance)
         {
-            creepTransform.Translate((creepTransform.position - dictPlayers[playerId].playerTrans.position).normalized * speed * Time.deltaTime);
-            //creepTransform.Translate((CharacterController.Instance().transform.position - creepTransform.position).normalized * speed * Time.deltaTime);
+            //creepTransform.Translate((creepTransform.position - dictPlayers[playerId].playerTrans.position).normalized * speed * Time.deltaTime);
+            creepTransform.Translate((CharacterController.Instance().transform.position - creepTransform.position).normalized * speed * Time.deltaTime);
         }
     }
 }

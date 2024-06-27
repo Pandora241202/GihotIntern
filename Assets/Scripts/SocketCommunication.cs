@@ -97,11 +97,7 @@ public class SocketCommunication
             var received = await udpClient.ReceiveAsync();
             var response = Encoding.UTF8.GetString(received.Buffer);
 
-            Debug.Log(response);
-
             EventName _event = JsonUtility.FromJson<EventName>(response);
-
-            Debug.Log(_event.event_name);
 
             switch (_event.event_name)
             {
