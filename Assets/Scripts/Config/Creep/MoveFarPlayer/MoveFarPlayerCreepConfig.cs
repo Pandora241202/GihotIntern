@@ -11,7 +11,7 @@ public class MoveFarPlayerCreepConfig : CreepConfig
 
     public override void Move(Transform creepTransform, float speed) 
     {
-        Player[] players = AllManager._instance.playerManager.Players;
+        Player[] players = AllManager._instance.playerManager.lsPlayers.ToArray();
         
         float minDis = DistanceBetween(players[0].playerTrans.position, creepTransform.position);
         int playerIdToTarget = 0;

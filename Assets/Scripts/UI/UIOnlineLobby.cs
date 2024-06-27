@@ -72,7 +72,7 @@ public class UIOnlineLobby : MonoBehaviour
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
         popupCreate.SetActive(false);
         //SocketCommunication.GetInstance().CreateRoom();
-        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
+        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
         UIManager._instance.uiMainMenu.AfterCreate();
         
         gameObject.SetActive(false);
@@ -80,7 +80,7 @@ public class UIOnlineLobby : MonoBehaviour
 
     public void OnGuessJoin()
     {
-        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
+        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
         UIManager._instance.uiMainMenu.AfterCreateGuess();
         gameObject.SetActive(false);
     }

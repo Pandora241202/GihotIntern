@@ -9,7 +9,7 @@ public class MoveTowardPlayerCreepConfig : CreepConfig
 
     protected (int, float) GetNearestPlayerWithDis(Transform creepTransform)
     {
-        Player[] players = AllManager._instance.playerManager.Players;
+        Player[] players = AllManager._instance.playerManager.dictPlayer.ToArray();
 
         float minDis = DistanceBetween(players[0].playerTrans.position, creepTransform.position);
         int playerIdToTarget = 0;
@@ -29,7 +29,7 @@ public class MoveTowardPlayerCreepConfig : CreepConfig
 
     public override void Move(Transform creepTransform, float speed) 
     {
-        Player[] players = AllManager._instance.playerManager.Players;
+        Player[] players = AllManager._instance.playerManager.lsPlayers.ToArray();
         
         (int playerId, float _) = GetNearestPlayerWithDis(creepTransform);
 

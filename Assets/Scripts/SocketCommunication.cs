@@ -109,7 +109,7 @@ public class SocketCommunication
                     Dispatcher.EnqueueToMainThread(() =>
                     {
                         AllManager.Instance().playerManager.AddPlayer(playerInfo.player_name, playerInfo.player_id);
-                        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
+                        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
                         UIManager._instance.uiMainMenu.JoinCall(0);
                     });
                     break;
@@ -119,7 +119,7 @@ public class SocketCommunication
                     Dispatcher.EnqueueToMainThread(() =>
                     {
                         AllManager.Instance().playerManager.AddPlayer(playerIn4.player_name, playerIn4.player_id);
-                        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.lsPlayers);
+                        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
                         UIManager._instance.uiOnlineLobby.OnGuessJoin();
                         UIManager._instance.uiMainMenu.JoinCall(1);
                     });
