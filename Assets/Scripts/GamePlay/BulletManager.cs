@@ -8,10 +8,11 @@ public class BulletInfo
     public bool isNeedDestroy;
     private Vector3 direction;
 
-    public BulletInfo(Transform obj, Vector3 targetDirection)
+    public BulletInfo(Transform obj, Vector3 targetDirection, float bulletSpeed = 5f)
     {
         this.bulletObj = obj;
         this.direction = targetDirection.normalized;
+        this.speed = bulletSpeed;
         Setup();
     }
 
@@ -22,13 +23,14 @@ public class BulletInfo
 
     public void Move()
     {
-        bulletObj.position+= direction * speed * Time.deltaTime;
+        bulletObj.position += direction * speed * Time.deltaTime;
     }
 }
 public class BulletManager
 {
     public List<BulletInfo> bulletInfoList = new List<BulletInfo>();
     public GunConfig bulletConfig;
+    private float lastFireTime = 0f;
 
     public void MyUpdate()
     {
@@ -69,16 +71,25 @@ public class BulletManager
         }
     }
 
-    public void SpawnBullet(Vector3 posSpawn,Vector3 target,int gunId)
+    public void SpawnBullet(Vector3 posSpawn, Vector3 target, int gunId)
     {
+        GunType gunType = bulletConfig.lsGunType[gunId];
+        // Check if enough time has passed since the last fire time
+        if (Time.time - lastFireTime < 1f / gunType.Firerate)
+        {
+            Debug.Log("Cannot fire yet. Waiting for fire rate cooldown.");
+            return;
+        }
         Debug.Log("Spawn Bullet");
+        Debug.Log("GunList count:  " + bulletConfig.lsGunType.Count);
         Vector3 direction = (target - posSpawn).normalized;
         Quaternion rotation = Quaternion.LookRotation(direction);
 
-        GameObject obj = GameObject.Instantiate(bulletConfig.lsBulletType[gunId].bulletPrefab, posSpawn,Quaternion.identity);
-     
+        GameObject obj = GameObject.Instantiate(gunType.bulletPrefab, posSpawn, Quaternion.identity);
+
         BulletInfo newBullet = new BulletInfo(obj.transform, direction);
         bulletInfoList.Add(newBullet);
-        Debug.Log($"Spawned Bullet. Total bullets: {bulletInfoList.Count}");   
+
+        Debug.Log($"Spawned Bullet. Total bullets: {bulletInfoList.Count}");
     }
-}   
+}
