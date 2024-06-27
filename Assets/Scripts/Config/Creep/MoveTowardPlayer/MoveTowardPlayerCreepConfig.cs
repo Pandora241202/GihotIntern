@@ -7,9 +7,9 @@ public class MoveTowardPlayerCreepConfig : CreepConfig
     {
         Dictionary<string, Player> dictPlayers = AllManager.Instance().playerManager.dictPlayers;
 
-        //(string playerId, float _) = GetNearestPlayerWithDis(creepTransform);
+        (string playerId, float _) = GetNearestPlayerWithDis(creepTransform);
 
-        //creepTransform.Translate((dictPlayers[playerId].playerTrans.position - creepTransform.position).normalized * speed * Time.deltaTime);
-        creepTransform.Translate((CharacterController.Instance().transform.position - creepTransform.position).normalized * speed * Time.deltaTime);
+        creepTransform.Translate((dictPlayers[playerId].playerTrans.position - creepTransform.position).normalized * speed * Time.deltaTime);
+        //creepTransform.Translate((CharacterController.Instance().transform.position - creepTransform.position).normalized * speed * Time.deltaTime);
     }
 }
