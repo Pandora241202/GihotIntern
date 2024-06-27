@@ -37,6 +37,7 @@ public class UIMainMenu : MonoBehaviour
 
         for (int i = players.Count-1; i >= 0; i--)
         {
+            if (goPlayerList.Count == 0) break;
             Destroy(goPlayerList[i].goPlayerListItem);
             goPlayerList.RemoveAt(i);
         }
@@ -54,7 +55,6 @@ public class UIMainMenu : MonoBehaviour
             {
                 item.btnKick.gameObject.SetActive(true);
             }
-            lsTxtName[index].text = pair.Value.name;
             index++;
         }
     }
@@ -63,20 +63,16 @@ public class UIMainMenu : MonoBehaviour
     {
         for (int i = players.Count-1; i >= 0; i--)
         {
+            if (goPlayerList.Count == 0) break;
             Destroy(goPlayerList[i].goPlayerListItem);
             goPlayerList.RemoveAt(i);
         }
-        int index = 0;
         foreach (var pair in players)
         {
             ItemPlayerList item = new ItemPlayerList(pair.Value.name, pair.Key, prefabListItem);
             goPlayerList.Add(item);
             item.goPlayerListItem.transform.SetParent(goContentList.transform);
-            lsTxtName[index].text = pair.Value.name;
-            index++;
         }
-
-        lsTxtName[index-1].text = players[Player_ID.MyPlayerID].name; 
     }
     public void AfterCreate()
     {

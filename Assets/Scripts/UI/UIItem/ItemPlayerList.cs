@@ -16,7 +16,7 @@ public class ItemPlayerList
     {
         this.id = id;
         goPlayerListItem = GameObject.Instantiate(goListPlayerPrefabs);
-        txtName = this.goPlayerListItem.GetComponent<TextMeshProUGUI>();
+        txtName = this.goPlayerListItem.transform.Find("txtNamePlayer").GetComponent<TextMeshProUGUI>();
         
         goCrown = goPlayerListItem.transform.Find("imgIconHost").gameObject;
         btnKick=goPlayerListItem.transform.Find("btnKick").gameObject.GetComponent<Button>();
