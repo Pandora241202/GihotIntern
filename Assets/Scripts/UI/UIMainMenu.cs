@@ -35,18 +35,28 @@ public class UIMainMenu : MonoBehaviour
         lsBtnForPlayer[0].SetActive(false);
     }
 
-    public void ChangeLobbyListName(List<Player> players)
+    public void ChangeLobbyListName(Dictionary<string,Player> players)
     {
 
         for (int i = 0; i < players.Count; i++)
         {
             goPlayerList[i].SetActive(false);
         }
-
-        for (int i = 0; i < players.Count; i++)
+        int index = 1;
+        foreach (var pair in players)
         {
-            lsTxtName[i].text = players[i].name;
-            goPlayerList[i].SetActive(true);
+            
+            if (pair.Key == Player_ID.MyPlayerID)
+            {
+                lsTxtName[0].text = pair.Value.name;
+                goPlayerList[0].SetActive(true);
+            }
+            else
+            {
+                lsTxtName[index].text = pair.Value.name;
+                goPlayerList[index].SetActive(true);
+                index++;
+            }
         }
     }
 

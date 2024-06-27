@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CreepConfig : ScriptableObject
@@ -44,5 +46,33 @@ public class CreepConfig : ScriptableObject
 
     public virtual void Move(Transform creepTransform, float speed) { }
 
-    public virtual void Attack() { }
+    public virtual void Attack(Creep creep) { }
+
+    public virtual void OnDead(Transform creepTransform) { }
+
+    float DistanceBetween(Vector3 pos1, Vector3 pos2)
+    {
+        return (pos1 - pos2).magnitude;
+    }
+
+    protected (string, float) GetNearestPlayerWithDis(Transform creepTransform)
+    {
+        Dictionary<string, Player> dictPlayers = AllManager._instance.playerManager.dictPlayers;
+
+        float minDis = DistanceBetween(dictPlayers.First().Value.playerTrans.position, creepTransform.position);
+        string playerIdToTarget = dictPlayers.First().Key;
+
+        foreach (var pair in dictPlayers)
+        {
+            Vector3 playerPos = pair.Value.playerTrans.position;
+            float dis = DistanceBetween(playerPos, creepTransform.position);
+            if (dis < minDis)
+            {
+                playerIdToTarget = pair.Key;
+                minDis = dis;
+            }
+        }
+
+        return (playerIdToTarget, minDis);
+    }
 }

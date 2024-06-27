@@ -47,6 +47,14 @@ public class Room
     public string game_mode;
 }
 
+[System.Serializable]
+public class CreepSpawnInfo
+{
+    public int creepTypeInt;
+    public Vector3 spawnPos;
+    public float time;
+}
+
 public class SocketCommunication
 {
     private static SocketCommunication instance;
@@ -114,7 +122,7 @@ public class SocketCommunication
                     Debug.Log(response);
                     Dispatcher.EnqueueToMainThread(() =>
                     {
-                        
+
                     });
                     break;
                 case "joined":
@@ -125,6 +133,10 @@ public class SocketCommunication
                     {
                         
                     });
+                    break;
+                case "spawn creep":
+                    var creepSpawnInfo = JsonUtility.FromJson<CreepSpawnInfo>(response);
+                    AllManager._instance.creepManager.SpawnCreep(creepSpawnInfo.spawnPos, (CreepManager.CreepType)creepSpawnInfo.creepTypeInt, creepSpawnInfo.time);
                     break;
             }
             Debug.Log(_event.event_name);

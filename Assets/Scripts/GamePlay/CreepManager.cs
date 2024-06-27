@@ -1,7 +1,4 @@
-﻿using System;
-using System.Buffers.Text;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Creep
@@ -21,21 +18,30 @@ public class Creep
         speed = config.BaseSpeed;
     }
 
-    //public void Move()
-    //{
-    //    config.Move(this);
-    //}
+    public void Move()
+    {
+        config.Move(creepTrans, speed);
+    }
 
-    //public void ProcessDmg(float dmg)
-    //{
-    //    health -= dmg;
-    //    if (health <= 0)
-    //    {
-    //        EnemyManager enemyManager = AllManager.Instance.enemyManager;
-    //        enemyManager.AddToDestroyList(this);
-    //    }
-    //    enemyTrans.gameObject.transform.localScale = Vector3.one * health;
-    //}
+    public void Attack()
+    {
+        config.Attack(this);
+    }
+
+    public void OnDead()
+    {
+        config.OnDead(creepTrans);
+    }
+
+    public void ProcessDmg(int dmg)
+    {
+        hp -= dmg;
+        if (hp <= 0)
+        {
+            CreepManager creepManager = AllManager._instance.creepManager;
+            creepManager.AddToDestroyList(this);
+        }
+    }
 }
 
 public class CreepManager
@@ -51,7 +57,13 @@ public class CreepManager
 
     public enum CreepType
     {
-
+        Creep1,
+        Creep2, 
+        Creep3,
+        Creep4,
+        Creep5,
+        Creep6,
+        Creep7
     }
 
     public CreepConfig GetCreepConfigByType(CreepType type)
@@ -64,10 +76,10 @@ public class CreepManager
         creepIdsToDestroy.Add(creep.creepTrans.gameObject.GetInstanceID());
     }
 
-    public void SpawnCreep(Vector3 spawnPos, CreepConfig config, float time)
+    public void SpawnCreep(Vector3 spawnPos, CreepType creepType, float time)
     {
+        CreepConfig config = GetCreepConfigByType(creepType);
         GameObject creepObj = GameObject.Instantiate(config.CreepPrefab, spawnPos, Quaternion.identity);
-        creepObj.layer = LayerMask.NameToLayer("Enemy");
         Creep creep = new Creep(creepObj.transform, config, time);
         creepDict.Add(creepObj.GetInstanceID(), creep);
     }
@@ -87,42 +99,40 @@ public class CreepManager
         foreach (var pair in creepDict)
         {
             Creep creep = pair.Value;
-            //creep.Move();
+            creep.Attack();
+            creep.Move();
         }
 
     }
 
-    //public void LateUpdate()
-    //{
-    //    for (int i = 0; i < enemyIdsToDestroy.Count; i++)
-    //    {
-    //        EnemyInfo enemyInfo = GetEnemyInfoById(enemyIdsToDestroy[i]);
+    public void LateUpdate()
+    {
+        for (int i = 0; i < creepIdsToDestroy.Count; i++)
+        {
+            Creep creep = GetCreepById(creepIdsToDestroy[i]);
 
-    //        if (enemyInfo == null)
-    //        {
-    //            enemyIdsToDestroy.RemoveAt(i);
-    //            continue;
-    //        }
+            if (creep == null)
+            {
+                creepIdsToDestroy.RemoveAt(i);
+                continue;
+            }
 
-    //        AllManager.Instance.effectManager.SpawnEffect(EffectManager.EffectType.EXPLOSION, enemyInfo.enemyTrans.position);
-    //        GameObject.Destroy(enemyInfo.enemyTrans.gameObject);
-    //        enemyInfoDict.Remove(enemyIdsToDestroy[i]);
-    //    }
-    //    enemyIdsToDestroy.Clear();
-    //}
+            //AllManager.Instance.effectManager.SpawnEffect(EffectManager.EffectType.EXPLOSION, enemyInfo.enemyTrans.position);
+            creep.OnDead();
+            GameObject.Destroy(creep.creepTrans.gameObject);
+            creepDict.Remove(creepIdsToDestroy[i]);
+        }
+        creepIdsToDestroy.Clear();
+    }
 
-    //public void ProcessCollision(int enemyId, GameObject colliderObject)
-    //{
-    //    EnemyInfo enemyInfo = GetEnemyInfoById(enemyId);
-    //    if (colliderObject == null)
-    //    {
-    //        enemyInfo.ProcessDmg(enemyInfo.health);
-    //        return;
-    //    }
-    //    BulletManager bulletManager = AllManager.Instance.bulletManager;
-    //    BulletInfo bulletInfo = bulletManager.GetBulletInfoById(colliderObject.GetInstanceID());
-    //    enemyInfo.ProcessDmg(bulletInfo.config.Dmg);
-    //}
+    public void ProcessCollision(int creepId, GameObject colliderobject)
+    {
+        //TODO: Bullet Dmg
+        //TODO: Sync 
+        int dmg = 5;
+        Creep creep = GetCreepById(creepId);
+        creep.ProcessDmg(dmg);
+    }
 
     //public void Reset()
     //{

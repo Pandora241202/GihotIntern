@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eadc8cade9d294043b11eb9593104c3e, type: 3}
+  m_Name: GunConfig
+  m_EditorClassIdentifier: 
+  lsGunType:
+  - numberOfBullet: 1
+    Firerate: 3
+    bulletConfig: {fileID: 11400000, guid: 0c2a13277af51b744986753d19c07e03, type: 2}
+    FireRange: 10
+    gunPrefab: {fileID: 0}
+    bulletPrefab: {fileID: 1771311856625642708, guid: f6b090be806a7f148bdca82f0ed546c3, type: 3}
+  - numberOfBullet: 1
+    Firerate: 8
+    bulletConfig: {fileID: 11400000, guid: 364cdc2a4e80e75459d460d2546aafd4, type: 2}
+    FireRange: 7
+    gunPrefab: {fileID: 0}
+    bulletPrefab: {fileID: 1771311856625642708, guid: f6b090be806a7f148bdca82f0ed546c3, type: 3}
+  - numberOfBullet: 3
+    Firerate: 2
+    bulletConfig: {fileID: 11400000, guid: 934ebed3a7e69174c98e2714e107ecfa, type: 2}
+    FireRange: 4
+    gunPrefab: {fileID: 0}
+    bulletPrefab: {fileID: 1771311856625642708, guid: f6b090be806a7f148bdca82f0ed546c3, type: 3}

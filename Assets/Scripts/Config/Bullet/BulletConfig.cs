@@ -1,14 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(menuName = "Config",fileName = "Bullet")]
+
+
 public class BulletConfig : ScriptableObject
 {
-   public List<BulletType> lsBulletType = new List<BulletType>();
+        public string bulletName;
+        public int damage;
+        public float speed;
+        public int bulletTimeToLive;
+        public float bulletBaseCR;
+        public float bulletBaseCD;
+        public bool destroyOnContact;
+        public int bulletMultiplier;
+        public GameObject bulletPrefab;
+    public virtual void Fire(Player player)
+    {
+
+    }
+
 }
 
-[System.Serializable]
-public class BulletType
-{
-   public int data;
-}
+
+

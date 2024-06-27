@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e232e8e31579c44a8ea74844197e0d0, type: 3}
+  m_Name: Creep3Config
+  m_EditorClassIdentifier: 
+  creepPrefab: {fileID: 580272723711686975, guid: c2f848695eac8bf469943c8c6c2875ee, type: 3}
+  baseHp: 60
+  baseSpeed: 2
+  baseDmg: 5
+  exp: 20
+  dropItemTypes: 
