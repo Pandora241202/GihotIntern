@@ -13,9 +13,9 @@ public class UIMainMenu : MonoBehaviour
     [SerializeField] public Button btnOnline;
     [SerializeField] private List<GameObject> lsBtnForPlayer = new List<GameObject>();
     [SerializeField] private List<TextMeshProUGUI> lsTxtName = new List<TextMeshProUGUI>();
-    [SerializeField] private List<GameObject> goPlayerList = new List<GameObject>();
-    [SerializeField] private GameObject prefabItemListPlayer;
-    [SerializeField] private GameObject goScrollViewPlayerList;
+    [SerializeField] private List<ItemPlayerList> goPlayerList = new List<ItemPlayerList>();
+    [SerializeField] public GameObject prefabListItem;
+    [SerializeField] private GameObject goContentList;
     public void OnSetUp()
     {
         
@@ -24,8 +24,6 @@ public class UIMainMenu : MonoBehaviour
         goOnline.SetActive(false);
         lsGOPlayer[0].SetActive(false);
         lsGOPlayer[1].SetActive(false);
-        goPlayerList[0].SetActive(false);
-        goPlayerList[1].SetActive(false);
     }
 
     public void ShowPlayerBtn()
@@ -34,31 +32,52 @@ public class UIMainMenu : MonoBehaviour
         lsBtnForPlayer[0].SetActive(false);
     }
 
-    public void ChangeLobbyListName(Dictionary<string,Player> players)
+    public void HostChangeLobbyListName(Dictionary<string,Player> players)
     {
 
-        for (int i = 0; i < players.Count; i++)
+        for (int i = players.Count-1; i >= 0; i--)
         {
-            goPlayerList[i].SetActive(false);
+            Destroy(goPlayerList[i].goPlayerListItem);
+            goPlayerList.RemoveAt(i);
         }
-        int index = 1;
+        int index = 0;
         foreach (var pair in players)
         {
-            
-            if (pair.Key == Player_ID.MyPlayerID)
+            ItemPlayerList item = new ItemPlayerList(pair.Value.name,pair.Key,prefabListItem);
+            goPlayerList.Add(item);
+            item.goPlayerListItem.transform.SetParent(goContentList.transform);
+            if (index == 0)
             {
-                lsTxtName[0].text = pair.Value.name;
-                goPlayerList[0].SetActive(true);
+                item.goCrown.SetActive(true);
             }
             else
             {
-                lsTxtName[index].text = pair.Value.name;
-                goPlayerList[index].SetActive(true);
-                index++;
+                item.btnKick.gameObject.SetActive(true);
             }
+            lsTxtName[index].text = pair.Value.name;
+            index++;
         }
     }
-    
+
+    public void ChangeLobbyListName(Dictionary<string, Player> players)
+    {
+        for (int i = players.Count-1; i >= 0; i--)
+        {
+            Destroy(goPlayerList[i].goPlayerListItem);
+            goPlayerList.RemoveAt(i);
+        }
+        int index = 0;
+        foreach (var pair in players)
+        {
+            ItemPlayerList item = new ItemPlayerList(pair.Value.name, pair.Key, prefabListItem);
+            goPlayerList.Add(item);
+            item.goPlayerListItem.transform.SetParent(goContentList.transform);
+            lsTxtName[index].text = pair.Value.name;
+            index++;
+        }
+
+        lsTxtName[index-1].text = players[Player_ID.MyPlayerID].name; 
+    }
     public void AfterCreate()
     {
         btnOnline.gameObject.SetActive(false);
@@ -73,6 +92,20 @@ public class UIMainMenu : MonoBehaviour
         lsBtnForPlayer[0].SetActive(false);
         lsGOPlayer[0].SetActive(true);
     }
+
+    // public void JoinCall(int i)
+    // {
+    //     if (i == 0)
+    //     {
+    //         goBorderMe[i].SetActive(true);
+    //         btnKickForHost.gameObject.SetActive(true);
+    //     }
+    //     else
+    //     {
+    //         goBorderMe[i].SetActive(true);
+    //         btnKickForHost.gameObject.SetActive(false);
+    //     }
+    // }
     public void OnBtnClick(int index)
     {
         if (index == 0)
