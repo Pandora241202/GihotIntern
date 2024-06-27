@@ -51,7 +51,7 @@ public class Room
 public class CreepSpawnInfo
 {
     public int creepTypeInt;
-    public Vector3 spawnPos;
+    [field: Serializable] public Vector3 spawnPos;
     public float time;
 }
 
