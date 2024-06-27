@@ -5,10 +5,11 @@ public class MoveTowardPlayerCreepConfig : CreepConfig
 {
     public override void Move(Transform creepTransform, float speed) 
     {
-        Dictionary<string, Player> dictPlayers = AllManager._instance.playerManager.dictPlayers;
+        Dictionary<string, Player> dictPlayers = AllManager.Instance().playerManager.dictPlayers;
 
-        (string playerId, float _) = GetNearestPlayerWithDis(creepTransform);
+        //(string playerId, float _) = GetNearestPlayerWithDis(creepTransform);
 
-        creepTransform.Translate((dictPlayers[playerId].playerTrans.position - creepTransform.position).normalized * speed * Time.deltaTime);
+        //creepTransform.Translate((dictPlayers[playerId].playerTrans.position - creepTransform.position).normalized * speed * Time.deltaTime);
+        creepTransform.Translate((CharacterController.Instance().transform.position - creepTransform.position).normalized * speed * Time.deltaTime);
     }
 }
