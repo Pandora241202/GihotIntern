@@ -33,13 +33,20 @@ class SimplePlayerInfo
     public string player_name;
 }
 
-
 [System.Serializable]
 public class Room
 {
     public string id;
     public string name;
     public string game_mode;
+}
+
+[System.Serializable]
+public class CreepSpawnInfo
+{
+    public int creepTypeInt;
+    public Vector3 spawnPos;
+    public float time;
 }
 
 public class SocketCommunication
@@ -123,6 +130,10 @@ public class SocketCommunication
                         UIManager._instance.uiOnlineLobby.OnGuessJoin();
                         UIManager._instance.uiMainMenu.JoinCall(1);
                     });
+                    break;
+                case "spawn creep":
+                    var creepSpawnInfo = JsonUtility.FromJson<CreepSpawnInfo>(response);
+                    AllManager._instance.creepManager.SpawnCreep(creepSpawnInfo.spawnPos, (CreepManager.CreepType)creepSpawnInfo.creepTypeInt, creepSpawnInfo.time);
                     break;
             }
             Debug.Log(_event.event_name);
