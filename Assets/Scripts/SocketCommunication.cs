@@ -108,7 +108,6 @@ public class SocketCommunication
                     Dispatcher.EnqueueToMainThread(() =>
                     {
                         AllManager.Instance().playerManager.AddPlayer(data.player_name, data.id);
-                        UIManager._instance.uiMainMenu.JoinCall(0);
                     });
                     break;
                 case "rooms":
