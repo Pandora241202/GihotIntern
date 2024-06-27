@@ -4,11 +4,13 @@ public class CreepController : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("playerBullet"))
+        if (other.gameObject.CompareTag("PlayerBullet"))
         {
-            AllManager allManager = AllManager._instance;
-            allManager.creepManager.ProcessCollision(gameObject.GetInstanceID(), other.gameObject);
+            //AllManager allManager = AllManager.Instance();
+            //allManager.creepManager.ProcessCollision(gameObject.GetInstanceID(), other.gameObject);
             //allManager.bulletManager.ProcessCollision(other.gameObject.GetInstanceID());
+            GameObject.Destroy(gameObject);
+            GameObject.Destroy(other.gameObject);
         }
     }
 }

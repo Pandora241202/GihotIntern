@@ -38,7 +38,7 @@ public class Creep
         hp -= dmg;
         if (hp <= 0)
         {
-            CreepManager creepManager = AllManager._instance.creepManager;
+            CreepManager creepManager = AllManager.Instance().creepManager;
             creepManager.AddToDestroyList(this);
         }
     }
@@ -49,6 +49,7 @@ public class CreepManager
     private Dictionary<int, Creep> creepDict = new Dictionary<int, Creep>();
     private List<int> creepIdsToDestroy = new List<int>();
     private CreepConfig[] creepConfigs;
+    public float _timer;
 
     public CreepManager(AllCreepConfig allCreepConfig)
     {
@@ -82,6 +83,7 @@ public class CreepManager
         GameObject creepObj = GameObject.Instantiate(config.CreepPrefab, spawnPos, Quaternion.identity);
         Creep creep = new Creep(creepObj.transform, config, time);
         creepDict.Add(creepObj.GetInstanceID(), creep);
+        _timer = 0;
     }
 
     public Creep GetCreepById(int id)
@@ -96,13 +98,21 @@ public class CreepManager
 
     public void MyUpdate()
     {
+        if (_timer >= 2)
+        {
+            SpawnCreep(new Vector3(Random.Range(-38, 38), 1, Random.Range(-38, 38)), (CreepType) Random.Range(0, 7), _timer);     
+            _timer = 0;
+        } else
+        {
+            _timer += Time.deltaTime;
+        }
+
         foreach (var pair in creepDict)
         {
             Creep creep = pair.Value;
             creep.Attack();
             creep.Move();
         }
-
     }
 
     public void LateUpdate()
