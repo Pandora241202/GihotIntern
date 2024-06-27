@@ -57,7 +57,7 @@ public class CreepConfig : ScriptableObject
 
     protected (string, float) GetNearestPlayerWithDis(Transform creepTransform)
     {
-        Dictionary<string, Player> dictPlayers = AllManager._instance.playerManager.dictPlayers;
+        Dictionary<string, Player> dictPlayers = AllManager.Instance().playerManager.dictPlayers;
 
         float minDis = DistanceBetween(dictPlayers.First().Value.playerTrans.position, creepTransform.position);
         string playerIdToTarget = dictPlayers.First().Key;
