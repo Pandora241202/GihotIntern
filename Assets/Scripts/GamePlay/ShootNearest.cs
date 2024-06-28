@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public class ShootNearest : MonoBehaviour
@@ -46,4 +46,4 @@ public class ShootNearest : MonoBehaviour
             }
         }
     }
-}
+}*/

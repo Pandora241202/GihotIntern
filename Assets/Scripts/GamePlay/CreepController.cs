@@ -6,11 +6,10 @@ public class CreepController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("PlayerBullet"))
         {
-            //AllManager allManager = AllManager.Instance();
-            //allManager.creepManager.ProcessCollision(gameObject.GetInstanceID(), other.gameObject);
+            AllManager allManager = AllManager.Instance();
+            allManager.creepManager.ProcessCollision(gameObject.GetInstanceID(), other.gameObject);
             //allManager.bulletManager.ProcessCollision(other.gameObject.GetInstanceID());
-            GameObject.Destroy(gameObject);
-            GameObject.Destroy(other.gameObject);
+            //GameObject.Destroy(other.gameObject);
         }
     }
 }

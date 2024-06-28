@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 
 public class CharacterController : MonoBehaviour
 {
     [SerializeField] private float speed = 1.0f;
-    [SerializeField] private CharacterController controller;
     [SerializeField] private GameObject prefabBullet;
+    [SerializeField] LayerMask creepLayerMask;
+    [SerializeField] int gunId;
+    GameObject curCreepTarget = null;
 
     public static CharacterController _instance { get; private set; }
     public static CharacterController Instance()
@@ -22,16 +25,66 @@ public class CharacterController : MonoBehaviour
     {
         //  SocketCommunication.GetInstance();
     }
+
     private void Update()
     {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
         Vector3 direction = new Vector3(horizontal, 0, vertical);
         transform.position += direction * speed * Time.deltaTime;
+        Shoot();
     }
-    public void ShootAtTarget(GameObject target)
+
+
+    GameObject GetTagetObj()
     {
-        Debug.Log("ShootAtTarget");
-        AllManager.Instance().bulletManager.SpawnBullet(transform.position, target.transform.position, 2);
+        GunType gunType = AllManager.Instance().gunConfig.lsGunType[gunId];
+
+        Collider[] creepColliders = Physics.OverlapSphere(transform.position, gunType.FireRange, creepLayerMask);
+
+        GameObject targetObj = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (Collider creepCollider in creepColliders)
+        {
+            float distance = Vector3.Distance(transform.position, creepCollider.transform.position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                targetObj = creepCollider.gameObject;
+            }
+        }
+
+        Debug.Log("find target" + targetObj?.GetInstanceID().ToString());
+        return targetObj;
     }
+
+    void Shoot()
+    {
+        GameObject targetObj = GetTagetObj();
+
+        if (targetObj == null) 
+        {
+            return;
+        }
+
+        if (targetObj != curCreepTarget) 
+        {
+            CreepManager creepManager = AllManager.Instance().creepManager;
+            creepManager.MarkTargetCreepById(targetObj.GetInstanceID());
+            if (curCreepTarget != null) 
+            {
+                creepManager.UnmarkTargetCreepById(curCreepTarget.GetInstanceID());
+            } 
+            curCreepTarget = targetObj;
+        }
+
+        AllManager.Instance().bulletManager.SpawnBullet(transform.position, targetObj.transform.position, 2);
+    }
+
+    //public void ShootAtTarget(GameObject target)
+    //{
+    //    Debug.Log("ShootAtTarget");
+    //    AllManager.Instance().bulletManager.SpawnBullet(transform.position, target.transform.position, 2);
+    //}
 }

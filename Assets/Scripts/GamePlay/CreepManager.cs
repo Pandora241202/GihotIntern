@@ -84,6 +84,7 @@ public class CreepManager
     {
         CreepConfig config = GetCreepConfigByType(creepType);
         GameObject creepObj = GameObject.Instantiate(config.CreepPrefab);
+        creepObj.layer = LayerMask.NameToLayer("creep");
         Creep creep = new Creep(creepObj.transform, creepType, config);
         creepNotActiveByTypeList[(int) creepType].Add(creep);
     }
@@ -196,6 +197,32 @@ public class CreepManager
         int dmg = 5;
         Creep creep = GetActiveCreepById(creepId);
         creep.ProcessDmg(dmg);
+    }
+
+    public void MarkTargetCreepById(int creepId)
+    {
+        Creep creep = GetActiveCreepById(creepId);
+
+        if (creep == null)
+        {
+            return;
+        }
+
+        Debug.Log("Bi dien ak???????");
+
+        creep.creepTrans.gameObject.GetComponent<Renderer>().material.color = Color.blue;
+    }
+
+    public void UnmarkTargetCreepById(int creepId)
+    {
+        Creep creep = GetActiveCreepById(creepId);
+
+        if (creep == null)
+        {
+            return;
+        }
+
+        creep.creepTrans.gameObject.GetComponent<Renderer>().material.color = Color.red;
     }
 
     //public void Reset()
