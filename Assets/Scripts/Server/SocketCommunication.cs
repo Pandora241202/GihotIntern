@@ -6,56 +6,6 @@ using System.Threading;
 using System.Text;
 using System;
 
-[System.Serializable]
-class EventName
-{
-    public string event_name;
-
-}
-
-[System.Serializable]
-class First_Connect
-{
-    public string id;
-    public string player_name;
-}
-
-[System.Serializable]
-class Rooms
-{
-    public Room[] rooms;
-}
-
-[System.Serializable]
-class SimplePlayerInfo
-{
-    public string player_id;
-    public string player_name;
-    public string host_id;
-}
-
-[System.Serializable]
-class SimplePlayerInfoList
-{
-    public SimplePlayerInfo[] players;
-}
-
-[System.Serializable]
-public class Room
-{
-    public string id;
-    public string name;
-    public string game_mode;
-}
-
-[System.Serializable]
-public class CreepSpawnInfo
-{
-    public int creepTypeInt;
-    [field: SerializeField] public Vector3 spawnPos;
-    public float time;
-    public int spawnNum;
-}
 
 public class SocketCommunication
 {

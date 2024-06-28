@@ -59,6 +59,12 @@ public class UIMainMenu : MonoBehaviour
         }
     }
 
+    public void OnLeave_Clicked()
+    {
+        SendData<PlayerLeaveEvent> data = new SendData<PlayerLeaveEvent>(new PlayerLeaveEvent("leave_lobby", true, Player_ID.MyPlayerID));
+        SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
+        BackShowMain();
+    }
     public void ChangeLobbyListName(Dictionary<string, Player> players)
     {
         for (int i = players.Count-1; i >= 0; i--)
