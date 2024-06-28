@@ -6,15 +6,6 @@ using System.Threading;
 using System.Text;
 using System;
 
-
-[System.Serializable]
-public class CreepSpawnInfo
-{
-    public int creepTypeInt;
-    [field: SerializeField] public Vector3[] spawnPos;
-    public float time;
-}
-
 public class SocketCommunication
 {
     private static SocketCommunication instance;

@@ -96,7 +96,6 @@ public class Room
 public class CreepSpawnInfo
 {
     public int creepTypeInt;
-    [field: SerializeField]public Vector3 spawnPos;
+    [field: SerializeField] public Vector3[] spawnPos;
     public float time;
-    public int spawnNum;
 }
