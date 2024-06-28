@@ -12,7 +12,6 @@ public class UIMainMenu : MonoBehaviour
     [SerializeField] private GameObject goOnline;
     [SerializeField] public Button btnOnline;
     [SerializeField] private List<GameObject> lsBtnForPlayer = new List<GameObject>();
-    [SerializeField] private List<TextMeshProUGUI> lsTxtName = new List<TextMeshProUGUI>();
     [SerializeField] private List<ItemPlayerList> goPlayerList = new List<ItemPlayerList>();
     [SerializeField] public GameObject prefabListItem;
     [SerializeField] private GameObject goContentList;
@@ -35,7 +34,7 @@ public class UIMainMenu : MonoBehaviour
     public void HostChangeLobbyListName(Dictionary<string,Player> players)
     {
 
-        for (int i = players.Count-1; i >= 0; i--)
+        for (int i = goPlayerList.Count-1; i >=0; i--)
         {
             Destroy(goPlayerList[i].goPlayerListItem);
             goPlayerList.RemoveAt(i);
@@ -45,16 +44,17 @@ public class UIMainMenu : MonoBehaviour
         {
             ItemPlayerList item = new ItemPlayerList(pair.Value.name,pair.Key,prefabListItem);
             goPlayerList.Add(item);
+            Debug.Log(pair.Value.name);
             item.goPlayerListItem.transform.SetParent(goContentList.transform);
             if (index == 0)
             {
                 item.goCrown.SetActive(true);
+                item.goBorder.SetActive(true);
             }
             else
             {
                 item.btnKick.gameObject.SetActive(true);
             }
-            lsTxtName[index].text = pair.Value.name;
             index++;
         }
     }
@@ -63,20 +63,34 @@ public class UIMainMenu : MonoBehaviour
     {
         for (int i = players.Count-1; i >= 0; i--)
         {
+            if (goPlayerList.Count == 0) break;
             Destroy(goPlayerList[i].goPlayerListItem);
             goPlayerList.RemoveAt(i);
         }
+
         int index = 0;
         foreach (var pair in players)
         {
-            ItemPlayerList item = new ItemPlayerList(pair.Value.name, pair.Key, prefabListItem);
-            goPlayerList.Add(item);
-            item.goPlayerListItem.transform.SetParent(goContentList.transform);
-            lsTxtName[index].text = pair.Value.name;
+            if (index == 1)
+            {
+                ItemPlayerList item = new ItemPlayerList(pair.Value.name, pair.Key, prefabListItem);
+                goPlayerList.Add(item);
+                item.goCrown.SetActive(true);
+                item.goPlayerListItem.transform.SetParent(goContentList.transform);
+            }
+            else if (index > 1)
+            {
+                ItemPlayerList item = new ItemPlayerList(pair.Value.name, pair.Key, prefabListItem);
+                goPlayerList.Add(item);
+                item.goPlayerListItem.transform.SetParent(goContentList.transform);
+            }
             index++;
         }
-
-        lsTxtName[index-1].text = players[Player_ID.MyPlayerID].name; 
+        ItemPlayerList itemMe = new ItemPlayerList(players[Player_ID.MyPlayerID].name, Player_ID.MyPlayerID, prefabListItem);
+        goPlayerList.Add(itemMe);
+        itemMe.goPlayerListItem.transform.SetParent(goContentList.transform);
+        itemMe.goBorder.SetActive(true);
+       
     }
     public void AfterCreate()
     {
