@@ -134,9 +134,18 @@ public class UIMainMenu : MonoBehaviour
         }
     }
 
+    public void BackShowMain()
+    {
+        btnOnline.gameObject.SetActive(true);
+        lsBtnForPlayer[0].SetActive(true);
+        lsBtnForPlayer[1].SetActive(false);
+        lsGOPlayer[0].SetActive(false);
+        lsGOPlayer[1].SetActive(false);
+    }
     public void OnOnline_Clicked()
     {
         goOnline.SetActive(true);
+        UIManager._instance.uiOnlineLobby.btnGetRooms.onClick.Invoke();
     }
     
 }

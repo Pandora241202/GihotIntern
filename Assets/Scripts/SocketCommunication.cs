@@ -31,6 +31,7 @@ class SimplePlayerInfo
 {
     public string player_id;
     public string player_name;
+    public string host_id;
 }
 
 [System.Serializable]
@@ -143,14 +144,44 @@ public class SocketCommunication
                     break;
                 case "spawn creep":
                     var creepSpawnInfo = JsonUtility.FromJson<CreepSpawnInfo>(response);
+                    // Dispatcher.EnqueueToMainThread(() =>
+                    //     {
+                    //         for (int i = 0; i < creepSpawnInfo.spawnNum; i++)
+                    //         {
+                    //             AllManager._instance.creepManager.SpawnCreep(creepSpawnInfo.spawnPos, (CreepManager.CreepType)creepSpawnInfo.creepTypeInt, creepSpawnInfo.time);
+                    //         }
+                    //     }
+                    // );
+                    break;
+                case "kick":
+                    SimplePlayerInfo kickedPlayer = JsonUtility.FromJson<SimplePlayerInfo>(response);
+                    Debug.Log(kickedPlayer.player_id);
+                    Debug.Log(kickedPlayer.host_id);
                     Dispatcher.EnqueueToMainThread(() =>
+                    {
+                        Debug.Log("trc remoce"+  AllManager.Instance().playerManager.dictPlayers.Count);
+                        AllManager.Instance().playerManager.RemovePlayer(kickedPlayer.player_id);
+                        Debug.Log("Sau remoce"+  AllManager.Instance().playerManager.dictPlayers.Count);
+
+                        if (Player_ID.MyPlayerID == kickedPlayer.host_id)
                         {
-                            for (int i = 0; i < creepSpawnInfo.spawnNum; i++)
-                            {
-                                AllManager._instance.creepManager.SpawnCreep(creepSpawnInfo.spawnPos, (CreepManager.CreepType)creepSpawnInfo.creepTypeInt, creepSpawnInfo.time);
-                            }
+                            UIManager._instance.uiMainMenu.HostChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
                         }
-                    );
+                        else
+                        {
+                            UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
+                        }
+                    });
+                    
+                    break;
+                case "kicked":
+                    Dispatcher.EnqueueToMainThread(() =>
+                    {
+                        Player me = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID];
+                        AllManager.Instance().playerManager.dictPlayers.Clear();
+                        AllManager.Instance().playerManager.dictPlayers.Add(me.id,me);
+                        UIManager._instance.uiMainMenu.BackShowMain();
+                    });
                     break;
             }
             Debug.Log(_event.event_name);
