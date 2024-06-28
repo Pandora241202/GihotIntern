@@ -6,47 +6,6 @@ using System.Threading;
 using System.Text;
 using System;
 
-[System.Serializable]
-class EventName
-{
-    public string event_name;
-
-}
-
-[System.Serializable]
-class First_Connect
-{
-    public string id;
-    public string player_name;
-}
-
-[System.Serializable]
-class Rooms
-{
-    public Room[] rooms;
-}
-
-[System.Serializable]
-class SimplePlayerInfo
-{
-    public string player_id;
-    public string player_name;
-    public string host_id;
-}
-
-[System.Serializable]
-class SimplePlayerInfoList
-{
-    public SimplePlayerInfo[] players;
-}
-
-[System.Serializable]
-public class Room
-{
-    public string id;
-    public string name;
-    public string game_mode;
-}
 
 [System.Serializable]
 public class CreepSpawnInfo
@@ -172,6 +131,7 @@ public class SocketCommunication
                     });
                     
                     break;
+                case "disband":
                 case "kicked":
                     Dispatcher.EnqueueToMainThread(() =>
                     {
@@ -179,6 +139,36 @@ public class SocketCommunication
                         AllManager.Instance().playerManager.dictPlayers.Clear();
                         AllManager.Instance().playerManager.dictPlayers.Add(me.id,me);
                         UIManager._instance.uiMainMenu.BackShowMain();
+                    });
+                    break;
+                case "player_leave":
+                    SimplePlayerInfo leave_player = JsonUtility.FromJson<SimplePlayerInfo>(response);
+                    Dispatcher.EnqueueToMainThread(() =>
+                    {
+                        
+                        AllManager.Instance().playerManager.RemovePlayer(leave_player.player_id);
+                        if (Player_ID.MyPlayerID == leave_player.host_id)
+                        {
+                            UIManager._instance.uiMainMenu.HostChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
+                        }
+                        else
+                        {
+                            UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
+                        }
+                    });
+                    break;
+                case "all player ready":
+                    Debug.Log("Con cac");
+                    Dispatcher.EnqueueToMainThread(() =>
+                    {
+                        UIManager._instance.uiMainMenu.btnStart.interactable = true;
+                    });
+                    break;
+                case "not all player ready":
+                    Debug.Log("Con cac");
+                    Dispatcher.EnqueueToMainThread(() =>
+                    {
+                        UIManager._instance.uiMainMenu.btnStart.interactable =false;
                     });
                     break;
             }

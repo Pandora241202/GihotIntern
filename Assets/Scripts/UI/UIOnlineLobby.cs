@@ -23,21 +23,7 @@ public class UIOnlineLobby : MonoBehaviour
     [SerializeField] private TMP_Dropdown ddGameMode;
     [SerializeField] private Button btnCloseCreatePU;
  
-    [System.Serializable]
-    class OnlineLobbyEvent 
-    {
-        public string event_name;
-        public bool value;
-        public string name;
-        public string game_mode;
-        public OnlineLobbyEvent(string event_name, bool value, string name = "", string game_mode = "")
-        {
-            this.event_name = event_name;
-            this.value = value;
-            this.name = name;
-            this.game_mode = game_mode;
-        }
-    }
+   
 
     public void OnClose()
     {
@@ -75,7 +61,7 @@ public class UIOnlineLobby : MonoBehaviour
         Debug.Log(AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].name);
         UIManager._instance.uiMainMenu.HostChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
         UIManager._instance.uiMainMenu.AfterCreate();
-        
+        UIManager._instance.uiMainMenu.btnStart.interactable = false;
         gameObject.SetActive(false);
     }
 
