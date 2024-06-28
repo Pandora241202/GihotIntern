@@ -15,6 +15,9 @@ public class UIMainMenu : MonoBehaviour
     [SerializeField] private List<ItemPlayerList> goPlayerList = new List<ItemPlayerList>();
     [SerializeField] public GameObject prefabListItem;
     [SerializeField] private GameObject goContentList;
+    [SerializeField] private Button btnLeave;
+    [SerializeField] private List<Button> lsBtnReady = new List<Button>();
+    public Button btnStart;
     public void OnSetUp()
     {
         
@@ -29,6 +32,9 @@ public class UIMainMenu : MonoBehaviour
     {
         lsBtnForPlayer[1].SetActive(true);
         lsBtnForPlayer[0].SetActive(false);
+        lsBtnReady[0].gameObject.SetActive(true);
+        lsBtnReady[1].gameObject.SetActive(false);
+        
     }
 
     public void HostChangeLobbyListName(Dictionary<string,Player> players)
@@ -59,10 +65,35 @@ public class UIMainMenu : MonoBehaviour
         }
     }
 
+    public void OnReady_Click(int i)
+    { 
+        SendData<PlayerIdEvent> data = new SendData<PlayerIdEvent>(new PlayerIdEvent("ready")); 
+        SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
+        if (i == 0)
+        {
+           
+            lsBtnReady[0].gameObject.SetActive(false);
+            lsBtnReady[1].gameObject.SetActive(true);
+
+        }
+        else
+        {
+            lsBtnReady[1].gameObject.SetActive(false);
+            lsBtnReady[0].gameObject.SetActive(true);
+
+        }
+        
+    }
     public void OnLeave_Clicked()
     {
-        SendData<PlayerLeaveEvent> data = new SendData<PlayerLeaveEvent>(new PlayerLeaveEvent("leave_lobby", true, Player_ID.MyPlayerID));
+        SendData<PlayerIdEvent> data = new SendData<PlayerIdEvent>(new PlayerIdEvent("leave"));
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
+        
+        //Reset List Player
+        Player me = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID];
+        AllManager.Instance().playerManager.dictPlayers.Clear();
+        AllManager.Instance().playerManager.dictPlayers.Add(me.id,me);
+        UIManager._instance.uiMainMenu.BackShowMain();
         BackShowMain();
     }
     public void ChangeLobbyListName(Dictionary<string, Player> players)
@@ -112,20 +143,7 @@ public class UIMainMenu : MonoBehaviour
         lsBtnForPlayer[0].SetActive(false);
         lsGOPlayer[0].SetActive(true);
     }
-
-    // public void JoinCall(int i)
-    // {
-    //     if (i == 0)
-    //     {
-    //         goBorderMe[i].SetActive(true);
-    //         btnKickForHost.gameObject.SetActive(true);
-    //     }
-    //     else
-    //     {
-    //         goBorderMe[i].SetActive(true);
-    //         btnKickForHost.gameObject.SetActive(false);
-    //     }
-    // }
+    
     public void OnBtnClick(int index)
     {
         if (index == 0)

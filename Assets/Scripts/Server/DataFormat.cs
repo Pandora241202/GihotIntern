@@ -41,16 +41,13 @@ class OnlineLobbyEvent
     }
 }
 [System.Serializable]
-class PlayerLeaveEvent
+class PlayerIdEvent
 {
     public string event_name;
-    public bool value;
-    public string player_id;
-    public PlayerLeaveEvent(string event_name,bool value,string id)
+    public string player_id = Player_ID.MyPlayerID;
+    public PlayerIdEvent(string event_name)
     {
         this.event_name = event_name;
-        this.value = value;
-        this.player_id = id;
     }
 }
 [System.Serializable]
