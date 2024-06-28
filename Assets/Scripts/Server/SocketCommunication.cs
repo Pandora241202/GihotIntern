@@ -124,6 +124,7 @@ public class SocketCommunication
                     });
                     
                     break;
+                case "disband":
                 case "kicked":
                     Dispatcher.EnqueueToMainThread(() =>
                     {
@@ -131,6 +132,36 @@ public class SocketCommunication
                         AllManager.Instance().playerManager.dictPlayers.Clear();
                         AllManager.Instance().playerManager.dictPlayers.Add(me.id,me);
                         UIManager._instance.uiMainMenu.BackShowMain();
+                    });
+                    break;
+                case "player_leave":
+                    SimplePlayerInfo leave_player = JsonUtility.FromJson<SimplePlayerInfo>(response);
+                    Dispatcher.EnqueueToMainThread(() =>
+                    {
+                        
+                        AllManager.Instance().playerManager.RemovePlayer(leave_player.player_id);
+                        if (Player_ID.MyPlayerID == leave_player.host_id)
+                        {
+                            UIManager._instance.uiMainMenu.HostChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
+                        }
+                        else
+                        {
+                            UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
+                        }
+                    });
+                    break;
+                case "all player ready":
+                    Debug.Log("Con cac");
+                    Dispatcher.EnqueueToMainThread(() =>
+                    {
+                        UIManager._instance.uiMainMenu.btnStart.interactable = true;
+                    });
+                    break;
+                case "not all player ready":
+                    Debug.Log("Con cac");
+                    Dispatcher.EnqueueToMainThread(() =>
+                    {
+                        UIManager._instance.uiMainMenu.btnStart.interactable =false;
                     });
                     break;
             }
