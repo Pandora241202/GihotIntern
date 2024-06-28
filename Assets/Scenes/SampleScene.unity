@@ -1352,6 +1352,10 @@ PrefabInstance:
       propertyPath: prefabBullet
       value: 
       objectReference: {fileID: 1771311856625642708, guid: f6b090be806a7f148bdca82f0ed546c3, type: 3}
+    - target: {fileID: 439095541260604641, guid: eb315ad2f4977474fa487a3025c7bd73, type: 3}
+      propertyPath: creepLayerMask.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
     - target: {fileID: 6769973144926382978, guid: eb315ad2f4977474fa487a3025c7bd73, type: 3}
       propertyPath: m_RootOrder
       value: 4
