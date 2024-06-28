@@ -29,10 +29,10 @@ public class AllManager : MonoBehaviour
     }
     private void Update() {
         bulletManager.MyUpdate();
-        //creepManager.MyUpdate();
+        creepManager.MyUpdate();
     }
     private void LateUpdate() {
         bulletManager.LateUpdate();
-        //creepManager.LateUpdate();
+        creepManager.LateUpdate();
     }
 }

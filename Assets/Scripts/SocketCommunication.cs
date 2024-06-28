@@ -144,14 +144,13 @@ public class SocketCommunication
                     break;
                 case "spawn creep":
                     var creepSpawnInfo = JsonUtility.FromJson<CreepSpawnInfo>(response);
-                    // Dispatcher.EnqueueToMainThread(() =>
-                    //     {
-                    //         for (int i = 0; i < creepSpawnInfo.spawnNum; i++)
-                    //         {
-                    //             AllManager._instance.creepManager.SpawnCreep(creepSpawnInfo.spawnPos, (CreepManager.CreepType)creepSpawnInfo.creepTypeInt, creepSpawnInfo.time);
-                    //         }
-                    //     }
-                    // );
+                    Dispatcher.EnqueueToMainThread(() =>
+                    {
+                        for (int i = 0; i < creepSpawnInfo.spawnNum; i++)
+                        {
+                            AllManager._instance.creepManager.ActivateCreep(creepSpawnInfo.spawnPos, (CreepManager.CreepType)creepSpawnInfo.creepTypeInt, creepSpawnInfo.time);
+                        }
+                    });
                     break;
                 case "kick":
                     SimplePlayerInfo kickedPlayer = JsonUtility.FromJson<SimplePlayerInfo>(response);

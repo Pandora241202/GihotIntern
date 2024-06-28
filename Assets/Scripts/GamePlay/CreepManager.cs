@@ -1,21 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Unity.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Creep
 {
     public Transform creepTrans;
     public CreepConfig config;
+    public CreepManager.CreepType type;
     public int hp;
     public float speed;
     public int dmg;
 
-    public Creep(Transform creepTrans, CreepConfig config, float time)
+    public Creep(Transform creepTrans, CreepManager.CreepType type, CreepConfig config)
     {
         this.creepTrans = creepTrans;
         this.config = config;
-        hp = config.BaseHp + (int) (time / 60) * 5;
+        this.type = type;
+        creepTrans.gameObject.SetActive(false);
+    }
+
+    public void Set(Vector3 pos, float time)
+    {
+        hp = config.BaseHp + (int)(time / 60) * 5;
         dmg = config.BaseDmg + (int)(time / 60) * 2;
         speed = config.BaseSpeed;
+        creepTrans.position = pos;
+        creepTrans.gameObject.SetActive(true);
+    }
+
+    public void UnSet() 
+    {
+        creepTrans.gameObject.SetActive(false);
     }
 
     public void Move()
@@ -39,22 +56,18 @@ public class Creep
         if (hp <= 0)
         {
             CreepManager creepManager = AllManager.Instance().creepManager;
-            creepManager.AddToDestroyList(this);
+            creepManager.AddToDeactivateList(this);
         }
     }
 }
 
 public class CreepManager
 {
-    private Dictionary<int, Creep> creepDict = new Dictionary<int, Creep>();
-    private List<int> creepIdsToDestroy = new List<int>();
+    private Dictionary<int, Creep> creepActiveDict = new Dictionary<int, Creep>();
+    List<Creep>[] creepNotActiveByTypeList = new List<Creep>[7];
+    private List<int> creepIdsToDeactivate = new List<int>();
+    //private List<CreepSpawnInfo> needSpawnCreeps = new List<CreepSpawnInfo>();
     private CreepConfig[] creepConfigs;
-    public float _timer;
-
-    public CreepManager(AllCreepConfig allCreepConfig)
-    {
-        creepConfigs = allCreepConfig.CreepConfigs;
-    }
 
     public enum CreepType
     {
@@ -67,29 +80,62 @@ public class CreepManager
         Creep7
     }
 
+    private void SpawnCreep(CreepType creepType)
+    {
+        CreepConfig config = GetCreepConfigByType(creepType);
+        GameObject creepObj = GameObject.Instantiate(config.CreepPrefab);
+        Creep creep = new Creep(creepObj.transform, creepType, config);
+        creepNotActiveByTypeList[(int) creepType].Add(creep);
+    }
+
+    public CreepManager(AllCreepConfig allCreepConfig)
+    {
+        creepConfigs = allCreepConfig.CreepConfigs;
+        
+        for (int i = 0; i < creepNotActiveByTypeList.Length; i++) 
+        {
+            creepNotActiveByTypeList[i] = new List<Creep>();
+        }
+
+        for (CreepType type = CreepType.Creep1; type <= CreepType.Creep7; type++)
+        {
+            for (int i = 0; i < Constants.MaxCreepForEachType; i++)
+            {
+                SpawnCreep(type);
+            }
+        }
+    }
+
     public CreepConfig GetCreepConfigByType(CreepType type)
     {
         return creepConfigs[(int)type];
     }
 
-    public void AddToDestroyList(Creep creep)
+    public void AddToDeactivateList(Creep creep)
     {
-        creepIdsToDestroy.Add(creep.creepTrans.gameObject.GetInstanceID());
+        creepIdsToDeactivate.Add(creep.creepTrans.gameObject.GetInstanceID());
     }
 
-    public void SpawnCreep(Vector3 spawnPos, CreepType creepType, float time)
+    public void ActivateCreep(Vector3 spawnPos, CreepType creepType, float time)
     {
-        CreepConfig config = GetCreepConfigByType(creepType);
-        GameObject creepObj = GameObject.Instantiate(config.CreepPrefab, spawnPos, Quaternion.identity);
-        Creep creep = new Creep(creepObj.transform, config, time);
-        creepDict.Add(creepObj.GetInstanceID(), creep);
-        _timer = 0;
+        // All creep of same type have been activated => Spawn new
+        if (creepNotActiveByTypeList[(int)creepType].Count == 0)
+        {
+            SpawnCreep(creepType);
+        }
+
+        Creep creepNeedActive = creepNotActiveByTypeList[(int)creepType][0];
+            
+        creepNeedActive.Set(spawnPos, time);
+        creepActiveDict.Add(creepNeedActive.creepTrans.gameObject.GetInstanceID(), creepNeedActive);
+            
+        creepNotActiveByTypeList[(int)creepType].RemoveAt(0);
     }
 
-    public Creep GetCreepById(int id)
+    public Creep GetActiveCreepById(int id)
     {
         Creep creep;
-        if (creepDict.TryGetValue(id, out creep))
+        if (creepActiveDict.TryGetValue(id, out creep))
         {
             return creep;
         }
@@ -107,7 +153,7 @@ public class CreepManager
             _timer += Time.deltaTime;
         }*/
 
-        foreach (var pair in creepDict)
+        foreach (var pair in creepActiveDict)
         {
             Creep creep = pair.Value;
             creep.Attack();
@@ -115,24 +161,32 @@ public class CreepManager
         }
     }
 
+    private void DeactivateCreep(Creep creep)
+    {
+        creep.UnSet();
+        creepNotActiveByTypeList[(int) creep.type].Add(creep);
+        creepActiveDict.Remove(creep.creepTrans.gameObject.GetInstanceID());
+    }
+
     public void LateUpdate()
     {
-        for (int i = 0; i < creepIdsToDestroy.Count; i++)
+        for (int i = 0; i < creepIdsToDeactivate.Count; i++)
         {
-            Creep creep = GetCreepById(creepIdsToDestroy[i]);
+            Creep creep = GetActiveCreepById(creepIdsToDeactivate[i]);
 
             if (creep == null)
             {
-                creepIdsToDestroy.RemoveAt(i);
+                creepIdsToDeactivate.RemoveAt(i);
                 continue;
             }
 
             //AllManager.Instance.effectManager.SpawnEffect(EffectManager.EffectType.EXPLOSION, enemyInfo.enemyTrans.position);
             creep.OnDead();
-            GameObject.Destroy(creep.creepTrans.gameObject);
-            creepDict.Remove(creepIdsToDestroy[i]);
+            
+            DeactivateCreep(creep);
         }
-        creepIdsToDestroy.Clear();
+
+        creepIdsToDeactivate.Clear();
     }
 
     public void ProcessCollision(int creepId, GameObject colliderobject)
@@ -140,7 +194,7 @@ public class CreepManager
         //TODO: Bullet Dmg
         //TODO: Sync 
         int dmg = 5;
-        Creep creep = GetCreepById(creepId);
+        Creep creep = GetActiveCreepById(creepId);
         creep.ProcessDmg(dmg);
     }
 
