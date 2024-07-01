@@ -98,7 +98,16 @@ public class CharacterController : MonoBehaviour
             } 
             curCreepTarget = targetObj;
         }
-        AllManager.Instance().bulletManager.SpawnBullet(transform.position, curCreepTarget, gunId);
+
+        Vector3 directionToTarget = (targetObj.transform.position - gunTransform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(directionToTarget);
+        gunTransform.rotation = Quaternion.Slerp(gunTransform.rotation, lookRotation, Time.deltaTime * 100f);
+        
+        float angle = Vector3.Angle(gunTransform.forward, directionToTarget);
+        if (angle < 10f)
+        {
+            AllManager.Instance().bulletManager.SpawnBullet(gunTransform.position, curCreepTarget, gunId);
+        }
     }
 
     public void SetTargetShoot(GameObject target)
