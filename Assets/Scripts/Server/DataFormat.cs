@@ -62,6 +62,7 @@ class First_Connect
 {
     public string id;
     public string player_name;
+    public int gunId;
 }
 
 [System.Serializable]
@@ -76,6 +77,7 @@ class SimplePlayerInfo
     public string player_id;
     public string player_name;
     public string host_id;
+    public int gun_id;
 }
 
 [System.Serializable]

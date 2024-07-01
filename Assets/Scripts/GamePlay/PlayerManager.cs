@@ -7,6 +7,15 @@ public class Player
     public Transform playerTrans;
     public string name;
     public string id;
+    public int gunId;
+    public GunConfig gunConfig;
+    public Player(string name, string id, int gunId)
+    {
+        this.name = name;
+        this.id = id;
+        this.gunId = gunId;
+
+    }
 }
 
 public class PlayerManager
@@ -22,11 +31,11 @@ public class PlayerManager
     {
         this.dictPlayers.Remove(id);
     }
-    public void AddPlayer(string name, string id)
+    public void AddPlayer(string name, string id, int gunId)
     {
-        Player newplayer = new Player();
-        newplayer.name = name;
-        newplayer.id = id;
-        dictPlayers.Add(id,newplayer);
+        Player newPlayer = new Player(name, id, gunId);
+        // newplayer.name = name;
+        // newplayer.id = id;
+        dictPlayers.Add(id,newPlayer);
     }
 }

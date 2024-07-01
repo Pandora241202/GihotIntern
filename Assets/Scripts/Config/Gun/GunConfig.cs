@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Config/Gun")]
 public class GunConfig : ScriptableObject
 {
-   public List<GunType> lsGunType = new List<GunType>();
+    public List<GunType> lsGunType = new List<GunType>();
 }
 
 [System.Serializable]
