@@ -6,5 +6,6 @@ public class Creep3Config : MoveTowardPlayerCreepConfig
     public override void Attack(Creep creep)
     {
         //TODO shoot bullet
+        base.Attack(creep);
     }
 }

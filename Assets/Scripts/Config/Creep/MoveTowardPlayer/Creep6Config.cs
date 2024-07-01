@@ -6,5 +6,6 @@ public class Creep6Config : MoveTowardPlayerCreepConfig
     public override void Attack(Creep creep)
     {
         //TODO Drop meteor
+        base.Attack(creep);
     }
 }

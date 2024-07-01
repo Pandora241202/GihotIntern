@@ -18,3 +18,4 @@ MonoBehaviour:
   baseDmg: 0
   exp: 30
   dropItemTypes: 
+  startMoveAwayDistance: 5

@@ -3,13 +3,14 @@ using UnityEngine;
 
 public class MoveTowardPlayerCreepConfig : CreepConfig
 {
-    public override void Move(Transform creepTransform, float speed) 
+    public override void Attack(Creep creep) 
     {
         Dictionary<string, Player> dictPlayers = AllManager.Instance().playerManager.dictPlayers;
 
-        //(string playerId, float _) = GetNearestPlayerWithDis(creepTransform);
+        //(string playerId, float _) = GetNearestPlayerWithDis(creep.creepTrans);
 
-        //creepTransform.Translate((dictPlayers[playerId].playerTrans.position - creepTransform.position).normalized * speed * Time.deltaTime);
-        creepTransform.Translate((CharacterController.Instance().transform.position - creepTransform.position).normalized * speed * Time.deltaTime);
+        //creep.creepTrans.rotation = Quaternion.LookRotation(dictPlayers[playerId].playerTrans.position - creep.creepTrans.position);
+
+        creep.creepTrans.rotation = Quaternion.LookRotation(CharacterController.Instance().transform.position - creep.creepTrans.position);
     }
 }

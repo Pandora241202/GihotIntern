@@ -44,7 +44,10 @@ public class CreepConfig : ScriptableObject
 
     public AllItemConfig.DropItemType[] DropItemTypes => dropItemTypes;
 
-    public virtual void Move(Transform creepTransform, float speed) { }
+    public virtual void Move(Transform creepTransform, float speed) 
+    {
+        creepTransform.Translate(creepTransform.forward * speed * Time.deltaTime, Space.World);
+    }
 
     public virtual void Attack(Creep creep) { }
 
