@@ -1,14 +1,38 @@
-/*using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 public class ShootNearest : MonoBehaviour
 {
-    public float searchRadius = 10.0f;
+    public GunConfig gunConfig;
+    public GunType gunType;
+    public Player player;
+    private float searchRadius = 0f;
     public int maxColliders = 10;
     private ITarget currentTarget;
+    public int currentGunId = AllManager.Instance().bulletManager.GetGunId(); //TODO: coroutine?
+    public GameObject currentGunPrefab;
+    public float currentFireRate;
 
+    private void Start()
+    {
+        // currentGunId = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].gunId;
+        // gunConfig = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].gunConfig.lsGunType[currentGunId];
+        Debug.Log("startGunId: " + currentGunId);
+        gunConfig = Resources.Load<GunConfig>("Configs/Gun/GunConfig");
+        gunType = gunConfig.lsGunType[currentGunId];
+        currentGunPrefab = gunType.gunPrefab;
+        GameObject gun = Instantiate(currentGunPrefab, transform.position, Quaternion.identity);
+        gun.transform.SetParent(transform);
+    }
+    
     private void Update()
     {
+        // currentGunId = AllManager.Instance().bulletManager.GetGunId();
+        Debug.Log("currentGunId after update in shootnearest: " + currentGunId);
+        gunType = gunConfig.lsGunType[currentGunId];
+        searchRadius = gunType.FireRange;
+        currentFireRate = gunType.Firerate;
         FindInRadius();
     }
 
@@ -46,4 +70,4 @@ public class ShootNearest : MonoBehaviour
             }
         }
     }
-}*/
+}

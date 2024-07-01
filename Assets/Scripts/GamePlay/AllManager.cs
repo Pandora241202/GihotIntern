@@ -8,7 +8,6 @@ public class AllManager : MonoBehaviour
     public BulletManager bulletManager;
     public PlayerManager playerManager;
     public CreepManager creepManager;
-
     public GunConfig gunConfig;
     [SerializeField] AllCreepConfig allCreepConfig;
 

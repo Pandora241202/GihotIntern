@@ -7,8 +7,9 @@ public class CharacterController : MonoBehaviour
 {
     [SerializeField] private float speed = 1.0f;
     [SerializeField] private GameObject prefabBullet;
+    public Transform gunTransform;
+    [SerializeField] int gunId = AllManager.Instance().bulletManager.GetGunId(); //temporary until be able to get the playerID
     [SerializeField] LayerMask creepLayerMask;
-    [SerializeField] int gunId;
     GameObject curCreepTarget = null;
 
     public static CharacterController _instance { get; private set; }
@@ -79,12 +80,14 @@ public class CharacterController : MonoBehaviour
             curCreepTarget = targetObj;
         }
 
-        AllManager.Instance().bulletManager.SpawnBullet(transform.position, targetObj.transform.position, 2);
+        AllManager.Instance().bulletManager.SpawnBullet(transform.position, gunId);
     }
 
-    //public void ShootAtTarget(GameObject target)
-    //{
-    //    Debug.Log("ShootAtTarget");
-    //    AllManager.Instance().bulletManager.SpawnBullet(transform.position, target.transform.position, 2);
-    //}
+    public void SetTargetShoot(GameObject target)
+    {
+        Debug.Log("SetTargetShoot");
+        //int gunId = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].gunId;
+        // AllManager.Instance().bulletManager.SpawnBullet(gunTransform.position, target.transform.position, gunId);
+        AllManager.Instance().bulletManager.SetTarget(target);
+    }
 }
