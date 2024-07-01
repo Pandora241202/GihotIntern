@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class CharacterController : MonoBehaviour
 {
-    [SerializeField] private float speed = 0.5f;
-    [SerializeField] private GameObject prefabBullet;
+    [SerializeField] private float speed = 1.0f;
     public Transform gunTransform;
     [SerializeField] int gunId = AllManager.Instance().bulletManager.GetGunId(); //temporary until be able to get the playerID
+    [SerializeField] private GameObject prefabBullet;
     [SerializeField] LayerMask creepLayerMask;
     GameObject curCreepTarget = null;
     public string id;
@@ -27,7 +27,9 @@ public class CharacterController : MonoBehaviour
     {
         //  SocketCommunication.GetInstance();
     }
-
+    private void Start(){
+        prefabBullet = AllManager.Instance().bulletManager.gunConfig.lsGunType[gunId].bulletPrefab;
+    }
     private void Update()
     {
         transform.position += this.velocity;
