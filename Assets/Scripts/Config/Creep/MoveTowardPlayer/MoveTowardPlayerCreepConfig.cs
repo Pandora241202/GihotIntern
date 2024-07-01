@@ -13,4 +13,13 @@ public class MoveTowardPlayerCreepConfig : CreepConfig
 
         //creep.creepTrans.rotation = Quaternion.LookRotation(CharacterController.Instance().transform.position - creep.creepTrans.position);
     }
+
+    public override void Move(Transform creepTransform, float speed)
+    {
+        Dictionary<string, Player> dictPlayers = AllManager.Instance().playerManager.dictPlayers;
+        (string playerId, float _) = GetNearestPlayerWithDis(creepTransform);
+        Vector3 direction =dictPlayers[playerId].playerTrans.position - creepTransform.position;
+        creepTransform.position += direction * speed * Time.deltaTime;
+        
+    }
 }
