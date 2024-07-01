@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletName: MachineGunBullet
   damage: 1
-  speed: 6
+  speed: 25
   bulletTimeToLive: 5
   bulletBaseCR: 0.2
   bulletBaseCD: 0.2

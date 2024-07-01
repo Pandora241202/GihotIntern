@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletName: ShotgunBullet
   damage: 8
-  speed: 4
+  speed: 8
   bulletTimeToLive: 2
   bulletBaseCR: 0.6
   bulletBaseCD: 1.2

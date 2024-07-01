@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletName: LightPistolBullet
   damage: 5
-  speed: 10
+  speed: 4
   bulletTimeToLive: 7
   bulletBaseCR: 0.4
   bulletBaseCD: 0.7

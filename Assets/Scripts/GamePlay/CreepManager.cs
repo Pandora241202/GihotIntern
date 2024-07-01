@@ -198,6 +198,7 @@ public class CreepManager
         int dmg = 5;
         Creep creep = GetActiveCreepById(creepId);
         creep.ProcessDmg(dmg);
+        AllManager.Instance().bulletManager.SetDelete(colliderobject.GetInstanceID());
     }
 
     public void MarkTargetCreepById(int creepId)

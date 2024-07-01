@@ -1401,13 +1401,21 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 439095541260604641, guid: eb315ad2f4977474fa487a3025c7bd73, type: 3}
+      propertyPath: speed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 439095541260604641, guid: eb315ad2f4977474fa487a3025c7bd73, type: 3}
       propertyPath: controller
       value: 
       objectReference: {fileID: 1375675670}
     - target: {fileID: 439095541260604641, guid: eb315ad2f4977474fa487a3025c7bd73, type: 3}
+      propertyPath: gunTransform
+      value: 
+      objectReference: {fileID: 1738684290}
+    - target: {fileID: 439095541260604641, guid: eb315ad2f4977474fa487a3025c7bd73, type: 3}
       propertyPath: prefabBullet
       value: 
-      objectReference: {fileID: 1771311856625642708, guid: f6b090be806a7f148bdca82f0ed546c3, type: 3}
+      objectReference: {fileID: 4236135470487450587, guid: 0e3b3c18d7237524e896c8ef281fe297, type: 3}
     - target: {fileID: 439095541260604641, guid: eb315ad2f4977474fa487a3025c7bd73, type: 3}
       propertyPath: creepLayerMask.m_Bits
       value: 128

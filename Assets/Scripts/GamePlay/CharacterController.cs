@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class CharacterController : MonoBehaviour
 {
-    [SerializeField] private float speed = 0.5f;
-    [SerializeField] private GameObject prefabBullet;
+    [SerializeField] private float speed = 1.0f;
     public Transform gunTransform;
     [SerializeField] int gunId = AllManager.Instance().bulletManager.GetGunId(); //temporary until be able to get the playerID
+    [SerializeField] private GameObject prefabBullet;
     [SerializeField] LayerMask creepLayerMask;
     GameObject curCreepTarget = null;
     public string id;
@@ -27,7 +27,9 @@ public class CharacterController : MonoBehaviour
     {
         //  SocketCommunication.GetInstance();
     }
-
+    private void Start(){
+        prefabBullet = AllManager.Instance().bulletManager.gunConfig.lsGunType[gunId].bulletPrefab;
+    }
     private void Update()
     {
         transform.position += this.velocity;
@@ -96,7 +98,16 @@ public class CharacterController : MonoBehaviour
             } 
             curCreepTarget = targetObj;
         }
-        AllManager.Instance().bulletManager.SpawnBullet(transform.position, curCreepTarget, gunId);
+
+        Vector3 directionToTarget = (targetObj.transform.position - gunTransform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(directionToTarget);
+        gunTransform.rotation = Quaternion.Slerp(gunTransform.rotation, lookRotation, Time.deltaTime * 50f);
+        
+        float angle = Vector3.Angle(gunTransform.forward, directionToTarget);
+        if (angle < 10f)
+        {
+            AllManager.Instance().bulletManager.SpawnBullet(gunTransform.position, curCreepTarget, gunId);
+        }
     }
 
     public void SetTargetShoot(GameObject target)
