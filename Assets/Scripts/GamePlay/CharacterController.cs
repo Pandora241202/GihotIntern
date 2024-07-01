@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 
 public class CharacterController : MonoBehaviour
@@ -10,16 +9,18 @@ public class CharacterController : MonoBehaviour
     [SerializeField] LayerMask creepLayerMask;
     [SerializeField] int gunId;
     GameObject curCreepTarget = null;
-
-    public static CharacterController _instance { get; private set; }
-    public static CharacterController Instance()
-    {
-        if (_instance == null)
-        {
-            _instance = GameObject.FindAnyObjectByType<CharacterController>();
-        }
-        return _instance;
-    }
+    public string id;
+    int frame = 0;
+    public Vector3 velocity = new Vector3(0, 0, 0);
+    //public static CharacterController _instance { get; private set; }
+    //public static CharacterController Instance()
+    //{
+    //    if (_instance == null)
+    //    {
+    //        _instance = GameObject.FindAnyObjectByType<CharacterController>();
+    //    }
+    //    return _instance;
+    //}
 
     private void Awake()
     {
@@ -28,11 +29,26 @@ public class CharacterController : MonoBehaviour
 
     private void Update()
     {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-        Vector3 direction = new Vector3(horizontal, 0, vertical);
-        transform.position += direction * speed * Time.deltaTime;
+        transform.position += this.velocity;
         Shoot();
+    }
+
+    private void FixedUpdate()
+    {
+        if (id != Player_ID.MyPlayerID) return;
+        //float horizontal = _joystick.Horizontal;
+        //float vertical = _joystick.Vertical;
+        //Vector3 direction = new Vector3(horizontal, 0, vertical);
+        //transform.position += direction * speed * Time.deltaTime;
+        if (frame % 2 == 0)
+        {
+            float horizontal = Input.GetAxis("Horizontal");
+            float vertical = Input.GetAxis("Vertical");
+            Vector3 direction = new Vector3(horizontal, 0, vertical) * speed;
+            SendData<MoveEvent> data = new SendData<MoveEvent>(new MoveEvent(direction));
+            SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
+        }
+        frame++;
     }
 
 

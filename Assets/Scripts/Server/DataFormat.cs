@@ -10,6 +10,18 @@ public class SendData<T>
         this._event = _event;
     }
 }
+
+[Serializable]
+class MoveEvent
+{
+    public string event_name = "move";
+    [field: SerializeField] Vector3 velocity;
+    public MoveEvent(Vector3 velocity)
+    {
+        this.velocity = velocity;
+    }
+}
+
 [System.Serializable]
 class ItemPlayerEvent
 {
@@ -51,10 +63,13 @@ class PlayerIdEvent
     }
 }
 [System.Serializable]
-class EventName
+public class EventName
 {
     public string event_name;
-
+    public EventName(string event_name)
+    {
+        this.event_name = event_name;
+    }
 }
 
 [System.Serializable]
@@ -98,4 +113,17 @@ public class CreepSpawnInfo
     public int creepTypeInt;
     [field: SerializeField] public Vector3[] spawnPos;
     public float time;
+}
+
+[Serializable]
+public class PlayerSpawnPos
+{
+    public string player_id;
+    [field: SerializeField] public Vector3 spawn_pos;
+}
+
+[Serializable]
+public class AllPlayerSpanwPos
+{
+    public PlayerSpawnPos[] all; 
 }
