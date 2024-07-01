@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lsGunType:
   - numberOfBullet: 1
-    Firerate: 4
+    Firerate: 1000
     bulletConfig: {fileID: 11400000, guid: 6a1dae1fb069c1945bd6abbed9c0dea7, type: 2}
     FireRange: 10
     gunPrefab: {fileID: 6774843256803546431, guid: 5dfd1a7d1a70bcf42b3d55b163ee81e5, type: 3}

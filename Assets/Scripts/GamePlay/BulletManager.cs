@@ -96,11 +96,12 @@ public class BulletManager
     public void SpawnBullet(Vector3 posSpawn, GameObject target, int gunId)
     {
         GunType gunType = gunConfig.lsGunType[gunId];
-        // Debug.Log("SpawnBullet in BulletManager called, gunId = " + gunId);
-        // Debug.Log("BulletManager target = " + target.transform.position);
-        gunType.bulletConfig.Fire(posSpawn, target.transform.position, this);
-        
-        // Debug.Log($"Spawned Bullet. Total bullets: {bulletInfoList.Count}");
+        localFireRate = gunType.Firerate;
+        if (target && Time.time >= lastFireTime + 1f / localFireRate)
+        {
+            gunType.bulletConfig.Fire(posSpawn, target.transform.position, this);
+            lastFireTime = Time.time;
+        }
         Debug.Log("Spawned Bullet");
     }
     public void SetTarget(GameObject target)
