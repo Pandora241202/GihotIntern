@@ -14,7 +14,6 @@ public class Player
         this.name = name;
         this.id = id;
         this.gunId = gunId;
-
     }
 }
 
@@ -47,9 +46,10 @@ public class PlayerManager
         dictPlayers.Add(id,newPlayer);
     }
 
-    public void UpdatePlayerVelocity(string id, Vector3 velocity)
+    public void UpdatePlayerVelocity(string id, Vector3 velocity, Vector3 position)
     {
         Player player = dictPlayers[id];
         player.playerTrans.gameObject.GetComponent<CharacterController>().velocity = velocity;
+        player.playerTrans.position = position;
     }
 }

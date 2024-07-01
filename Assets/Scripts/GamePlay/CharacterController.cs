@@ -43,12 +43,12 @@ public class CharacterController : MonoBehaviour
         //float vertical = _joystick.Vertical;
         //Vector3 direction = new Vector3(horizontal, 0, vertical);
         //transform.position += direction * speed * Time.deltaTime;
-        if (frame % 2 == 0)
+        if (frame % 5 == 0)
         {
             float horizontal = Input.GetAxis("Horizontal");
             float vertical = Input.GetAxis("Vertical");
             Vector3 velocity = new Vector3(horizontal, 0, vertical) * speed * Time.deltaTime;
-            SendData<MoveEvent> data = new SendData<MoveEvent>(new MoveEvent(velocity));
+            SendData<MoveEvent> data = new SendData<MoveEvent>(new MoveEvent(velocity, transform.position));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
         }
         frame++;

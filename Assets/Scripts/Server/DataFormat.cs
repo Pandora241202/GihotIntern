@@ -16,9 +16,11 @@ class MoveEvent
 {
     public string event_name = "move";
     [field: SerializeField] Vector3 velocity;
-    public MoveEvent(Vector3 velocity)
+    [field: SerializeField] Vector3 position;
+    public MoveEvent(Vector3 velocity, Vector3 position)
     {
         this.velocity = velocity;
+        this.position = position;
     }
 }
 
@@ -136,4 +138,5 @@ public class PlayerMove
 {
     public string player_id;
     [field: SerializeField] public Vector3 velocity;
+    [field: SerializeField] public Vector3 position;
 }
