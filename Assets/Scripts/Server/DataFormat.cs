@@ -129,3 +129,10 @@ public class AllPlayerSpanwPos
 {
     public PlayerSpawnPos[] data; 
 }
+
+[Serializable]
+public class PlayerMove
+{
+    public string player_id;
+    [field: SerializeField] public Vector3 velocity;
+}

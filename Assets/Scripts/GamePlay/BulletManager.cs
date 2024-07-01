@@ -48,25 +48,25 @@ public class BulletManager
     public void MyUpdate()
     {
 
-        for (int i = 0; i < bulletInfoList.Count; i++)
-        {
-            bulletInfoList[i].Move();
-        }
+        //for (int i = 0; i < bulletInfoList.Count; i++)
+        //{
+        //    bulletInfoList[i].Move();
+        //}
 
-        for (int i = 0; i < bulletInfoList.Count; i++)
-        {
-            if (bulletInfoList[i].bulletObj.position.y >= 6)
-            {
-                bulletInfoList[i].isNeedDestroy = true;
-            }
-        }
-        GunType gunType = gunConfig.lsGunType[gunId];
-        localFireRate = gunType.Firerate;
-        if (target && Time.time >= lastFireTime + 1f / localFireRate)
-        {
-            SpawnBullet(CharacterController.Instance().gunTransform.position, target, gunId);
-            lastFireTime = Time.time;
-        }
+        //for (int i = 0; i < bulletInfoList.Count; i++)
+        //{
+        //    if (bulletInfoList[i].bulletObj.position.y >= 6)
+        //    {
+        //        bulletInfoList[i].isNeedDestroy = true;
+        //    }
+        //}
+        //GunType gunType = gunConfig.lsGunType[gunId];
+        //localFireRate = gunType.Firerate;
+        //if (target && Time.time >= lastFireTime + 1f / localFireRate)
+        //{
+        //    SpawnBullet(CharacterController.Instance().gunTransform.position, target, gunId);
+        //    lastFireTime = Time.time;
+        //}
     }
 
     public void LateUpdate()

@@ -29,7 +29,7 @@ public class ShootNearest : MonoBehaviour
     private void Update()
     {
         // currentGunId = AllManager.Instance().bulletManager.GetGunId();
-        Debug.Log("currentGunId after update in shootnearest: " + currentGunId);
+        //Debug.Log("currentGunId after update in shootnearest: " + currentGunId);
         gunType = gunConfig.lsGunType[currentGunId];
         searchRadius = gunType.FireRange;
         currentFireRate = gunType.Firerate;

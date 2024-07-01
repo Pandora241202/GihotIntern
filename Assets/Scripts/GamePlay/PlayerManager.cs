@@ -46,5 +46,9 @@ public class PlayerManager
         dictPlayers.Add(id,newPlayer);
     }
 
-
+    public void UpdatePlayerVelocity(string id, Vector3 velocity)
+    {
+        Player player = dictPlayers[id];
+        player.playerTrans.gameObject.GetComponent<CharacterController>().velocity = velocity;
+    }
 }

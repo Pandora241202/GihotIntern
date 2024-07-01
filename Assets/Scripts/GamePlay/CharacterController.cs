@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CharacterController : MonoBehaviour
 {
-    [SerializeField] private float speed = 1.0f;
+    [SerializeField] private float speed = 0.5f;
     [SerializeField] private GameObject prefabBullet;
     public Transform gunTransform;
     [SerializeField] int gunId = AllManager.Instance().bulletManager.GetGunId(); //temporary until be able to get the playerID
@@ -32,10 +32,6 @@ public class CharacterController : MonoBehaviour
     {
         transform.position += this.velocity;
         Shoot();
-    }
-
-    private void FixedUpdate()
-    {
         if (id != Player_ID.MyPlayerID) return;
         //float horizontal = _joystick.Horizontal;
         //float vertical = _joystick.Vertical;
@@ -45,11 +41,16 @@ public class CharacterController : MonoBehaviour
         {
             float horizontal = Input.GetAxis("Horizontal");
             float vertical = Input.GetAxis("Vertical");
-            Vector3 direction = new Vector3(horizontal, 0, vertical) * speed;
-            SendData<MoveEvent> data = new SendData<MoveEvent>(new MoveEvent(direction));
+            Vector3 velocity = new Vector3(horizontal, 0, vertical) * speed * Time.deltaTime;
+            SendData<MoveEvent> data = new SendData<MoveEvent>(new MoveEvent(velocity));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
         }
         frame++;
+    }
+
+    private void FixedUpdate()
+    {
+
     }
 
 
@@ -72,7 +73,7 @@ public class CharacterController : MonoBehaviour
             }
         }
 
-        Debug.Log("find target" + targetObj?.GetInstanceID().ToString());
+        //Debug.Log("find target" + targetObj?.GetInstanceID().ToString());
         return targetObj;
     }
 

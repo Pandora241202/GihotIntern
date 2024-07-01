@@ -9,22 +9,23 @@ public class AllManager : MonoBehaviour
     public BulletManager bulletManager;
     public PlayerManager playerManager;
     public CreepManager creepManager;
+
     public GunConfig gunConfig;
     [SerializeField] AllCreepConfig allCreepConfig;
     [SerializeField] GameObject characterPrefab;
 
     public static AllManager Instance()
     {
-        if (_instance == null)
-        {
-            _instance = GameObject.FindAnyObjectByType<AllManager>();
-        }
-
         return _instance;
     }
+
+    private void Awake()
+    {
+        _instance = this;
+    }
+
     private void Start() {
         playerManager = new PlayerManager(characterPrefab);
-        DontDestroyOnLoad(this);
     }
     private void Update() {
         //bulletManager.MyUpdate();
