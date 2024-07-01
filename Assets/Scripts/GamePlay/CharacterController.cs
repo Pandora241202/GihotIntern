@@ -101,7 +101,7 @@ public class CharacterController : MonoBehaviour
 
         Vector3 directionToTarget = (targetObj.transform.position - gunTransform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(directionToTarget);
-        gunTransform.rotation = Quaternion.Slerp(gunTransform.rotation, lookRotation, Time.deltaTime * 100f);
+        gunTransform.rotation = Quaternion.Slerp(gunTransform.rotation, lookRotation, Time.deltaTime * 50f);
         
         float angle = Vector3.Angle(gunTransform.forward, directionToTarget);
         if (angle < 10f)
