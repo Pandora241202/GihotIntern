@@ -79,8 +79,7 @@ public class CharacterController : MonoBehaviour
             } 
             curCreepTarget = targetObj;
         }
-
-        AllManager.Instance().bulletManager.SpawnBullet(transform.position, gunId);
+        AllManager.Instance().bulletManager.SpawnBullet(transform.position, curCreepTarget, gunId);
     }
 
     public void SetTargetShoot(GameObject target)

@@ -64,7 +64,7 @@ public class BulletManager
         localFireRate = gunType.Firerate;
         if (target && Time.time >= lastFireTime + 1f / localFireRate)
         {
-            SpawnBullet(CharacterController.Instance().gunTransform.position, gunId);
+            SpawnBullet(CharacterController.Instance().gunTransform.position, target, gunId);
             lastFireTime = Time.time;
         }
     }
@@ -92,9 +92,11 @@ public class BulletManager
         }
     }
 
-    public void SpawnBullet(Vector3 posSpawn, int gunId)
+    public void SpawnBullet(Vector3 posSpawn, GameObject target, int gunId)
     {
         GunType gunType = gunConfig.lsGunType[gunId];
+        Debug.Log("SpawnBullet in BulletManager called, gunId = " + gunId);
+        Debug.Log("BulletManager target = " + target.transform.position);
         gunType.bulletConfig.Fire(posSpawn, target.transform.position, this);
         
         Debug.Log($"Spawned Bullet. Total bullets: {bulletInfoList.Count}");

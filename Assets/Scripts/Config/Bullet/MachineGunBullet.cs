@@ -9,6 +9,7 @@ public class MachineGunBullet : BulletConfig
     {
         Vector3 direction = (target - posSpawn).normalized;
         GameObject obj = GameObject.Instantiate(bulletPrefab, posSpawn, Quaternion.identity);
+        obj.transform.rotation = Quaternion.LookRotation(direction) * Quaternion.Euler(90, 0, 0);
         BulletInfo newBullet = new BulletInfo(obj.transform, direction, speed);
         bulletManager.bulletInfoList.Add(newBullet);
     }
