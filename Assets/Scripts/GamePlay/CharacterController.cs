@@ -15,6 +15,7 @@ public class CharacterController : MonoBehaviour
     public string id;
     int frame = 0;
     public Vector3 velocity = new Vector3(0, 0, 0);
+    float lastFireTime = 0f;
     //public static CharacterController _instance { get; private set; }
     //public static CharacterController Instance()
     //{
@@ -104,13 +105,14 @@ public class CharacterController : MonoBehaviour
 
         Vector3 directionToTarget = (targetObj.transform.position - gunTransform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(directionToTarget);
-        gunTransform.rotation = Quaternion.Slerp(gunTransform.rotation, lookRotation, Time.deltaTime * 50f);
-        
-        float angle = Vector3.Angle(gunTransform.forward, directionToTarget);
-        if (angle < 10f)
-        {
-            AllManager.Instance().bulletManager.SpawnBullet(gunTransform.position, curCreepTarget, gunId);
-        }
+        gunTransform.rotation = lookRotation;
+        lastFireTime = AllManager.Instance().bulletManager.SpawnBullet(gunTransform.position, curCreepTarget, gunId, lastFireTime);
+
+        //float angle = Vector3.Angle(gunTransform.forward, directionToTarget);
+        //if (angle < 10f)
+        //{
+        //    AllManager.Instance().bulletManager.SpawnBullet(gunTransform.position, curCreepTarget, gunId);
+        //}
     }
 
     public void SetTargetShoot(GameObject target)

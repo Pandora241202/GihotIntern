@@ -26,49 +26,4 @@ public class ShootNearest : MonoBehaviour
         GameObject gun = Instantiate(currentGunPrefab, transform.position, Quaternion.identity);
         gun.transform.SetParent(transform);
     }
-    
-    private void Update()
-    {
-        // currentGunId = AllManager.Instance().bulletManager.GetGunId();
-        //Debug.Log("currentGunId after update in shootnearest: " + currentGunId);
-        gunType = gunConfig.lsGunType[currentGunId];
-        searchRadius = gunType.FireRange;
-        currentFireRate = gunType.Firerate;
-        FindInRadius();
-    }
-
-    void FindInRadius()
-    {
-        Collider[] hitColliders = new Collider[maxColliders];
-        int numColliders = Physics.OverlapSphereNonAlloc(transform.position, searchRadius, hitColliders);
-        float closestDistance = Mathf.Infinity;
-        ITarget closestTarget = null;
-
-        for (int i = 0; i < numColliders; i++)
-        {
-            if (hitColliders[i].TryGetComponent<ITarget>(out ITarget target))
-            {
-                float distance = Vector3.Distance(transform.position, hitColliders[i].transform.position);
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestTarget = target;
-                }
-            }
-        }
-
-        if (currentTarget != closestTarget)
-        {
-            if (currentTarget != null)
-            {
-                currentTarget.UnTarget();
-            }
-            currentTarget = closestTarget;
-            if (currentTarget != null)
-            {
-                currentTarget.Target();
-                Debug.Log("Targeting: " + currentTarget);
-            }
-        }
-    }
 }

@@ -99,16 +99,16 @@ public class BulletManager
         }
     }
 
-    public void SpawnBullet(Vector3 posSpawn, GameObject target, int gunId)
+    public float SpawnBullet(Vector3 posSpawn, GameObject target, int gunId, float lastFireTime)
     {
         GunType gunType = gunConfig.lsGunType[gunId];
         localFireRate = gunType.Firerate;
         if (target && Time.time >= lastFireTime + 1f / localFireRate)
         {
             gunType.bulletConfig.Fire(posSpawn, target.transform.position, this);
-            lastFireTime = Time.time;
+            return Time.time;
         }
-        Debug.Log("Spawned Bullet");
+        return lastFireTime;
     }
     public void SetTarget(GameObject target)
     {
