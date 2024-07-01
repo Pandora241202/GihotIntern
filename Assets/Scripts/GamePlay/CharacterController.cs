@@ -6,8 +6,10 @@ public class CharacterController : MonoBehaviour
 {
     [SerializeField] private float speed = 1.0f;
     public Transform gunTransform;
-    [SerializeField] int gunId = AllManager.Instance().bulletManager.GetGunId(); //temporary until be able to get the playerID
+
     [SerializeField] private GameObject prefabBullet;
+
+    [SerializeField] public int gunId; 
     [SerializeField] LayerMask creepLayerMask;
     GameObject curCreepTarget = null;
     public string id;
@@ -26,6 +28,7 @@ public class CharacterController : MonoBehaviour
     private void Awake()
     {
         //  SocketCommunication.GetInstance();
+        //gunId = GameObject.FindAnyObjectByType<SceneUpdater>().bulletManager.GetGunId();
     }
     private void Start(){
         prefabBullet = AllManager.Instance().bulletManager.gunConfig.lsGunType[gunId].bulletPrefab;
@@ -75,7 +78,7 @@ public class CharacterController : MonoBehaviour
             }
         }
 
-        //Debug.Log("find target" + targetObj?.GetInstanceID().ToString());
+        Debug.Log("find target" + targetObj?.GetInstanceID().ToString());
         return targetObj;
     }
 

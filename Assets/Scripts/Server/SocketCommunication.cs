@@ -97,7 +97,8 @@ public class SocketCommunication
                     {
                         foreach (Vector3 pos in creepSpawnInfo.spawnPos)
                         {
-                            AllManager._instance.creepManager.ActivateCreep(pos, (CreepManager.CreepType)creepSpawnInfo.creepTypeInt, creepSpawnInfo.time);
+                            Debug.Log(AllManager._instance.sceneUpdater);
+                            AllManager._instance.sceneUpdater.creepManager.ActivateCreep(pos, (CreepManager.CreepType)creepSpawnInfo.creepTypeInt, creepSpawnInfo.time);
                         }
                     });
                     break;
@@ -172,7 +173,7 @@ public class SocketCommunication
                     {
                         for(int i = 0; i < all.data.Length; i++)
                         {
-                            AllManager.Instance().playerManager.SpawnPlayer(all.data[i].spawn_pos, all.data[i].player_id);
+                            AllManager.Instance().playerManager.SpawnPlayer(all.data[i].spawn_pos, all.data[i].player_id, all.data[i].gun_id);
                         }
                     });
                     break;

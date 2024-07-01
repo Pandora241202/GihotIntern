@@ -10,7 +10,7 @@ public class ShootNearest : MonoBehaviour
     private float searchRadius = 0f;
     public int maxColliders = 10;
     private ITarget currentTarget;
-    public int currentGunId = AllManager.Instance().bulletManager.GetGunId(); //TODO: coroutine?
+    public int currentGunId; //TODO: coroutine?
     public GameObject currentGunPrefab;
     public float currentFireRate;
 
@@ -18,6 +18,7 @@ public class ShootNearest : MonoBehaviour
     {
         // currentGunId = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].gunId;
         // gunConfig = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].gunConfig.lsGunType[currentGunId];
+        currentGunId = AllManager.Instance().bulletManager.GetGunId();
         Debug.Log("startGunId: " + currentGunId);
         gunConfig = Resources.Load<GunConfig>("Configs/Gun/GunConfig");
         gunType = gunConfig.lsGunType[currentGunId];

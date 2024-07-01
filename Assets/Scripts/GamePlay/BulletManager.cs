@@ -36,6 +36,12 @@ public class BulletManager
     private float lastFireTime = 0f;
     private int gunId = 0; //TODO: receive gunID from player
     public GameObject target;
+
+    public BulletManager(GunConfig config)
+    {
+        this.gunConfig = config;
+    }
+
     public void SetGunId(int id)
     {
         gunId = id;

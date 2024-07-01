@@ -6,13 +6,16 @@ using UnityEngine.SceneManagement;
 public class AllManager : MonoBehaviour
 {
     public static AllManager _instance { get; private set; }
-    public BulletManager bulletManager;
+
     public PlayerManager playerManager;
-    public CreepManager creepManager;
+
 
     public GunConfig gunConfig;
-    [SerializeField] AllCreepConfig allCreepConfig;
+    [SerializeField] public AllCreepConfig allCreepConfig;
     [SerializeField] GameObject characterPrefab;
+    public SceneUpdater sceneUpdater;
+    public BulletManager bulletManager;
+    public CreepManager creepManager;
 
     public static AllManager Instance()
     {
@@ -28,19 +31,10 @@ public class AllManager : MonoBehaviour
         playerManager = new PlayerManager(characterPrefab);
     }
     private void Update() {
-        if(SceneManager.GetActiveScene().name == "level1")
-        {
-            bulletManager.MyUpdate();
-            creepManager.MyUpdate();
-        }
 
     }
     private void LateUpdate() {
-        if (SceneManager.GetActiveScene().name == "level1")
-        {
-            bulletManager.LateUpdate();
-            creepManager.LateUpdate();
-        }
+
     }
 
     public void LoadGame(string sceneName)
@@ -63,10 +57,12 @@ public class AllManager : MonoBehaviour
 
     private void OnSceneLoaded()
     {
+        UIManager._instance.uiMainMenu.gameObject.SetActive(false);
+        sceneUpdater = GameObject.FindObjectOfType<SceneUpdater>();
+        creepManager = sceneUpdater.creepManager;
+        bulletManager = sceneUpdater.bulletManager;
         SendData<EventName> ev = new SendData<EventName>(new EventName("done loading"));
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
-        UIManager._instance.uiMainMenu.gameObject.SetActive(false);
-        creepManager = new CreepManager(allCreepConfig);
-        bulletManager = new BulletManager();
+        SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
     }
 }

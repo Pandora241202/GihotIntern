@@ -122,6 +122,7 @@ public class PlayerSpawnPos
 {
     public string player_id;
     [field: SerializeField] public Vector3 spawn_pos;
+    public int gun_id;
 }
 
 [Serializable]

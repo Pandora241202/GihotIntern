@@ -27,11 +27,12 @@ public class PlayerManager
         this.characterPrefab = characterPrefab;
     }
 
-    public void SpawnPlayer(Vector3 position, string id)
+    public void SpawnPlayer(Vector3 position, string id, int gun_id)
     {
         Player player = this.dictPlayers[id];
         player.playerTrans = GameObject.Instantiate(characterPrefab, position, Quaternion.identity).transform;
         player.playerTrans.gameObject.GetComponent<CharacterController>().id = id;
+        player.playerTrans.gameObject.GetComponent<CharacterController>().gunId = gun_id;
     }
 
     public void RemovePlayer(string id)
