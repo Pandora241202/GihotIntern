@@ -168,9 +168,14 @@ public class SocketCommunication
                     break;
                 case "spawn player":
                     AllPlayerSpanwPos all = JsonUtility.FromJson<AllPlayerSpanwPos>(response);
+                    Debug.Log(response);
                     Dispatcher.EnqueueToMainThread(() =>
                     {
-                        Debug.Log(all.all[0].spawn_pos);
+                        for(int i = 0; i < all.data.Length; i++)
+                        {
+                            AllManager.Instance().playerManager.SpawnPlayer(all.data[i].spawn_pos, all.data[i].player_id);
+                            Debug.Log(all.data[i].spawn_pos);
+                        }
                     });
                     break;
                 case "player move":

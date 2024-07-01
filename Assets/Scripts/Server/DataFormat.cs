@@ -125,5 +125,5 @@ public class PlayerSpawnPos
 [Serializable]
 public class AllPlayerSpanwPos
 {
-    public PlayerSpawnPos[] all; 
+    public PlayerSpawnPos[] data; 
 }

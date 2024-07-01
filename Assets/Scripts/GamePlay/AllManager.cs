@@ -24,10 +24,8 @@ public class AllManager : MonoBehaviour
         return _instance;
     }
     private void Start() {
-        bulletManager = new BulletManager();
         playerManager = new PlayerManager(characterPrefab);
-        creepManager = new CreepManager(allCreepConfig);
-        bulletManager.gunConfig = gunConfig;
+        DontDestroyOnLoad(this);
     }
     private void Update() {
         //bulletManager.MyUpdate();
@@ -41,7 +39,6 @@ public class AllManager : MonoBehaviour
     public void LoadGame(string sceneName)
     {
         StartCoroutine(LoadScene(sceneName));
-        OnSceneLoaded();
     }
 
     private IEnumerator LoadScene(string sceneName)
@@ -50,10 +47,9 @@ public class AllManager : MonoBehaviour
 
         while (!asyncLoad.isDone)
         {
-            yield return 1;
+            yield return null;
         }
-
-        
+        OnSceneLoaded();
         Debug.Log("Scene loaded!");
 
     }
@@ -62,5 +58,8 @@ public class AllManager : MonoBehaviour
     {
         SendData<EventName> ev = new SendData<EventName>(new EventName("done loading"));
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
+        UIManager._instance.uiMainMenu.gameObject.SetActive(false);
+        creepManager = new CreepManager(allCreepConfig);
+        bulletManager = new BulletManager();
     }
 }
