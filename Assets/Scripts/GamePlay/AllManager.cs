@@ -28,12 +28,19 @@ public class AllManager : MonoBehaviour
         playerManager = new PlayerManager(characterPrefab);
     }
     private void Update() {
-        //bulletManager.MyUpdate();
-        //creepManager.MyUpdate();
+        if(SceneManager.GetActiveScene().name == "level1")
+        {
+            bulletManager.MyUpdate();
+            creepManager.MyUpdate();
+        }
+
     }
     private void LateUpdate() {
-        //bulletManager.LateUpdate();
-        //creepManager.LateUpdate();
+        if (SceneManager.GetActiveScene().name == "level1")
+        {
+            bulletManager.LateUpdate();
+            creepManager.LateUpdate();
+        }
     }
 
     public void LoadGame(string sceneName)
