@@ -26,6 +26,11 @@ public class UIMainMenu : MonoBehaviour
         goOnline.SetActive(false);
         lsGOPlayer[0].SetActive(false);
         lsGOPlayer[1].SetActive(false);
+        btnStart.onClick.AddListener(() =>
+        {
+            SendData<EventName> ev = new SendData<EventName>(new EventName("start"));
+            SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
+        });
     }
 
     public void ShowPlayerBtn()

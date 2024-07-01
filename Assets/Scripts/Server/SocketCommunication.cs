@@ -149,18 +149,36 @@ public class SocketCommunication
                     });
                     break;
                 case "all player ready":
-                    Debug.Log("Con cac");
                     Dispatcher.EnqueueToMainThread(() =>
                     {
                         UIManager._instance.uiMainMenu.btnStart.interactable = true;
                     });
                     break;
                 case "not all player ready":
-                    Debug.Log("Con cac");
                     Dispatcher.EnqueueToMainThread(() =>
                     {
                         UIManager._instance.uiMainMenu.btnStart.interactable =false;
                     });
+                    break;
+                case "start":
+                    Dispatcher.EnqueueToMainThread(() =>
+                    {
+                        AllManager.Instance().LoadGame("level1");
+                    });
+                    break;
+                case "spawn player":
+                    AllPlayerSpanwPos all = JsonUtility.FromJson<AllPlayerSpanwPos>(response);
+                    Debug.Log(response);
+                    Dispatcher.EnqueueToMainThread(() =>
+                    {
+                        for(int i = 0; i < all.data.Length; i++)
+                        {
+                            AllManager.Instance().playerManager.SpawnPlayer(all.data[i].spawn_pos, all.data[i].player_id);
+                            Debug.Log(all.data[i].spawn_pos);
+                        }
+                    });
+                    break;
+                case "player move":
                     break;
             }
             Debug.Log(_event.event_name);

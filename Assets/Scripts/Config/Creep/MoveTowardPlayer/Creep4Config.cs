@@ -8,14 +8,14 @@ public class Creep4Config : MoveTowardPlayerCreepConfig
 
     public override void Attack(Creep creep)
     {
-        //(string _, float dis) = GetNearestPlayerWithDis(creep.creepTrans);
-        float dis = Vector3.Distance(CharacterController.Instance().transform.position, creep.creepTrans.position);
+        ////(string _, float dis) = GetNearestPlayerWithDis(creep.creepTrans);
+        //float dis = Vector3.Distance(CharacterController.Instance().transform.position, creep.creepTrans.position);
 
-        if (dis <= startIncreaseSpeedDis && creep.speed <= BaseSpeed)
-        {
-            creep.speed = creep.speed*speedMultiplayer;
-        }
+        //if (dis <= startIncreaseSpeedDis && creep.speed <= BaseSpeed)
+        //{
+        //    creep.speed = creep.speed*speedMultiplayer;
+        //}
 
-        creep.creepTrans.rotation = Quaternion.LookRotation(CharacterController.Instance().transform.position - creep.creepTrans.position);
+        //creep.creepTrans.rotation = Quaternion.LookRotation(CharacterController.Instance().transform.position - creep.creepTrans.position);
     }
 }
