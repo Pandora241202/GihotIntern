@@ -111,7 +111,7 @@ public class CharacterController : MonoBehaviour
         Vector3 directionToTarget = (targetObj.transform.position - gunTransform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(directionToTarget);
         gunTransform.rotation = lookRotation;
-        lastFireTime = AllManager.Instance().bulletManager.SpawnBullet(gunTransform.position, curCreepTarget, gunId, lastFireTime);
+        lastFireTime = AllManager.Instance().bulletManager.SpawnBullet(gunTransform.position, curCreepTarget, gunId, lastFireTime, "PlayerBullet");
 
         //float angle = Vector3.Angle(gunTransform.forward, directionToTarget);
         //if (angle < 10f)

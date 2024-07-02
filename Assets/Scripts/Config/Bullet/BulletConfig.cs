@@ -14,7 +14,7 @@ public class BulletConfig : ScriptableObject
     public bool destroyOnContact;
     public int bulletMultiplier;
     public GameObject bulletPrefab;
-    public virtual void Fire(Vector3 posSpawn, Vector3 target, BulletManager bulletManager)
+    public virtual void Fire(Vector3 posSpawn, Vector3 target, BulletManager bulletManager, string tagName)
     {
 
     }
