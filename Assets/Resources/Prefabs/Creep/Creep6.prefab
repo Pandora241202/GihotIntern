@@ -634,7 +634,7 @@ GameObject:
   - component: {fileID: 2683230816591307213}
   - component: {fileID: -2683755545824444012}
   - component: {fileID: -3520270310533875436}
-  - component: {fileID: 694537039247476853}
+  - component: {fileID: 3964964865840277482}
   m_Layer: 0
   m_Name: Creep6
   m_TagString: Untagged
@@ -708,20 +708,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!136 &694537039247476853
-CapsuleCollider:
+--- !u!65 &3964964865840277482
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8689480311849083149}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5503652
-  m_Height: 2.4462295
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.7231147, z: -0.050365224}
+  serializedVersion: 2
+  m_Size: {x: 1.0655268, y: 1.4808469, z: 1}
+  m_Center: {x: 0.032763436, y: 1.099585, z: 0}
 --- !u!1 &8842949335943828853
 GameObject:
   m_ObjectHideFlags: 0
