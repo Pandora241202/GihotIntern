@@ -150,15 +150,6 @@ public class CreepManager
 
     public void MyUpdate()
     {
-        /*if (_timer >= 2)
-        {
-            SpawnCreep(new Vector3(Random.Range(-38, 38), 1, Random.Range(-38, 38)), (CreepType) Random.Range(0, 7), _timer);     
-            _timer = 0;
-        } else
-        {
-            _timer += Time.deltaTime;
-        }*/
-
         foreach (var pair in creepActiveDict)
         {
             Creep creep = pair.Value;

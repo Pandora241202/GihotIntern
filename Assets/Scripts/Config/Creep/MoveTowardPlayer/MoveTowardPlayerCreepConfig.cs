@@ -18,8 +18,7 @@ public class MoveTowardPlayerCreepConfig : CreepConfig
     {
         Dictionary<string, Player> dictPlayers = AllManager.Instance().playerManager.dictPlayers;
         (string playerId, float _) = GetNearestPlayerWithDis(creepTransform);
-        Vector3 direction =dictPlayers[playerId].playerTrans.position - creepTransform.position;
-        creepTransform.position += direction * speed * Time.deltaTime;
-        
+        Vector3 direction = dictPlayers[playerId].playerTrans.position - creepTransform.position;
+        creepTransform.position += direction.normalized * speed * Time.deltaTime;   
     }
 }
