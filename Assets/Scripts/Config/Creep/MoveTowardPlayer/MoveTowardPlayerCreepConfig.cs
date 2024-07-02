@@ -7,9 +7,9 @@ public class MoveTowardPlayerCreepConfig : CreepConfig
     {
         Dictionary<string, Player> dictPlayers = AllManager.Instance().playerManager.dictPlayers;
 
-        //(string playerId, float _) = GetNearestPlayerWithDis(creep.creepTrans);
+        (string playerId, float _) = GetNearestPlayerWithDis(creep.creepTrans);
 
-        //creep.creepTrans.rotation = Quaternion.LookRotation(dictPlayers[playerId].playerTrans.position - creep.creepTrans.position);
+        creep.creepTrans.rotation = Quaternion.LookRotation(dictPlayers[playerId].playerTrans.position - creep.creepTrans.position);
 
         //creep.creepTrans.rotation = Quaternion.LookRotation(CharacterController.Instance().transform.position - creep.creepTrans.position);
     }

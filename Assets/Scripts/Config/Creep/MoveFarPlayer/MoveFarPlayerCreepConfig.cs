@@ -8,19 +8,20 @@ public class MoveFarPlayerCreepConfig : CreepConfig
 
     public override void Attack(Creep creep) 
     {
-        //Dictionary<string, Player> dictPlayers = AllManager.Instance().playerManager.dictPlayers;
+        Dictionary<string, Player> dictPlayers = AllManager.Instance().playerManager.dictPlayers;
 
-        ////(string playerId, float minDis) = GetNearestPlayerWithDis(creep.creepTrans);
+        (string playerId, float minDis) = GetNearestPlayerWithDis(creep.creepTrans);
         //float minDis = Vector3.Distance(creep.creepTrans.position, CharacterController.Instance().transform.position);
 
-        //if (minDis <= startMoveAwayDistance)
-        //{
-        //    //creep.creepTrans.rotation = Quaternion.LookRotation(creepTransform.position - dictPlayers[playerId].playerTrans.position);
-        //    creep.creepTrans.rotation = Quaternion.LookRotation(creep.creepTrans.position - CharacterController.Instance().transform.position);
-        //    creep.speed = BaseSpeed;
-        //} else
-        //{
-        //    creep.speed = 0;
-        //}
+        if (minDis <= startMoveAwayDistance)
+        {
+            creep.creepTrans.rotation = Quaternion.LookRotation(creep.creepTrans.position - dictPlayers[playerId].playerTrans.position);
+            //creep.creepTrans.rotation = Quaternion.LookRotation(creep.creepTrans.position - CharacterController.Instance().transform.position);
+            creep.speed = BaseSpeed;
+        }
+        else
+        {
+            creep.speed = 0;
+        }
     }
 }
