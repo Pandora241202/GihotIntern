@@ -16,6 +16,7 @@ public class CharacterController : MonoBehaviour
     int frame = 0;
     public Vector3 velocity = new Vector3(0, 0, 0);
     float lastFireTime = 0f;
+
     //public static CharacterController _instance { get; private set; }
     //public static CharacterController Instance()
     //{
@@ -32,7 +33,11 @@ public class CharacterController : MonoBehaviour
         //gunId = GameObject.FindAnyObjectByType<SceneUpdater>().bulletManager.GetGunId();
     }
     private void Start(){
-        prefabBullet = AllManager.Instance().bulletManager.gunConfig.lsGunType[gunId].bulletPrefab;
+        GunType gunType = AllManager.Instance().bulletManager.gunConfig.lsGunType[gunId];
+        prefabBullet = gunType.bulletPrefab;
+        GameObject currentGunPrefab = gunType.gunPrefab;
+        GameObject gun = Instantiate(currentGunPrefab, transform.position, Quaternion.identity);
+        gun.transform.SetParent(transform.Find("Gun"));
     }
     private void Update()
     {
