@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Text;
 using System;
+using System.Net;
 
 public class SocketCommunication
 {
@@ -15,7 +16,7 @@ public class SocketCommunication
         return instance;
     }
     UdpClient udpClient;
-    public string address = "127.0.0.1";
+    public string address = "3.7.100.109";
     public int port = 9999;
     Thread receiveData;
     public string player_id;
@@ -33,6 +34,9 @@ public class SocketCommunication
 
         string message = $"{{ \"_event\" : {{ \"event_name\" : \"first connect\", \"name\" : \"{namePlayer}\" }} }}";
         byte[] data = Encoding.UTF8.GetBytes(message);
+        IPAddress[] addressList = Dns.GetHostAddresses(address);
+
+        Debug.Log(addressList[0]);
         await udpClient.SendAsync(data, data.Length, address, 9999);
 
         Debug.Log("Connected to server");
