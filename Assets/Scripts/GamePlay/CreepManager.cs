@@ -12,12 +12,15 @@ public class Creep
     public int hp;
     public float speed;
     public int dmg;
+    public float timer;
+    public GameObject bombObj;
 
     public Creep(Transform creepTrans, CreepManager.CreepType type, CreepConfig config)
     {
         this.creepTrans = creepTrans;
         this.config = config;
         this.type = type;
+        bombObj = null;
         creepTrans.gameObject.SetActive(false);
     }
 
@@ -29,6 +32,7 @@ public class Creep
         creepTrans.position = pos;
         creepTrans.gameObject.SetActive(true);
         creepTrans.gameObject.GetComponent<Renderer>().enabled = true;
+        timer = 0;
     }
 
     public void UnSet() 
@@ -48,7 +52,7 @@ public class Creep
 
     public void OnDead()
     {
-        config.OnDead(creepTrans);
+        config.OnDead(this);
     }
 
     public void ProcessDmg(int dmg)
@@ -57,7 +61,7 @@ public class Creep
         if (hp <= 0)
         {
             CreepManager creepManager = AllManager.Instance().creepManager;
-            creepManager.AddToDeactivateList(this);
+            config.OnDead(this);
         }
     }
 }
@@ -128,7 +132,7 @@ public class CreepManager
 
         Creep creepNeedActive = creepNotActiveByTypeList[(int)creepType][0];
             
-        creepNeedActive.Set(spawnPos, time);
+        creepNeedActive.Set(spawnPos, time/1000f);
         creepActiveDict.Add(creepNeedActive.creepTrans.gameObject.GetInstanceID(), creepNeedActive);
             
         creepNotActiveByTypeList[(int)creepType].RemoveAt(0);
@@ -183,8 +187,7 @@ public class CreepManager
             }
 
             //AllManager.Instance.effectManager.SpawnEffect(EffectManager.EffectType.EXPLOSION, enemyInfo.enemyTrans.position);
-            creep.OnDead();
-            
+
             DeactivateCreep(creep);
         }
 

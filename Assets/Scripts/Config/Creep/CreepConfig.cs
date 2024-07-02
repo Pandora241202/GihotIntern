@@ -51,7 +51,10 @@ public class CreepConfig : ScriptableObject
 
     public virtual void Attack(Creep creep) { }
 
-    public virtual void OnDead(Transform creepTransform) { }
+    public virtual void OnDead(Creep creep) 
+    {
+        AllManager.Instance().creepManager.AddToDeactivateList(creep);
+    }
 
     float DistanceBetween(Vector3 pos1, Vector3 pos2)
     {
