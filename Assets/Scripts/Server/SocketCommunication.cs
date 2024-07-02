@@ -181,7 +181,7 @@ public class SocketCommunication
                     PlayerMove playerMove = JsonUtility.FromJson<PlayerMove>(response);
                     Dispatcher.EnqueueToMainThread(() =>
                     {
-                        AllManager.Instance().playerManager.UpdatePlayerVelocity(playerMove.player_id, playerMove.velocity);
+                        AllManager.Instance().playerManager.UpdatePlayerVelocity(playerMove.player_id, playerMove.velocity, playerMove.position);
                     });
                     break;
             }

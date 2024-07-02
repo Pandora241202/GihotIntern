@@ -59,10 +59,11 @@ public class AllManager : MonoBehaviour
     {
         UIManager._instance.uiMainMenu.gameObject.SetActive(false);
         sceneUpdater = GameObject.FindObjectOfType<SceneUpdater>();
+        //Debug.Log(sceneUpdater);
         creepManager = sceneUpdater.creepManager;
         bulletManager = sceneUpdater.bulletManager;
         SendData<EventName> ev = new SendData<EventName>(new EventName("done loading"));
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
-        SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
+        //SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
     }
 }
