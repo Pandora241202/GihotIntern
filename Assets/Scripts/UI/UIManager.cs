@@ -8,6 +8,8 @@ public class UIManager : MonoBehaviour
 {
     public UIOnlineLobby uiOnlineLobby;
     public UIMainMenu uiMainMenu;
+    public UILogin uiLogin;
+    public UIChoseGun uiChoseGun;
     public static UIManager _instance { get; private set; }
 
 
@@ -23,6 +25,8 @@ public class UIManager : MonoBehaviour
     {
         uiOnlineLobby.OnSetUp();
         uiMainMenu.OnSetUp();
+        uiChoseGun.OnSetUp();
+        uiLogin.OnSetUp();
         _instance = GameObject.FindAnyObjectByType<UIManager>();
         //new
         DontDestroyOnLoad(this);

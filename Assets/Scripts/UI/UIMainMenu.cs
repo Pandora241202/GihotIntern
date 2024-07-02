@@ -11,6 +11,7 @@ public class UIMainMenu : MonoBehaviour
     [SerializeField] private List<GameObject> lsGOPlayer = new List<GameObject>();
     [SerializeField] private GameObject goOnline;
     [SerializeField] public Button btnOnline;
+    [SerializeField] public Button btnChoseGun;
     [SerializeField] private List<GameObject> lsBtnForPlayer = new List<GameObject>();
     [SerializeField] private List<ItemPlayerList> goPlayerList = new List<ItemPlayerList>();
     [SerializeField] public GameObject prefabListItem;
@@ -33,6 +34,10 @@ public class UIMainMenu : MonoBehaviour
         });
     }
 
+    public void OnChoseGun_Clicked()
+    {
+        UIManager._instance.uiChoseGun.gameObject.SetActive(true);
+    }
     public void ShowPlayerBtn()
     {
         lsBtnForPlayer[1].SetActive(true);

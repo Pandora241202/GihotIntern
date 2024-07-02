@@ -21,6 +21,16 @@ class MoveEvent
         this.velocity = velocity;
     }
 }
+[Serializable]
+class ChoseGunEvent
+{
+    public string event_name = "chosegun";
+    public int gun_id;
+    public ChoseGunEvent(int gunid)
+    {
+        this.gun_id = gunid;
+    }
+}
 
 [System.Serializable]
 class ItemPlayerEvent
