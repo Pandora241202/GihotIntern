@@ -95,6 +95,7 @@ public class BulletManager
             if (check.bulletObj.gameObject.GetInstanceID() == id)
             {
                 check.isNeedDestroy = true;
+                Debug.Log("SetDelete");
             }
         }
     }
