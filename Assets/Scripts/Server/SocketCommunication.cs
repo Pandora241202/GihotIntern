@@ -23,15 +23,15 @@ public class SocketCommunication
 
     public SocketCommunication()
     {
-        ConnectToServer();
+       // ConnectToServer();
     }
 
-    async void ConnectToServer()
+    public async void ConnectToServer(string namePlayer)
     {
         udpClient = new UdpClient();
         udpClient.Client.ReceiveBufferSize = 1024 * 64;
 
-        string message = "{ \"_event\" : {\"event_name\" : \"first connect\"}}";
+        string message = $"{{ \"_event\" : {{ \"event_name\" : \"first connect\", \"name\" : \"{namePlayer}\" }} }}";
         byte[] data = Encoding.UTF8.GetBytes(message);
         await udpClient.SendAsync(data, data.Length, address, 9999);
 
