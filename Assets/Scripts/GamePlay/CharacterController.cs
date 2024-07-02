@@ -11,6 +11,7 @@ public class CharacterController : MonoBehaviour
 
     [SerializeField] public int gunId; 
     [SerializeField] LayerMask creepLayerMask;
+    private FixedJoystick joystick;
     GameObject curCreepTarget = null;
     public string id;
     int frame = 0;
@@ -34,6 +35,7 @@ public class CharacterController : MonoBehaviour
     }
     private void Start(){
         GunType gunType = AllManager.Instance().bulletManager.gunConfig.lsGunType[gunId];
+        joystick = UIManager._instance._joystick;
         prefabBullet = gunType.bulletPrefab;
         GameObject currentGunPrefab = gunType.gunPrefab;
         GameObject gun = Instantiate(currentGunPrefab, transform.position, Quaternion.identity);
@@ -44,17 +46,18 @@ public class CharacterController : MonoBehaviour
         transform.position += this.velocity;
         Shoot();
         if (id != Player_ID.MyPlayerID) return;
-        //float horizontal = _joystick.Horizontal;
-        //float vertical = _joystick.Vertical;
-        //Vector3 direction = new Vector3(horizontal, 0, vertical);
-        //transform.position += direction * speed * Time.deltaTime;
+        
         if (frame % 5 == 0)
         {
-            float horizontal = Input.GetAxis("Horizontal");
-            float vertical = Input.GetAxis("Vertical");
+        //     float horizontal = Input.GetAxis("Horizontal");
+        //     float vertical = Input.GetAxis("Vertical");
+        //     Vector3 velocity = new Vector3(horizontal, 0, vertical) * speed * Time.deltaTime;
+            float horizontal = joystick.Horizontal;
+            float vertical = joystick.Vertical;
             Vector3 velocity = new Vector3(horizontal, 0, vertical) * speed * Time.deltaTime;
             SendData<MoveEvent> data = new SendData<MoveEvent>(new MoveEvent(velocity, transform.position));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
+            
         }
         frame++;
     }
