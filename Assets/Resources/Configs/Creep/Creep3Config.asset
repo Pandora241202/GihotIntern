@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e232e8e31579c44a8ea74844197e0d0, type: 3}
   m_Name: Creep3Config
   m_EditorClassIdentifier: 
-  creepPrefab: {fileID: 580272723711686975, guid: c2f848695eac8bf469943c8c6c2875ee, type: 3}
+  creepPrefab: {fileID: 2565361874747692803, guid: 991470b3256e6dc4a9976adec0c38724, type: 3}
   baseHp: 60
   baseSpeed: 2
   baseDmg: 5

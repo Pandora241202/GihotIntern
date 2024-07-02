@@ -16,7 +16,7 @@ public class ShotgunBullet : BulletConfig
             Vector3 spreadDirection = Quaternion.Euler(0, angle, 0) * direction;
             GameObject obj = GameObject.Instantiate(bulletPrefab, posSpawn, Quaternion.identity);
             obj.tag = tagName;
-            obj.transform.rotation = Quaternion.LookRotation(direction) * Quaternion.Euler(90, 0, 0);
+            // obj.transform.rotation = Quaternion.LookRotation(direction) * Quaternion.Euler(90, 0, 0);
             BulletInfo newBullet = new BulletInfo(obj.transform, spreadDirection, speed);
             bulletManager.bulletInfoList.Add(newBullet);
         }

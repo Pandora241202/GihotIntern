@@ -31,7 +31,7 @@ public class Creep
         speed = config.BaseSpeed;
         creepTrans.position = pos;
         creepTrans.gameObject.SetActive(true);
-        creepTrans.gameObject.GetComponent<Renderer>().enabled = true;
+  
         timer = 0;
     }
 
@@ -215,7 +215,7 @@ public class CreepManager
 
         Debug.Log("Bi dien ak???????");
 
-        creep.creepTrans.gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
+       
     }
 
     public void UnmarkTargetCreepById(int creepId)
@@ -227,7 +227,6 @@ public class CreepManager
             return;
         }
 
-        creep.creepTrans.gameObject.GetComponent<Renderer>().material.color = Color.red;
     }
 
     //public void Reset()
