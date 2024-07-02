@@ -6653,6 +6653,7 @@ MonoBehaviour:
   gunConfig: {fileID: 11400000, guid: b7e16aa11b45bb840a18223048e3c6e4, type: 2}
   allCreepConfig: {fileID: 11400000, guid: 92cd18033a673d042a6b96cfd0bfecd0, type: 2}
   characterPrefab: {fileID: 7902174039242817089, guid: eb315ad2f4977474fa487a3025c7bd73, type: 3}
+  sceneUpdater: {fileID: 0}
 --- !u!1 &1876620804
 GameObject:
   m_ObjectHideFlags: 0
