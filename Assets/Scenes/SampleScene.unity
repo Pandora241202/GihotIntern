@@ -1193,6 +1193,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunConfig: {fileID: 11400000, guid: b7e16aa11b45bb840a18223048e3c6e4, type: 2}
   allCreepConfig: {fileID: 11400000, guid: 92cd18033a673d042a6b96cfd0bfecd0, type: 2}
+  allDropItemConfig: {fileID: 11400000, guid: 20a183ad6a998ab43965f56d4f7107a5, type: 2}
   characterPrefab: {fileID: 0}
   sceneUpdater: {fileID: 0}
 --- !u!4 &1918626540

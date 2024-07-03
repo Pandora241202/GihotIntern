@@ -9,12 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad2f4ab48b7a4774f85cc505e11f50e0, type: 3}
-  m_Name: Creep1Config
+  m_Script: {fileID: 11500000, guid: 4f172518ecad21349a73f6f8ae3a7bcb, type: 3}
+  m_Name: AllDropItemConfig
   m_EditorClassIdentifier: 
-  creepPrefab: {fileID: 2534315495902057875, guid: 0bcc36228c5ad404997508d92a639dfa, type: 3}
-  baseHp: 30
-  baseSpeed: 2
-  baseDmg: 3
-  exp: 10
-  dropItemTypes: 04000000
+  powerUpAttributesList:
+  - type: 4
+    powerUpConfig: {fileID: 11400000, guid: 6ffe9ae6551b4fb4982d3646693b615b, type: 2}

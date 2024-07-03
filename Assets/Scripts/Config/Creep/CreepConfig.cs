@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CreepConfig : ScriptableObject
@@ -22,7 +23,7 @@ public class CreepConfig : ScriptableObject
 
     [SerializeField] float exp;
 
-    [SerializeField]  AllItemConfig.DropItemType[] dropItemTypes;
+    [SerializeField]  AllDropItemConfig.PowerUpsType[] dropItemTypes;
 
     public GameObject CreepPrefab => creepPrefab;
 
@@ -42,7 +43,7 @@ public class CreepConfig : ScriptableObject
 
     public float Exp => exp;
 
-    public AllItemConfig.DropItemType[] DropItemTypes => dropItemTypes;
+    public AllDropItemConfig.PowerUpsType[] DropItemTypes => dropItemTypes;
 
     public virtual void Move(Transform creepTransform, float speed) 
     {
@@ -51,9 +52,17 @@ public class CreepConfig : ScriptableObject
 
     public virtual void Attack(Creep creep) { }
 
-    public virtual void OnDead(Creep creep) 
+    public virtual void     OnDead(Creep creep) 
     {
         AllManager.Instance().creepManager.AddToDeactivateList(creep);
+        Debug.Log("Array size: " + dropItemTypes.Length);
+        Debug.Log("Array content: " + string.Join(", ", dropItemTypes.Select(d => d.ToString())));
+        if (dropItemTypes.Length == 0)
+        {
+            Debug.Log("Drop item type is empty");
+        }
+        Debug.Log($"Creep {creep.type} dropped item of type {dropItemTypes[0]}");
+        AllManager.Instance().powerUpManager.SpawnPowerUp(creep.creepTrans.position, DropItemTypes[0]);//, AllManager.Instance().powerUpConfig.GetPowerUpPrefab(PowerUpsType.HealthPack));
     }
 
     float DistanceBetween(Vector3 pos1, Vector3 pos2)

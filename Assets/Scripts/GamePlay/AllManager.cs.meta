@@ -3,7 +3,12 @@ guid: 79c6db8e6cef36249845e648c1cc10d2
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - gunConfig: {instanceID: 0}
+  - allCreepConfig: {instanceID: 0}
+  - allPowerUpConfig: {fileID: 11400000, guid: 20a183ad6a998ab43965f56d4f7107a5, type: 2}
+  - characterPrefab: {instanceID: 0}
+  - sceneUpdater: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -2,11 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Config/ItemConfig/AllItems")]
-public class AllItemConfig : ScriptableObject
+[CreateAssetMenu(menuName = "Config/ItemConfig/AllDropItems")]
+public class AllDropItemConfig : ScriptableObject
 {
-    public enum DropItemType
+    public enum PowerUpsType
+    {
+        DmgBoost,
+        SpeedBoost,
+        EXPGainBoost,
+        HealthRegen,
+        HealthPack,
+        LifeSteal,
+        CritRateBuff,
+        CritDMGBuff,
+        SkillCD,
+        // AOEMeteorStrike,
+        EXPOrb,
+        Bomb,
+        Invincibility,
+        TimeWarp,
+        PoisonAura
+    }   
+    [System.Serializable]
+    public class PowerUpAttributes
+    {
+        public PowerUpsType type;
+        public PowerUpsConfig powerUpConfig;
+    }
+    public List<PowerUpAttributes> powerUpAttributesList = new List<PowerUpAttributes>();
+    public virtual void Activate()
     {
 
-    }   
+    }  
 }
