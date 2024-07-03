@@ -82,9 +82,11 @@ public class BulletManager
             bulletInfoList[i].Move();
         }
 
+        Transform bullet;
         for (int i = 0; i < bulletInfoList.Count; i++)
         {
-            if (bulletInfoList[i].bulletObj.position.y >= 6)
+            bullet = bulletInfoList[i].bulletObj;
+            if (bullet.position.x >= 100 || bullet.position.x <= -100 || bullet.position.z >= 100 || bullet.position.z <= -100)
             {
                 bulletInfoList[i].isNeedDestroy = true;
             }
