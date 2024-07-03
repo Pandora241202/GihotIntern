@@ -14,11 +14,13 @@ public class Creep4Config : MoveTowardPlayerCreepConfig
 
         if (dis <= startIncreaseSpeedDis && creep.speed <= BaseSpeed)
         {
+            creep.animator.SetTrigger("isAttack");
             creep.speed = creep.speed * speedMultiplayer;
         }
 
         Dictionary<string, Player> dictPlayers = AllManager.Instance().playerManager.dictPlayers;
-        creep.creepTrans.rotation = Quaternion.LookRotation(dictPlayers[playerId].playerTrans.position - creep.creepTrans.position);
-        //creep.creepTrans.rotation = Quaternion.LookRotation(CharacterController.Instance().transform.position - creep.creepTrans.position);
+        Vector3 rotateDir = dictPlayers[playerId].playerTrans.position - creep.creepTrans.position;
+        rotateDir.y = 0;
+        creep.creepTrans.rotation = Quaternion.LookRotation(rotateDir);
     }
 }

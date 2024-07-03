@@ -19,4 +19,4 @@ MonoBehaviour:
   exp: 30
   dropItemTypes: 
   startIncreaseSpeedDis: 5
-  speedMultiplayer: 1.2
+  speedMultiplayer: 1.5

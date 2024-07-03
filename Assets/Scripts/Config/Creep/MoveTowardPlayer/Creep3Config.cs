@@ -13,11 +13,14 @@ public class Creep3Config : MoveTowardPlayerCreepConfig
 
         (string playerId, float _) = GetNearestPlayerWithDis(creep.creepTrans);
 
-        creep.creepTrans.rotation = Quaternion.LookRotation(dictPlayers[playerId].playerTrans.position - creep.creepTrans.position);
+        Vector3 rotateDir = dictPlayers[playerId].playerTrans.position - creep.creepTrans.position;
+        rotateDir.y = 0;
+        creep.creepTrans.rotation = Quaternion.LookRotation(rotateDir);
 
         if (creep.timer >= fireRate)
         {
-            bulletConfig.Fire(creep.creepTrans.position, dictPlayers[playerId].playerTrans.position, AllManager.Instance().bulletManager, "EnemyBullet");
+            creep.animator.SetTrigger("isAttack");
+            bulletConfig.Fire(creep.creepTrans.position, dictPlayers[playerId].playerTrans.position, AllManager.Instance().bulletManager, "EnemyBullet", true, 0.25f);
             creep.timer = 0;
         } else
         {
