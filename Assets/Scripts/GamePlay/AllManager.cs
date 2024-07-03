@@ -6,16 +6,15 @@ using UnityEngine.SceneManagement;
 public class AllManager : MonoBehaviour
 {
     public static AllManager _instance { get; private set; }
-
     public PlayerManager playerManager;
-
-
     public GunConfig gunConfig;
     [SerializeField] public AllCreepConfig allCreepConfig;
+    [SerializeField] public AllDropItemConfig allDropItemConfig;
     [SerializeField] GameObject characterPrefab;
     public SceneUpdater sceneUpdater;
     public BulletManager bulletManager;
     public CreepManager creepManager;
+    public PowerUpManager powerUpManager;
 
     public static AllManager Instance()
     {
@@ -62,6 +61,7 @@ public class AllManager : MonoBehaviour
         //Debug.Log(sceneUpdater);
         creepManager = sceneUpdater.creepManager;
         bulletManager = sceneUpdater.bulletManager;
+        powerUpManager = sceneUpdater.powerUpManager;
         SendData<EventName> ev = new SendData<EventName>(new EventName("done loading"));
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
         //SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
