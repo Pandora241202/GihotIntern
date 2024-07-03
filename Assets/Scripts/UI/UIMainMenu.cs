@@ -29,7 +29,6 @@ public class UIMainMenu : MonoBehaviour
         lsGOPlayer[1].SetActive(false);
         btnStart.onClick.AddListener(() =>
         {
-            UIManager._instance._joystick.gameObject.SetActive(true);
             SendData<EventName> ev = new SendData<EventName>(new EventName("start"));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
         });
