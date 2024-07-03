@@ -53,6 +53,7 @@ public class BulletInfo
 public class BulletManager
 {
     public List<BulletInfo> bulletInfoList = new List<BulletInfo>();
+    public Dictionary<int, BulletInfo> bulletInfoDict = new Dictionary<int, BulletInfo>();
     public GunConfig gunConfig;
     private float localFireRate;
     private float lastFireTime = 0f;
@@ -99,27 +100,23 @@ public class BulletManager
 
     public void LateUpdate()
     {
+        GameObject bullet;
         for (int i = bulletInfoList.Count - 1; i >= 0; i--)
         {
             if (bulletInfoList[i].isNeedDestroy)
             {
-                GameObject.Destroy(bulletInfoList[i].bulletObj.gameObject);
-                Debug.Log("Destroy bullet");
+                bullet = bulletInfoList[i].bulletObj.gameObject;
                 bulletInfoList.RemoveAt(i);
+                bulletInfoDict.Remove(bullet.GetInstanceID());
+                GameObject.Destroy(bulletInfoList[i].bulletObj.gameObject);
             }
         }
     }
 
     public void SetDelete(int id)
     {
-        foreach (var check in bulletInfoList)
-        {
-            if (check.bulletObj.gameObject.GetInstanceID() == id)
-            {
-                check.isNeedDestroy = true;
-                Debug.Log("SetDelete");
-            }
-        }
+        BulletInfo in4;
+        if(bulletInfoDict.TryGetValue(id, out in4)) in4.isNeedDestroy = true;
     }
 
     public float SpawnBullet(Vector3 posSpawn, GameObject target, int gunId, float lastFireTime, string tagName)
@@ -132,10 +129,5 @@ public class BulletManager
             return Time.time;
         }
         return lastFireTime;
-    }
-    public void SetTarget(GameObject target)
-    {
-        Debug.Log("SetTarget");
-        this.target = target;
     }
 }

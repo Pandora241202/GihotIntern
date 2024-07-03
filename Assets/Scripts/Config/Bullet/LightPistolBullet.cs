@@ -14,5 +14,6 @@ public class LightPistolBullet : BulletConfig
         obj.transform.Translate(direction*0.5f);
         BulletInfo newBullet = new BulletInfo(obj.transform, direction, speed, needDelayActive, delayActiveTime);
         bulletManager.bulletInfoList.Add(newBullet);
+        bulletManager.bulletInfoDict.Add(obj.GetInstanceID(), newBullet);
     }
 }

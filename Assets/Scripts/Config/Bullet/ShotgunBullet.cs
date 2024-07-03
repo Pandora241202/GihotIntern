@@ -19,6 +19,7 @@ public class ShotgunBullet : BulletConfig
             // obj.transform.rotation = Quaternion.LookRotation(direction) * Quaternion.Euler(90, 0, 0);
             BulletInfo newBullet = new BulletInfo(obj.transform, spreadDirection, speed, needDelayActive, delayActiveTime);
             bulletManager.bulletInfoList.Add(newBullet);
+            bulletManager.bulletInfoDict.Add(obj.GetInstanceID(), newBullet);
         }
 
     }

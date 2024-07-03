@@ -46,16 +46,15 @@ public class PlayerManager
     public void AddPlayer(string name, string id, int gunId)
     {
         Player newPlayer = new Player(name, id, gunId);
-        // newplayer.name = name;
-        // newplayer.id = id;
         dictPlayers.Add(id,newPlayer);
     }
 
     public void UpdatePlayerVelocity(string id, Vector3 velocity, Vector3 position,Quaternion rotation)
     {
         Player player = dictPlayers[id];
-        player.playerTrans.gameObject.GetComponent<CharacterController>().velocity = velocity;
+        CharacterController c_Controller = player.playerTrans.gameObject.GetComponent<CharacterController>();
+        c_Controller.velocity = velocity;
         player.playerTrans.position = position;
-        player.playerTrans.gameObject.GetComponent<CharacterController>().goChar.transform.rotation = rotation;
+        c_Controller.goChar.transform.rotation = rotation;
     }
 }

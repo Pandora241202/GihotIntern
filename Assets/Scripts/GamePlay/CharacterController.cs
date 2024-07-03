@@ -137,12 +137,4 @@ public class CharacterController : MonoBehaviour
         //    AllManager.Instance().bulletManager.SpawnBullet(gunTransform.position, curCreepTarget, gunId);
         //}
     }
-
-    public void SetTargetShoot(GameObject target)
-    {
-        Debug.Log("SetTargetShoot");
-        //int gunId = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].gunId;
-        // AllManager.Instance().bulletManager.SpawnBullet(gunTransform.position, target.transform.position, gunId);
-        AllManager.Instance().bulletManager.SetTarget(target);
-    }
 }

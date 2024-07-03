@@ -9,15 +9,15 @@ public class Dispatcher : MonoBehaviour
     private static Dispatcher _instance = null;
     public static Dispatcher Instance()
     {
-        if (!_instance)
-        {
-            _instance = FindObjectOfType<Dispatcher>();
-            if (!_instance)
-            {
-                var obj = new GameObject("Dispatcher");
-                _instance = obj.AddComponent<Dispatcher>();
-            }
-        }
+        //if (!_instance)
+        //{
+        //    _instance = FindObjectOfType<Dispatcher>();
+        //    if (!_instance)
+        //    {
+        //        var obj = new GameObject("Dispatcher");
+        //        _instance = obj.AddComponent<Dispatcher>();
+        //    }
+        //}
         return _instance;
     }
 
