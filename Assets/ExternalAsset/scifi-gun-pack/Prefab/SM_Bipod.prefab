@@ -29,6 +29,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 0.829169, y: 0.829169, z: 0.829169}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4722782930056153841}
   - {fileID: 7065119750260790273}
@@ -42,7 +43,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 177097179026391696}
-  m_Mesh: {fileID: -206327949966430488, guid: 5fa2006895e683646a19c1232974d7ef, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 5fa2006895e683646a19c1232974d7ef, type: 3}
 --- !u!23 &1894321089715484236
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -54,9 +55,12 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -69,6 +73,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -81,6 +86,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &5881126846326443143
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -91,9 +97,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -206327949966430488, guid: 5fa2006895e683646a19c1232974d7ef, type: 3}
 --- !u!1 &1827330074251103423
 GameObject:
@@ -124,6 +130,7 @@ Transform:
   m_LocalRotation: {x: 0.42261827, y: -0, z: -0, w: 0.9063078}
   m_LocalPosition: {x: 0.001263507, y: -0.00012054189, z: 0.014378562}
   m_LocalScale: {x: 1.1578454, y: 1.1578454, z: 1.1578454}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3760071565388116099}
   m_RootOrder: 0
@@ -147,9 +154,12 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -161,6 +171,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -173,6 +184,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &3010141765946068674
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -183,9 +195,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -3375376813717992275, guid: 5fa2006895e683646a19c1232974d7ef, type: 3}
 --- !u!1 &5864026800159309012
 GameObject:
@@ -216,6 +228,7 @@ Transform:
   m_LocalRotation: {x: -0.42261827, y: 0, z: -0, w: 0.9063078}
   m_LocalPosition: {x: 0.001263507, y: -0.00017441266, z: -0.01431436}
   m_LocalScale: {x: 1.1578454, y: 1.1578454, z: 1.1578454}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3760071565388116099}
   m_RootOrder: 1
@@ -239,9 +252,12 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -253,6 +269,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -265,6 +282,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &8298551235943984825
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -275,7 +293,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8981833561230962108, guid: 5fa2006895e683646a19c1232974d7ef, type: 3}
