@@ -8,7 +8,7 @@ public class CharacterController : MonoBehaviour
     public Transform gunTransform;
 
     [SerializeField] private GameObject prefabBullet;
-
+    public GameObject goChar;
     [SerializeField] public int gunId; 
     [SerializeField] LayerMask creepLayerMask;
     private FixedJoystick joystick;
@@ -17,6 +17,7 @@ public class CharacterController : MonoBehaviour
     int frame = 0;
     public Vector3 velocity = new Vector3(0, 0, 0);
     float lastFireTime = 0f;
+    [SerializeField] private Animator charAnim;
 
     //public static CharacterController _instance { get; private set; }
     //public static CharacterController Instance()
@@ -45,22 +46,30 @@ public class CharacterController : MonoBehaviour
     {
         transform.position += this.velocity;
         Shoot();
-        if (id != Player_ID.MyPlayerID) return;
-        
-        if (frame % 5 == 0)
+        if (velocity != Vector3.zero)
         {
-        //     float horizontal = Input.GetAxis("Horizontal");
-        //     float vertical = Input.GetAxis("Vertical");
-        //     Vector3 velocity = new Vector3(horizontal, 0, vertical) * speed * Time.deltaTime;
+            charAnim.SetBool("isRun", true);
+            
+        }
+        else
+        {
+            charAnim.SetBool("isRun", false);
+        }
+        if (id != Player_ID.MyPlayerID) return;
+    
+        if (frame % 3 == 0)
+        {
             float horizontal = joystick.Horizontal;
             float vertical = joystick.Vertical;
-            Vector3 velocity = new Vector3(horizontal, 0, vertical) * speed * Time.deltaTime;
-            SendData<MoveEvent> data = new SendData<MoveEvent>(new MoveEvent(velocity, transform.position));
+        
+            Vector3 direction = new Vector3(horizontal, 0, vertical);
+            Vector3 velocity = direction * speed * Time.deltaTime;
+            SendData<MoveEvent> data = new SendData<MoveEvent>(new MoveEvent(velocity, transform.position,Quaternion.LookRotation(direction)));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
-            
         }
         frame++;
     }
+
 
     private void FixedUpdate()
     {
