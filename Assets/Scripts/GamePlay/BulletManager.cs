@@ -89,13 +89,6 @@ public class BulletManager
                 bulletInfoList[i].isNeedDestroy = true;
             }
         }
-        //GunType gunType = gunConfig.lsGunType[gunId];
-        //localFireRate = gunType.Firerate;
-        //if (target && Time.time >= lastFireTime + 1f / localFireRate)
-        //{
-        //    SpawnBullet(CharacterController.Instance().gunTransform.position, target, gunId);
-        //    lastFireTime = Time.time;
-        //}
     }
 
     public void LateUpdate()
@@ -106,17 +99,19 @@ public class BulletManager
             if (bulletInfoList[i].isNeedDestroy)
             {
                 bullet = bulletInfoList[i].bulletObj.gameObject;
+                GameObject.Destroy(bullet);
                 bulletInfoList.RemoveAt(i);
                 bulletInfoDict.Remove(bullet.GetInstanceID());
-                GameObject.Destroy(bulletInfoList[i].bulletObj.gameObject);
             }
         }
+        //Debug.Log(bulletInfoDict.Count);
     }
 
     public void SetDelete(int id)
     {
         BulletInfo in4;
-        if(bulletInfoDict.TryGetValue(id, out in4)) in4.isNeedDestroy = true;
+        if(bulletInfoDict.TryGetValue(id, out in4)) 
+            in4.isNeedDestroy = true;
     }
 
     public float SpawnBullet(Vector3 posSpawn, GameObject target, int gunId, float lastFireTime, string tagName)
