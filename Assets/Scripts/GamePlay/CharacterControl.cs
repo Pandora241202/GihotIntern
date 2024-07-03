@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterController : MonoBehaviour
+public class CharacterControl : MonoBehaviour
 {
-    [SerializeField] private float speed = 1.0f;
+    [SerializeField] private float speed = 0.5f;
     public Transform gunTransform;
 
     [SerializeField] private GameObject prefabBullet;
@@ -18,13 +18,15 @@ public class CharacterController : MonoBehaviour
     public Vector3 velocity = new Vector3(0, 0, 0);
     float lastFireTime = 0f;
     [SerializeField] private Animator charAnim;
-
-    //public static CharacterController _instance { get; private set; }
-    //public static CharacterController Instance()
+    Vector3 colllide_velocity = new Vector3(0, 0, 0);
+    bool collision = false;
+    public CharacterController characterController;
+    //public static CharacterControl _instance { get; private set; }
+    //public static CharacterControl Instance()
     //{
     //    if (_instance == null)
     //    {
-    //        _instance = GameObject.FindAnyObjectByType<CharacterController>();
+    //        _instance = GameObject.FindAnyObjectByType<CharacterControl>();
     //    }
     //    return _instance;
     //}
@@ -50,7 +52,7 @@ public class CharacterController : MonoBehaviour
 
     private void Update()
     {
-        transform.position += this.velocity;
+        characterController.Move(velocity);
         Shoot();
         if (velocity != Vector3.zero)
         {
@@ -137,4 +139,5 @@ public class CharacterController : MonoBehaviour
         //    AllManager.Instance().bulletManager.SpawnBullet(gunTransform.position, curCreepTarget, gunId);
         //}
     }
+
 }

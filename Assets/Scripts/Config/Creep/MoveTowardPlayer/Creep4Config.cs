@@ -10,7 +10,7 @@ public class Creep4Config : MoveTowardPlayerCreepConfig
     public override void Attack(Creep creep)
     {
         (string playerId, float dis) = GetNearestPlayerWithDis(creep.creepTrans);
-        //float dis = Vector3.Distance(CharacterController.Instance().transform.position, creep.creepTrans.position);
+        //float dis = Vector3.Distance(CharacterControl.Instance().transform.position, creep.creepTrans.position);
 
         if (dis <= startIncreaseSpeedDis && creep.speed <= BaseSpeed)
         {
@@ -19,6 +19,6 @@ public class Creep4Config : MoveTowardPlayerCreepConfig
 
         Dictionary<string, Player> dictPlayers = AllManager.Instance().playerManager.dictPlayers;
         creep.creepTrans.rotation = Quaternion.LookRotation(dictPlayers[playerId].playerTrans.position - creep.creepTrans.position);
-        //creep.creepTrans.rotation = Quaternion.LookRotation(CharacterController.Instance().transform.position - creep.creepTrans.position);
+        //creep.creepTrans.rotation = Quaternion.LookRotation(CharacterControl.Instance().transform.position - creep.creepTrans.position);
     }
 }
