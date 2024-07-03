@@ -35,13 +35,19 @@ public class CharacterController : MonoBehaviour
         //gunId = GameObject.FindAnyObjectByType<SceneUpdater>().bulletManager.GetGunId();
     }
     private void Start(){
-        GunType gunType = AllManager.Instance().bulletManager.gunConfig.lsGunType[gunId];
+        
         joystick = UIManager._instance._joystick;
+    }
+
+    public void SetGunAndBullet()
+    {
+        GunType gunType = AllManager.Instance().bulletManager.gunConfig.lsGunType[gunId];
         prefabBullet = gunType.bulletPrefab;
         GameObject currentGunPrefab = gunType.gunPrefab;
         GameObject gun = Instantiate(currentGunPrefab, transform.position, Quaternion.identity);
         gun.transform.SetParent(transform.Find("Gun"));
     }
+
     private void Update()
     {
         transform.position += this.velocity;
@@ -96,7 +102,7 @@ public class CharacterController : MonoBehaviour
             }
         }
 
-        Debug.Log("find target" + targetObj?.GetInstanceID().ToString());
+        //Debug.Log("find target" + targetObj?.GetInstanceID().ToString());
         return targetObj;
     }
 

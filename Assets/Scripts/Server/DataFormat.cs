@@ -29,7 +29,7 @@ class MoveEvent
 [Serializable]
 class ChoseGunEvent
 {
-    public string event_name = "chosegun";
+    public string event_name = "choosegun";
     public int gun_id;
     public ChoseGunEvent(int gunid)
     {
