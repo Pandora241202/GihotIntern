@@ -17,16 +17,19 @@ class MoveEvent
     public string event_name = "move";
     [field: SerializeField] Vector3 velocity;
     [field: SerializeField] Vector3 position;
-    public MoveEvent(Vector3 velocity, Vector3 position)
+    [field: SerializeField] Quaternion rotation;
+    public MoveEvent(Vector3 velocity, Vector3 position,Quaternion rotation)
     {
         this.velocity = velocity;
         this.position = position;
+        this.rotation = rotation;
+
     }
 }
 [Serializable]
 class ChoseGunEvent
 {
-    public string event_name = "chosegun";
+    public string event_name = "choosegun";
     public int gun_id;
     public ChoseGunEvent(int gunid)
     {
@@ -149,4 +152,5 @@ public class PlayerMove
     public string player_id;
     [field: SerializeField] public Vector3 velocity;
     [field: SerializeField] public Vector3 position;
+    [field: SerializeField] public Quaternion rotation;
 }

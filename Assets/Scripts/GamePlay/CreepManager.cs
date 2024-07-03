@@ -207,10 +207,6 @@ public class CreepManager
         {
             return;
         }
-
-        Debug.Log("Bi dien ak???????");
-
-       
     }
 
     public void UnmarkTargetCreepById(int creepId)

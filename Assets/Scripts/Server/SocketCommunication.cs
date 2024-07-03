@@ -16,7 +16,7 @@ public class SocketCommunication
         return instance;
     }
     UdpClient udpClient;
-    public string address = "3.7.100.109";
+    public string address = "127.0.0.1";
     public int port = 9999;
     Thread receiveData;
     public string player_id;
@@ -179,13 +179,14 @@ public class SocketCommunication
                         {
                             AllManager.Instance().playerManager.SpawnPlayer(all.data[i].spawn_pos, all.data[i].player_id, all.data[i].gun_id);
                         }
+                        UIManager._instance._joystick.gameObject.SetActive(true);
                     });
                     break;
                 case "player move":
                     PlayerMove playerMove = JsonUtility.FromJson<PlayerMove>(response);
                     Dispatcher.EnqueueToMainThread(() =>
                     {
-                        AllManager.Instance().playerManager.UpdatePlayerVelocity(playerMove.player_id, playerMove.velocity, playerMove.position);
+                        AllManager.Instance().playerManager.UpdatePlayerVelocity(playerMove.player_id, playerMove.velocity, playerMove.position,playerMove.rotation);
                     });
                     break;
             }
