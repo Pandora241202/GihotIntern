@@ -14,6 +14,7 @@ public class Creep
     public int dmg;
     public float timer;
     public GameObject bombObj;
+    public Animator animator;
 
     public Creep(Transform creepTrans, CreepManager.CreepType type, CreepConfig config)
     {
@@ -21,6 +22,7 @@ public class Creep
         this.config = config;
         this.type = type;
         bombObj = null;
+        animator = creepTrans.gameObject.GetComponent<Animator>();
         creepTrans.gameObject.SetActive(false);
     }
 
@@ -58,8 +60,10 @@ public class Creep
     public void ProcessDmg(int dmg)
     {
         hp -= dmg;
+        animator.SetTrigger("isTakeDmg");
         if (hp <= 0)
         {
+            animator.SetTrigger("isDead");
             CreepManager creepManager = AllManager.Instance().creepManager;
             config.OnDead(this);
         }

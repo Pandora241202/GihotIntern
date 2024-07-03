@@ -8,13 +8,22 @@ public class BulletInfo
     public bool isNeedDestroy;
     private Vector3 direction;
     public int damage;
+    public float timer;
+    public bool needDelayActive;
+    public float delayActiveTime;
 
-
-    public BulletInfo(Transform obj, Vector3 targetDirection, float bulletSpeed = 5f)
+    public BulletInfo(Transform obj, Vector3 targetDirection, float bulletSpeed = 5f, bool needDelayActive = false, float delayActiveTime = 0)
     {
         this.bulletObj = obj;
         this.direction = targetDirection.normalized;
         this.speed = bulletSpeed;
+        this.timer = 0;
+        this.needDelayActive = needDelayActive;
+        this.delayActiveTime = delayActiveTime;
+        if (needDelayActive)
+        {
+            bulletObj.gameObject.SetActive(false);
+        }
         Setup();
     }
 
@@ -25,6 +34,19 @@ public class BulletInfo
 
     public void Move()
     {
+        if (needDelayActive)
+        {
+            if (timer >= delayActiveTime)
+            {
+                bulletObj.gameObject.SetActive(true);
+                needDelayActive = false;
+                timer = 0;
+            }
+            else
+            {
+                timer += Time.deltaTime;
+            }
+        }
         bulletObj.position += direction * speed * Time.deltaTime;
     }
 }
