@@ -17,6 +17,6 @@ MonoBehaviour:
   baseSpeed: 4
   baseDmg: 5
   exp: 30
-  dropItemTypes: 
+  dropItemTypes: 04000000
   startIncreaseSpeedDis: 5
   speedMultiplayer: 1.2

@@ -17,5 +17,5 @@ MonoBehaviour:
   baseSpeed: 1
   baseDmg: 0
   exp: 30
-  dropItemTypes: 
+  dropItemTypes: 04000000
   startMoveAwayDistance: 5
