@@ -52,16 +52,10 @@ public class CreepConfig : ScriptableObject
 
     public virtual void Attack(Creep creep) { }
 
-    public virtual void     OnDead(Creep creep) 
+    public virtual void OnDead(Creep creep) 
     {
         AllManager.Instance().creepManager.AddToDeactivateList(creep);
-        Debug.Log("Array size: " + dropItemTypes.Length);
-        Debug.Log("Array content: " + string.Join(", ", dropItemTypes.Select(d => d.ToString())));
-        if (dropItemTypes.Length == 0)
-        {
-            Debug.Log("Drop item type is empty");
-        }
-        Debug.Log($"Creep {creep.type} dropped item of type {dropItemTypes[0]}");
+        Debug.Log($"{creep.type} dropped item of type {dropItemTypes[0]}");
         AllManager.Instance().powerUpManager.SpawnPowerUp(creep.creepTrans.position, DropItemTypes[0]);//, AllManager.Instance().powerUpConfig.GetPowerUpPrefab(PowerUpsType.HealthPack));
     }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Config/PowerUpConfig/HealthPack")]
 public class HealthPack : PowerUpsConfig
 {
-    public override void Activate(Player player)
+    public override void Activate(int playerId)
     {
         Debug.Log("HealthPack activated");
     }

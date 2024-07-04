@@ -53,9 +53,12 @@ public class PowerUpManager
         {
             if (powerUpInfoList[i].isNeedDestroy)
             {
-                GameObject.Destroy(powerUpInfoList[i].powerUpObj.gameObject);
-                Debug.Log("Destroy power-up");
-                powerUpInfoList.RemoveAt(i);
+                if (powerUpInfoList[i].powerUpObj != null)
+                {
+                    GameObject.Destroy(powerUpInfoList[i].powerUpObj.gameObject);
+                    Debug.Log("Destroy power-up");
+                    powerUpInfoList.RemoveAt(i);
+                }
             }
         }
     }
@@ -67,9 +70,14 @@ public class PowerUpManager
         PowerUpInfo newPowerUp = new PowerUpInfo(powerUpObj, powerUpAttr.powerUpConfig.timeToLive);
         powerUpInfoList.Add(newPowerUp);
     }
-    public void ActivatePowerUp(AllDropItemConfig.PowerUpsType powerUpType, Player player)
+    public void ActivatePowerUp(AllDropItemConfig.PowerUpsType powerUpType, int playerId)
     {
         var powerUpAttr = allDropItemConfig.powerUpAttributesList.Find(attr => attr.type == powerUpType);
-        powerUpAttr.powerUpConfig.Activate(player);
+        powerUpAttr.powerUpConfig.Activate(1);
+        // setDeletePowerUp(powerUpType);
+    }
+    public void setDeletePowerUp(int index)
+    {
+        powerUpInfoList[index].isNeedDestroy = true;
     }
 }
