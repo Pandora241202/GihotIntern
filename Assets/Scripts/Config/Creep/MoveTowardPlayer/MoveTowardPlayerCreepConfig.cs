@@ -13,6 +13,6 @@ public class MoveTowardPlayerCreepConfig : CreepConfig
         rotateDir.y = 0;
         creep.creepTrans.rotation = Quaternion.LookRotation(rotateDir);
 
-        //creep.creepTrans.rotation = Quaternion.LookRotation(CharacterController.Instance().transform.position - creep.creepTrans.position);
+        //creep.creepTrans.rotation = Quaternion.LookRotation(CharacterControl.Instance().transform.position - creep.creepTrans.position);
     }
 }

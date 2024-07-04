@@ -31,10 +31,10 @@ public class PlayerManager
     {
         Player player = this.dictPlayers[id]; 
         player.playerTrans = GameObject.Instantiate(characterPrefab, position, Quaternion.identity).transform;
-        player.playerTrans.gameObject.GetComponent<CharacterController>().id = id;
-        player.playerTrans.gameObject.GetComponent<CharacterController>().gunId = gun_id;
+        player.playerTrans.gameObject.GetComponent<CharacterControl>().id = id;
+        player.playerTrans.gameObject.GetComponent<CharacterControl>().gunId = gun_id;
         Debug.Log("Player: " + player.name + " gun: " + gun_id);
-        player.playerTrans.gameObject.GetComponent<CharacterController>().SetGunAndBullet();
+        player.playerTrans.gameObject.GetComponent<CharacterControl>().SetGunAndBullet();
         if (id == Player_ID.MyPlayerID) 
             player.playerTrans.Find("CM vcam1").gameObject.GetComponent<CinemachineVirtualCamera>().Priority = 11;
     }
@@ -52,7 +52,7 @@ public class PlayerManager
     public void UpdatePlayerVelocity(string id, Vector3 velocity, Vector3 position,Quaternion rotation)
     {
         Player player = dictPlayers[id];
-        CharacterController c_Controller = player.playerTrans.gameObject.GetComponent<CharacterController>();
+        CharacterControl c_Controller = player.playerTrans.gameObject.GetComponent<CharacterControl>();
         c_Controller.velocity = velocity;
         player.playerTrans.position = position;
         c_Controller.goChar.transform.rotation = rotation;

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8875686005540085006}
   m_Layer: 0
   m_Name: Landscape_2_2
-  m_TagString: Untagged
+  m_TagString: MapElement
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
