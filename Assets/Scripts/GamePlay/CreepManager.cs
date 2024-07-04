@@ -15,6 +15,7 @@ public class Creep
     public float timer;
     public GameObject bombObj;
     public Animator animator;
+    public Dictionary<int, Vector3> collision_plane_normal_dict = new Dictionary<int, Vector3>();
 
     public Creep(Transform creepTrans, CreepManager.CreepType type, CreepConfig config)
     {
@@ -44,7 +45,7 @@ public class Creep
 
     public void Move()
     {
-        config.Move(creepTrans, speed);
+        config.Move(this);
     }
 
     public void Attack()
@@ -189,14 +190,27 @@ public class CreepManager
         creepIdsToDeactivate.Clear();
     }
 
-    public void ProcessCollision(int creepId, GameObject colliderobject)
+    public void ProcessCollisionPlayerBullet(int creepId, GameObject colliderObject)
     {
         //TODO: Bullet Dmg
         //TODO: Sync 
         int dmg = 5;
         Creep creep = GetActiveCreepById(creepId);
         creep.ProcessDmg(dmg);
-        AllManager.Instance().bulletManager.SetDelete(colliderobject.GetInstanceID());
+        AllManager.Instance().bulletManager.SetDelete(colliderObject.GetInstanceID());
+    }
+
+    public void ProcessCollisionMapElement(int creepId, Collider collider)
+    {
+        Creep creep = GetActiveCreepById(creepId);
+        int mapElementId = collider.gameObject.GetInstanceID();
+        
+        if (creep.collision_plane_normal_dict.ContainsKey(mapElementId)) return;
+
+        Vector3 collidePoint = collider.ClosestPoint(creep.creepTrans.position);
+        collidePoint.y = creep.creepTrans.position.y;
+
+        creep.collision_plane_normal_dict.Add(mapElementId, (creep.creepTrans.position - collidePoint).normalized);
     }
 
     public void MarkTargetCreepById(int creepId)
