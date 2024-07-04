@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5920019803502222552}
   - component: {fileID: 4421837705926950913}
   - component: {fileID: 3284338686467118594}
-  - component: {fileID: 1998651652441334223}
+  - component: {fileID: -4732145403897892116}
   m_Layer: 0
   m_Name: Ground_3
   m_TagString: MapElement
@@ -101,7 +101,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 2
---- !u!64 &1998651652441334223
+--- !u!64 &-4732145403897892116
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
