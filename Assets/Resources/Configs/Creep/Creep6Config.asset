@@ -17,4 +17,4 @@ MonoBehaviour:
   baseSpeed: 2
   baseDmg: 10
   exp: 20
-  dropItemTypes: 
+  dropItemTypes: 04000000
