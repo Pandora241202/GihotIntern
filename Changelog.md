@@ -1,6 +1,6 @@
 # Changelog
 All notable changes to this project will be documented in this file.
-## [1.0.2] --- 04/07/2024
+## [1.0.2] - 04/07/2024
 ### Added
 - Map and environment.
 - Collision between environment and player.
@@ -18,7 +18,7 @@ All notable changes to this project will be documented in this file.
 - Enemy spawning cause lag - Move enemy to an object pool.
 
 
-## [1.0.1] --- 01/07/2024
+## [1.0.1] - 01/07/2024
 ### Added
 - Player, guns, enemies attributes design.
 - Bullet configs.
@@ -34,7 +34,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Only one player can shoot at a time
 
-## [1.0.0] --- 25/06/2024
+## [1.0.0] - 25/06/2024
 ### Added
 - Simple server.
 - Simple player movement.
