@@ -78,14 +78,6 @@ public class CharacterControl : MonoBehaviour
         frame++;
     }
 
-    void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        if (hit.collider.CompareTag("Enemy"))
-        {
-            // Ignore collisions with enemies
-            Physics.IgnoreCollision(hit.collider, characterController);
-        }
-    }
 
     private void FixedUpdate()
     {
