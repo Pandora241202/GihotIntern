@@ -1,5 +1,6 @@
 # Changelog
 All notable changes to this project will be documented in this file.
+For game design changelog, visit [GameDesign Changelog](https://docs.google.com/spreadsheets/d/1oSoVJ0jk9w2Vpz4AcT9sktsVrlLd9k-s05p6IKA5R1k/edit?usp=sharing)
 ## [1.0.2] - 05/07/2024
 ### Added
 - Map and environment.
