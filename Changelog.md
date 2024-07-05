@@ -1,28 +1,28 @@
 # Changelog
 All notable changes to this project will be documented in this file.
-## [1.0.2] - 04/07/2024
+## [1.0.2] - 05/07/2024
 ### Added
 - Map and environment.
 - Collision between environment and player.
-- Transparent camera when player move behind an object.
 - Joystick for mobile gameplay.
 - Gameplay assets.
 - UI Login and choose starting gun.
+- Manage terrain on map with a dictionary.
 
 ### Changed
 - Fine-tune enemy animations.
+- Fine-tune enemy and character collider.
 - Manage and destroy bullets through a bullet dictionary.
 
 ### Fixed
-- Enemy and character collider.
+- Character sinking/flying due to collision with terrain - Normalized movement vector to avoid changing Y-vector when collding with slightly higher terrain.
 - Enemy spawning cause lag - Move enemy to an object pool.
-
 
 ## [1.0.1] - 01/07/2024
 ### Added
 - Player, guns, enemies attributes design.
-- Bullet configs.
-- Enemy behaviors.
+- Three new Bullet configs.
+- Seven new enemy behaviors.
 - Enemy spawning.
 - Camera following player.
 
