@@ -1,7 +1,11 @@
 ﻿using Cinemachine;
+using JetBrains.Annotations;
+using System.Buffers.Text;
 using System.Collections.Generic;
+using UnityEditor.Rendering.PostProcessing;
 using UnityEngine;
 using UnityEngine.UI;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public class Player
 {
@@ -15,22 +19,16 @@ public class Player
     //Player stat 
 
     public int health; 
-    public int level;
     public float speed;
-    public int exp = 0;
-    public int expCost;
     public Player(string name, string id, int gunId, PlayerConfig config)
     {
         this.name = name;
         this.id = id;
         this.gunId = gunId;
         this.playerConfig = config;
-        this.health = config.health;
-        // this.level = config.level;
-        this.speed = config.speed;
-        // expCost = config.expRealCost;
+        this.health = Constants.PlayerBaseMaxHealth;
+        this.speed = Constants.PlayerBaseSpeed;
     }
-
 }
 
 public class PlayerManager
@@ -40,6 +38,39 @@ public class PlayerManager
     public PlayerManager(GameObject characterPrefab)
     {
         this.characterPrefab = characterPrefab;
+    }
+    public int exp = 0;
+    public int level = Constants.PlayerBaseLevel;
+    public int expRequire = Constants.PlayerBaseExp;
+
+
+    public void ProcessExpGain(int expGain)
+    {
+        exp += expGain;
+        if (exp >= expRequire)
+        {
+            expRequire = Constants.PlayerBaseExp + (level - 1) * Constants.ExpIncrement + Constants.ScalingMultiplierExp * (level-1) * (level-1);
+            level++;
+            exp -= expRequire;
+        }
+    }
+
+    public int GetMaxHealthFromLevel()
+    {
+        return Constants.PlayerBaseMaxHealth + (level - 1) * 3;
+    }
+
+    public int GetBaseSpeedFromLevel()
+    {
+        return Constants.PlayerBaseSpeed + (level - 1) / 2;
+    }
+
+    public int GetPlayerDmg(string playerId)
+    {
+        Player player = dictPlayers[playerId];
+        GunType gunType = AllManager.Instance().gunConfig.lsGunType[player.gunId];
+
+        return gunType.baseDamage + (level - 1) * gunType.bulletMultiplier;
     }
 
     public void SpawnPlayer(Vector3 position, string id, int gun_id)

@@ -6,8 +6,7 @@ using UnityEngine;
 public class PlayerConfig : ScriptableObject
 {
     public SkillType skillType;
-    public int level;
-    public int health;
+
     public float speed;
     // public int exp = 0;
     

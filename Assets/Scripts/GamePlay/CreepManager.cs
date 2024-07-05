@@ -65,8 +65,8 @@ public class Creep
         if (hp <= 0)
         {
             animator.SetTrigger("isDead");
-            AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].exp++;
-            Debug.Log("Tesst EXP "+AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].exp);
+            AllManager.Instance().playerManager.ProcessExpGain(1);
+            Debug.Log("Tesst EXP "+ AllManager.Instance().playerManager.exp);
             CreepManager creepManager = AllManager.Instance().creepManager;
             config.OnDead(this);
         }
@@ -194,11 +194,9 @@ public class CreepManager
 
     public void ProcessCollisionPlayerBullet(int creepId, GameObject colliderObject)
     {
-        //TODO: Bullet Dmg
-        //TODO: Sync 
-        int dmg = 5;
         Creep creep = GetActiveCreepById(creepId);
-        creep.ProcessDmg(dmg);
+        BulletInfo bulletInfo = AllManager.Instance().bulletManager.bulletInfoDict[colliderObject.GetInstanceID()];
+        creep.ProcessDmg(bulletInfo.damage);
         AllManager.Instance().bulletManager.SetDelete(colliderObject.GetInstanceID());
     }
 

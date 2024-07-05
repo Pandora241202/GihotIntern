@@ -20,7 +20,7 @@ public class Creep3Config : MoveTowardPlayerCreepConfig
         if (creep.timer >= fireRate)
         {
             creep.animator.SetTrigger("isAttack");
-            bulletConfig.Fire(creep.creepTrans.position, dictPlayers[playerId].playerTrans.position, AllManager.Instance().bulletManager, "EnemyBullet", true, 0.25f);
+            bulletConfig.Fire(creep.creepTrans.position, dictPlayers[playerId].playerTrans.position, creep.dmg, AllManager.Instance().bulletManager, "EnemyBullet", true, 0.25f);
             creep.timer = 0;
         } else
         {

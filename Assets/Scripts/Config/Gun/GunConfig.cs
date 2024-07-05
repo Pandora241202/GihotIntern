@@ -12,6 +12,8 @@ public class GunType
 {
     public int numberOfBullet;
     public float Firerate;
+    public int baseDamage;
+    public int bulletMultiplier;
     public BulletConfig bulletConfig;
     public float FireRange;
     public GameObject gunPrefab;
