@@ -253,6 +253,7 @@ public class CharacterControl : MonoBehaviour
         }
         if (other.gameObject.CompareTag("MapElement"))
         {
+            Debug.Log("Collide with map element");
             int id = other.gameObject.GetInstanceID();
             if (collision_plane_normal_dict.ContainsKey(id)) return;
             Vector3 collide_point = other.ClosestPoint(transform.position);
