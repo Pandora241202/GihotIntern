@@ -9,6 +9,7 @@ TagManager:
   - Bullet
   - EnemyBullet
   - MapElement
+  - Creep
   layers:
   - Default
   - TransparentFX

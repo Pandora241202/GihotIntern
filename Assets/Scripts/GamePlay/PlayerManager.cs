@@ -29,6 +29,11 @@ public class Player
         this.health = Constants.PlayerBaseMaxHealth;
         this.speed = Constants.PlayerBaseSpeed;
     }
+
+    public void ProcessDmg(int dmg)
+    {
+        health -= dmg;
+    }
 }
 
 public class PlayerManager
@@ -102,5 +107,18 @@ public class PlayerManager
         c_Controller.velocity = velocity;
         player.playerTrans.position = position;
         c_Controller.goChar.transform.rotation = rotation;
+    }
+
+    public void ProcessCollisionCreep(string playerId, int creepId)
+    {
+        Creep creep = AllManager.Instance().creepManager.GetActiveCreepById(creepId);
+        dictPlayers[playerId].ProcessDmg(creep.dmg);
+    }
+
+    public void ProcessCollisionEnemyBullet(string playerId, int bulletId)
+    {
+        BulletInfo bullet = AllManager.Instance().bulletManager.bulletInfoDict[bulletId];
+        dictPlayers[playerId].ProcessDmg(bullet.damage);
+        AllManager.Instance().bulletManager.SetDelete(bulletId);
     }
 }

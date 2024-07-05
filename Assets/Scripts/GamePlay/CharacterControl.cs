@@ -164,6 +164,14 @@ public class CharacterControl : MonoBehaviour
     Dictionary<int, Vector3> collision_plane_normal_dict = new Dictionary<int, Vector3>();
     private void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.CompareTag("Creep"))
+        {
+            AllManager.Instance().playerManager.ProcessCollisionCreep(id, other.gameObject.GetInstanceID());
+        } 
+        else if (other.gameObject.CompareTag("EnemyBullet"))
+        {
+            AllManager.Instance().playerManager.ProcessCollisionEnemyBullet(id, other.gameObject.GetInstanceID());
+        }
         if (other.gameObject.CompareTag("MapElement"))
         {
             int id = other.gameObject.GetInstanceID();
