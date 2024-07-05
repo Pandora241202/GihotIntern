@@ -31,7 +31,6 @@ public class UIManager : MonoBehaviour
         uiMainMenu.OnSetUp();
         uiChoseGun.OnSetUp();
         uiLogin.OnSetUp();
-        uiGameplay.OnSetUp();
         _instance = GameObject.FindAnyObjectByType<UIManager>();
         //new
         DontDestroyOnLoad(this);

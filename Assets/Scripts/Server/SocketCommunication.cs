@@ -16,7 +16,7 @@ public class SocketCommunication
         return instance;
     }
     UdpClient udpClient;
-    public string address = "127.0.0.1";
+    public string address = "192.168.6.180";
     public int port = 9999;
     Thread receiveData;
     public string player_id;
@@ -168,7 +168,10 @@ public class SocketCommunication
                 case "start":
                     Dispatcher.EnqueueToMainThread(() =>
                     {
-                        AllManager.Instance().LoadGame("level1");
+                        AllManager.Instance().LoadGame( "level1");
+                        UIManager._instance.uiGameplay.OnSetUp(AllManager._instance.playerManager.
+                            GetMaxHealthFromLevel(),AllManager._instance.playerManager.expRequire);
+
                     });
                     break;
                 case "spawn player":

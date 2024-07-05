@@ -1,8 +1,7 @@
 ﻿using Cinemachine;
-using JetBrains.Annotations;
 using System.Buffers.Text;
 using System.Collections.Generic;
-using UnityEditor.Rendering.PostProcessing;
+
 using UnityEngine;
 using UnityEngine.UI;
 using static Cinemachine.DocumentationSortingAttribute;
@@ -18,7 +17,7 @@ public class Player
     
     //Player stat 
 
-    public int health; 
+    public float health; 
     public float speed;
     public Player(string name, string id, int gunId, PlayerConfig config)
     {
@@ -32,7 +31,16 @@ public class Player
 
     public void ProcessDmg(int dmg)
     {
-        health -= dmg;
+        if (health > 0)
+        {
+            health -= dmg;
+            UIManager._instance.uiGameplay.sliderHealth.value = health;
+        }
+
+        if (health <=0)
+        {
+            Debug.Log("Died");
+        }
     }
 }
 
@@ -52,12 +60,16 @@ public class PlayerManager
     public void ProcessExpGain(int expGain)
     {
         exp += expGain;
+        
         if (exp >= expRequire)
         {
+            
+            exp -= expRequire;
             expRequire = Constants.PlayerBaseExp + (level - 1) * Constants.ExpIncrement + Constants.ScalingMultiplierExp * (level-1) * (level-1);
             level++;
-            exp -= expRequire;
+            UIManager._instance.uiGameplay.LevelUpdateSlider(expRequire);
         }
+        UIManager._instance.uiGameplay.UpdateLevelSlider(exp);
     }
 
     public int GetMaxHealthFromLevel()
