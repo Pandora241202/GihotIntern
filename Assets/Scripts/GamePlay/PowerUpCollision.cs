@@ -13,7 +13,7 @@ public class PowerUpCollision : MonoBehaviour
             if (powerUpManager != null)
             {
                 powerUpManager.ActivatePowerUp(powerUpType, 1);
-                Destroy(gameObject); // Destroy the power-up after activation
+                Destroy(gameObject); 
             }
         }
     }

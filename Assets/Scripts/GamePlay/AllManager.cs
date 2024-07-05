@@ -10,6 +10,7 @@ public class AllManager : MonoBehaviour
     public GunConfig gunConfig;
     [SerializeField] public AllCreepConfig allCreepConfig;
     [SerializeField] public AllDropItemConfig allDropItemConfig;
+    [SerializeField] public PlayerConfig playerConfig;
     [SerializeField] GameObject characterPrefab;
     public SceneUpdater sceneUpdater;
     public BulletManager bulletManager;

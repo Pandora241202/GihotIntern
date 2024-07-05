@@ -62,7 +62,7 @@ public class SocketCommunication
                     Player_ID.MyPlayerID = data.id;
                     Dispatcher.EnqueueToMainThread(() =>
                     {
-                        AllManager.Instance().playerManager.AddPlayer(data.player_name, data.id, data.gunId);
+                        AllManager.Instance().playerManager.AddPlayer(data.player_name, data.id, data.gunId,AllManager._instance.playerConfig);
                     });
                     break;
                 case "rooms":
@@ -76,7 +76,7 @@ public class SocketCommunication
                     Debug.Log(response);
                     Dispatcher.EnqueueToMainThread(() =>
                     {
-                        AllManager.Instance().playerManager.AddPlayer(playerInfo.player_name, playerInfo.player_id, playerInfo.gun_id);
+                        AllManager.Instance().playerManager.AddPlayer(playerInfo.player_name, playerInfo.player_id, playerInfo.gun_id,AllManager._instance.playerConfig);
                         UIManager._instance.uiMainMenu.HostChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
                         //UIManager._instance.uiMainMenu.JoinCall(0);
                     });
@@ -90,7 +90,7 @@ public class SocketCommunication
                         for (int i = 0; i < playerIn4List.players.Length; i++)
                         {
                             if (playerIn4List.players[i].player_id == Player_ID.MyPlayerID) continue;
-                            AllManager.Instance().playerManager.AddPlayer(playerIn4List.players[i].player_name, playerIn4List.players[i].player_id, playerIn4List.players[i].gun_id);
+                            AllManager.Instance().playerManager.AddPlayer(playerIn4List.players[i].player_name, playerIn4List.players[i].player_id, playerIn4List.players[i].gun_id,AllManager._instance.playerConfig);
                         }
                         UIManager._instance.uiOnlineLobby.OnGuessJoin();
                     });

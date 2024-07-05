@@ -64,6 +64,8 @@ public class Creep
         if (hp <= 0)
         {
             animator.SetTrigger("isDead");
+            AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].exp++;
+            Debug.Log("Tesst EXP "+AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].exp);
             CreepManager creepManager = AllManager.Instance().creepManager;
             config.OnDead(this);
         }

@@ -10,12 +10,27 @@ public class Player
     public string id;
     public int gunId;
     public GunConfig gunConfig;
-    public Player(string name, string id, int gunId)
+    public PlayerConfig playerConfig;
+    
+    //Player stat 
+
+    public int health; 
+    public int level;
+    public float speed;
+    public int exp = 0;
+    public int expCost;
+    public Player(string name, string id, int gunId, PlayerConfig config)
     {
         this.name = name;
         this.id = id;
         this.gunId = gunId;
+        this.playerConfig = config;
+        this.health = config.health;
+        // this.level = config.level;
+        this.speed = config.speed;
+        // expCost = config.expRealCost;
     }
+
 }
 
 public class PlayerManager
@@ -43,9 +58,9 @@ public class PlayerManager
     {
         this.dictPlayers.Remove(id);
     }
-    public void AddPlayer(string name, string id, int gunId)
+    public void AddPlayer(string name, string id, int gunId,PlayerConfig playerConfig)
     {
-        Player newPlayer = new Player(name, id, gunId);
+        Player newPlayer = new Player(name, id, gunId,playerConfig);
         dictPlayers.Add(id,newPlayer);
     }
 
