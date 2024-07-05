@@ -45,9 +45,17 @@ public class CreepConfig : ScriptableObject
 
     public AllDropItemConfig.PowerUpsType[] DropItemTypes => dropItemTypes;
 
-    public virtual void Move(Transform creepTransform, float speed) 
+    public virtual void Move(Creep creep) 
     {
-        creepTransform.Translate(creepTransform.forward * speed * Time.deltaTime, Space.World);
+        Vector3 normal = Vector3.zero;
+        foreach (var pair in creep.collision_plane_normal_dict)
+        {
+            normal += pair.Value;
+        }
+
+        creep.creepTrans.Translate((creep.creepTrans.forward + normal).normalized * creep.speed * Time.deltaTime, Space.World);
+
+        //creepTransform.Translate(creepTransform.forward * creep.speed * Time.deltaTime, Space.World);
     }
 
     public virtual void Attack(Creep creep) { }
@@ -61,7 +69,9 @@ public class CreepConfig : ScriptableObject
 
     float DistanceBetween(Vector3 pos1, Vector3 pos2)
     {
-        return (pos1 - pos2).magnitude;
+        Vector3 disVector = pos1 - pos2;
+        disVector.y = 0;
+        return disVector.magnitude;
     }
 
     protected (string, float) GetNearestPlayerWithDis(Transform creepTransform)

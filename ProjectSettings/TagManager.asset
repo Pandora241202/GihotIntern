@@ -9,7 +9,6 @@ TagManager:
   - Bullet
   - EnemyBullet
   - MapElement
-  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -20,7 +19,7 @@ TagManager:
   - 
   - creep
   - DontRender
-  - 
+  - Obstacles
   - 
   - 
   - 

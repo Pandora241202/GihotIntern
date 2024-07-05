@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4200989644267890173}
   - component: {fileID: 3133126747184363646}
   - component: {fileID: 4091082062052174969}
-  - component: {fileID: 9145787299348092907}
   - component: {fileID: 8404929717423804997}
+  - component: {fileID: 5684141489572800721}
   m_Layer: 0
   m_Name: Landscape_2_1
   m_TagString: MapElement
@@ -85,19 +85,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &9145787299348092907
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 141786274913234784}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 5.175432, y: 5.2044454, z: 4.739581}
-  m_Center: {x: -0.029726624, y: 2.6023433, z: -0.11908519}
 --- !u!54 &8404929717423804997
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -114,3 +101,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 2
+--- !u!64 &5684141489572800721
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 141786274913234784}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -7549268965111482087, guid: c82bd8d555363bc488d5cccc8b7e13d9, type: 3}
