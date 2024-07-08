@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public class AllManager : MonoBehaviour
@@ -40,7 +41,7 @@ public class AllManager : MonoBehaviour
 
     }
 
-    public void LoadGame(string sceneName)
+    public void LoadSceneAsync(string sceneName)
     {
         StartCoroutine(LoadScene(sceneName));
     }
@@ -53,22 +54,33 @@ public class AllManager : MonoBehaviour
         {
             yield return null;
         }
-        OnSceneLoaded();
+        OnSceneLoaded(sceneName);
         Debug.Log("Scene loaded!");
 
     }
 
-    private void OnSceneLoaded()
+    private void OnSceneLoaded(string sceneName)
     {
-        UIManager._instance.uiMainMenu.gameObject.SetActive(false);
-        UIManager._instance.uiGameplay.gameObject.SetActive(true);
-        sceneUpdater = GameObject.FindObjectOfType<SceneUpdater>();
-        //Debug.Log(sceneUpdater);
-        creepManager = sceneUpdater.creepManager;
-        bulletManager = sceneUpdater.bulletManager;
-        powerUpManager = sceneUpdater.powerUpManager;
-        SendData<EventName> ev = new SendData<EventName>(new EventName("done loading"));
-        SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
+        if (sceneName == "level1")
+        {
+
+            UIManager._instance.uiMainMenu.gameObject.SetActive(false);
+            UIManager._instance.uiGameplay.gameObject.SetActive(true);
+            sceneUpdater = GameObject.FindObjectOfType<SceneUpdater>();
+            //Debug.Log(sceneUpdater);
+            creepManager = sceneUpdater.creepManager;
+            bulletManager = sceneUpdater.bulletManager;
+            powerUpManager = sceneUpdater.powerUpManager;
+            SendData<EventName> ev = new SendData<EventName>(new EventName("done loading"));
+            SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
+        }
+        else if(sceneName == "UI")
+        {
+            UIManager._instance.uiPause.gameObject.SetActive(false);
+            UIManager._instance.uiGameplay.gameObject.SetActive(false);
+            UIManager._instance.uiMainMenu.gameObject.SetActive(true);
+            UIManager._instance.uiMainMenu.BackShowMain();
+        }
         //SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
         
     }

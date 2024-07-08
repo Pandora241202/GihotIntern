@@ -87,6 +87,26 @@ public class PlayerManager
 
     public void RemovePlayer(string id)
     {
+        if(id == Player_ID.MyPlayerID)
+        {
+            Player pl;
+            for (int i = this.dictPlayers.Count - 1; i > 0; i--)
+            {
+                pl = this.dictPlayers[id];
+                if (pl.playerTrans != null)
+                {
+                    GameObject.Destroy(pl.playerTrans);
+                }
+                this.dictPlayers.Remove(id);
+            }
+            AllManager.Instance().LoadSceneAsync("UI");
+            return;
+        }
+        Player player = this.dictPlayers[id];
+        if (player.playerTrans != null)
+        {
+            GameObject.Destroy(player.playerTrans);
+        }
         this.dictPlayers.Remove(id);
     }
     public void AddPlayer(string name, string id, int gunId, PlayerConfig playerConfig)

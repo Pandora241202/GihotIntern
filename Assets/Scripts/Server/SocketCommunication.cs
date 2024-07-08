@@ -188,7 +188,7 @@ public class SocketCommunication
                     break;
                 case "start":
 
-                    AllManager.Instance().LoadGame("level1");
+                    AllManager.Instance().LoadSceneAsync("level1");
 
                     break;
                 case "spawn player":
@@ -207,7 +207,15 @@ public class SocketCommunication
                     AllManager.Instance().playerManager.UpdatePlayersState(playersState);
                     break;
 
+                case "player out":
+                    Debug.Log("player out");
+                    SimplePlayerInfo playerOut = JsonUtility.FromJson<SimplePlayerInfo>(response);
+                    AllManager.Instance().playerManager.RemovePlayer(playerOut.player_id);
+                    break;
+
             }
+
+            Debug.Log(response);
             //remove processed data from buffer
             buffer.RemoveRange(0, 4 + dataLength);
             //Debug.Log(response);

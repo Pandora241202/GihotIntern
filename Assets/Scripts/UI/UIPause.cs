@@ -21,7 +21,8 @@ public class UIPause : MonoBehaviour
                 break;
             case 2:
                 //Leave
-                
+                SendData<PlayerOutEvent> ev = new SendData<PlayerOutEvent>(new PlayerOutEvent());
+                SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
                 break;
         }
     }

@@ -190,7 +190,11 @@ public class PlayerState
 [Serializable]
 public class PlayersState
 {
-    public ushort server_tick;
     public PlayerState[] states;
 }
 
+[Serializable]
+public class PlayerOutEvent
+{
+    public string event_name = "player out";
+}

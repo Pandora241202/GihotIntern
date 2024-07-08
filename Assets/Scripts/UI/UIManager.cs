@@ -33,12 +33,20 @@ public class UIManager : MonoBehaviour
         uiMainMenu.OnSetUp();
         uiChoseGun.OnSetUp();
         uiLogin.OnSetUp();
-        _instance = GameObject.FindAnyObjectByType<UIManager>();
-        //new
-        DontDestroyOnLoad(this);
-    }
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            GameObject.Destroy(this.gameObject);
+        }
+            //new
 
-    private void Update()
+        }
+
+        private void Update()
     {
         // Debug.Log(Player_ID.MyPlayerID);
     }
