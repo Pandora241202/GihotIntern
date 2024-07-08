@@ -13,15 +13,7 @@ public class CreepConfig : ScriptableObject
 
     [SerializeField] int baseDmg;
 
-    //[SerializeField] float startSpawnTime;
-
-    //[SerializeField] float spawnRate;
-
-    //[SerializeField] float minSpawnIntervalTime;
-
-    //[SerializeField] float maxSpawnIntervalTime;
-
-    [SerializeField] float exp;
+    [SerializeField] int exp;
 
     [SerializeField]  AllDropItemConfig.PowerUpsType[] dropItemTypes;
 
