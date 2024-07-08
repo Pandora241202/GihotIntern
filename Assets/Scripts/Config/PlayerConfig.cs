@@ -8,20 +8,6 @@ public class PlayerConfig : ScriptableObject
     public SkillType skillType;
 
     public float speed;
-    // public int exp = 0;
-    
-    // public int expBaseCost;
-    // private const int scalingMul = 15;
-    // private const int expIncrement = 135;
-    //
-    //
-    // public int expRealCost
-    // {
-    //     get
-    //     {
-    //         return expBaseCost + (level - 1) * expIncrement + scalingMul * (level - 1) * (level - 1);
-    //     }
-    // }
 }
 public enum SkillType
 {

@@ -9,6 +9,8 @@ public class HealthPack : PowerUpsConfig
     {
         Debug.Log("HealthPack activated");
         AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health++;
+        UIManager._instance.uiGameplay.sliderHealth.value =
+            AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health;
         Debug.Log(AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health);
     }
 }

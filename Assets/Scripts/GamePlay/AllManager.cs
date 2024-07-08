@@ -27,13 +27,16 @@ public class AllManager : MonoBehaviour
         SocketCommunication.GetInstance();
     }
 
-    private void Start() {
+    private void Start()
+    {
         playerManager = new PlayerManager(characterPrefab);
     }
-    private void Update() {
-        
+    private void Update()
+    {
+
     }
-    private void LateUpdate() {
+    private void LateUpdate()
+    {
 
     }
 

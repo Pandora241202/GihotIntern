@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
+    public UIPause uiPause;
+    public UIGamePlay uiGameplay;
     public UIOnlineLobby uiOnlineLobby;
     public UIMainMenu uiMainMenu;
     public UILogin uiLogin;
@@ -29,7 +31,6 @@ public class UIManager : MonoBehaviour
         uiMainMenu.OnSetUp();
         uiChoseGun.OnSetUp();
         uiLogin.OnSetUp();
-        
         _instance = GameObject.FindAnyObjectByType<UIManager>();
         //new
         DontDestroyOnLoad(this);

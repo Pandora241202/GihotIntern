@@ -61,7 +61,7 @@ public class UIOnlineLobby : MonoBehaviour
         Debug.Log(AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].name);
         UIManager._instance.uiMainMenu.HostChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
         UIManager._instance.uiMainMenu.AfterCreate();
-        UIManager._instance.uiMainMenu.btnStart.interactable = false;
+        //UIManager._instance.uiMainMenu.btnStart.interactable = false;
         gameObject.SetActive(false);
     }
 

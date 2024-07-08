@@ -29,7 +29,7 @@ class MoveEvent
     public string event_name = "move";
     [field: SerializeField] Vector3 velocity;
     [field: SerializeField] Quaternion rotation;
-    public MoveEvent(Vector3 velocity,Quaternion rotation)
+    public MoveEvent(Vector3 velocity, Quaternion rotation)
     {
         this.velocity = velocity;
         this.rotation = rotation;
@@ -65,7 +65,7 @@ class ItemPlayerEvent
     public bool value;
     public string player_id;
     public string host_id;
-    public ItemPlayerEvent(string event_name,bool value,string id)
+    public ItemPlayerEvent(string event_name, bool value, string id)
     {
         this.event_name = event_name;
         this.value = value;
@@ -74,7 +74,7 @@ class ItemPlayerEvent
     }
 }
 [System.Serializable]
-class OnlineLobbyEvent 
+class OnlineLobbyEvent
 {
     public string event_name;
     public bool value;
@@ -164,7 +164,7 @@ public class PlayerSpawnPos
 [Serializable]
 public class AllPlayerSpanwPos
 {
-    public PlayerSpawnPos[] data; 
+    public PlayerSpawnPos[] data;
 }
 
 [Serializable]

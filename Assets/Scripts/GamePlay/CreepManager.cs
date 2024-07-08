@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Unity.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Creep
@@ -64,7 +65,7 @@ public class Creep
         if (hp <= 0)
         {
             animator.SetTrigger("isDead");
-            AllManager.Instance().playerManager.ProcessExpGain(1);
+            AllManager.Instance().playerManager.ProcessExpGain(this.config.Exp);
             Debug.Log("Tesst EXP "+ AllManager.Instance().playerManager.exp);
             CreepManager creepManager = AllManager.Instance().creepManager;
             config.OnDead(this);

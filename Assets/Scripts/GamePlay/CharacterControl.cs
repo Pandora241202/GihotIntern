@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,8 +26,9 @@ public class CharacterControl : MonoBehaviour
     public float correctPositionTime = 0;
     public bool isColliding = false;
     public bool lerp = false;
-    public int frameLerp = 3;
+    public int frameLerp = 16;
     public int elapseFrame = 0;
+    public Vector3 lerpVertor = Vector3.zero;
     public Vector3 lerpPosition = Vector3.zero;
 
     //public static CharacterControl _instance { get; private set; }
@@ -68,7 +68,7 @@ public class CharacterControl : MonoBehaviour
 
     public void Lerp()
     {
-        Vector3 lerpVector = lerpPosition - transform.position;
+        //Vector3 lerpVector = lerpPosition - transform.position;
 
         //if(lerpVector.magnitude < speed * Time.fixedDeltaTime * 3)
         //{
@@ -87,21 +87,24 @@ public class CharacterControl : MonoBehaviour
 
         //transform.position += direction * Time.fixedDeltaTime * speed;
         //final_velocity = direction * speed;
-        
+
         //if (Vector3.Angle(velocity, lerpDirection) > 70) return;
 
-        if ((transform.position - lerpPosition).magnitude < speed * Time.fixedDeltaTime)
+        if ((lerpPosition - transform.position).magnitude <= speed * Time.fixedDeltaTime || elapseFrame == frameLerp)
         {
             lerp = false;
             transform.position = lerpPosition;
+            final_velocity = input_velocity;
             return;
         }
 
-        elapseFrame++;
-        Vector3 interpolationPosition = Vector3.Lerp(transform.position, lerpPosition, (float) elapseFrame/ frameLerp);
-        transform.position = interpolationPosition;
-        final_velocity = (lerpVector.normalized + input_velocity.normalized).normalized * speed;
+        
+       // Vector3 interpolationPosition = Vector3.Lerp(transform.position, lerpPosition, (float)1 / frameLerp);
+        //elapseFrame++;
+        //transform.position = interpolationPosition;
+
         lerpPosition += input_velocity * Time.fixedDeltaTime;
+        final_velocity = (lerpVertor + input_velocity).normalized * speed;
     }
 
     private void FixedUpdate()
@@ -117,27 +120,28 @@ public class CharacterControl : MonoBehaviour
             final_velocity = input_velocity;
         }
 
+        normal = Vector3.zero;
+            
+        if (collision)
+        {
+            for (int i = 0; i < collision_plane_normal_dict.Count; i++)
+            {
+                normal += collision_plane_normal_dict.ElementAt(i).Value;
+            }
+
+            final_velocity = (normal + final_velocity.normalized).normalized * speed;
+        }
+
         if (correctPositionTime < Time.fixedDeltaTime * 5)
         {
-           
-                normal = Vector3.zero;
-
-                if (collision) 
-                
-                {
-                    for (int i = 0; i < collision_plane_normal_dict.Count; i++)
-                    {
-                        normal += collision_plane_normal_dict.ElementAt(i).Value;
-                    }
-
-                    final_velocity = (normal + final_velocity.normalized).normalized * speed;
-                }
-
-
-
             transform.position += final_velocity * Time.fixedDeltaTime;
-            correctPositionTime += Time.fixedDeltaTime;
+
         }
+
+
+
+        correctPositionTime += Time.fixedDeltaTime;
+
 
 
 
@@ -158,11 +162,11 @@ public class CharacterControl : MonoBehaviour
 
         if (id != Player_ID.MyPlayerID) return;
 
-        
 
-        
 
-        if(frame % 3 == 0)
+
+
+        if (frame % 3 == 0)
         {
             float horizontal = joystick.Horizontal;
             float vertical = joystick.Vertical;
@@ -243,14 +247,14 @@ public class CharacterControl : MonoBehaviour
         //    AllManager.Instance().bulletManager.SpawnBullet(gunTransform.position, curCreepTarget, gunId);
         //}
     }
-    
+
     Dictionary<int, Vector3> collision_plane_normal_dict = new Dictionary<int, Vector3>();
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Creep"))
         {
             AllManager.Instance().playerManager.ProcessCollisionCreep(id, other.gameObject.GetInstanceID());
-        } 
+        }
         else if (other.gameObject.CompareTag("EnemyBullet"))
         {
             AllManager.Instance().playerManager.ProcessCollisionEnemyBullet(id, other.gameObject.GetInstanceID());
@@ -278,7 +282,7 @@ public class CharacterControl : MonoBehaviour
                 collide_point.y = transform.position.y;
                 collision = true;
                 collision_plane_normal_dict[id] = (transform.position - collide_point).normalized;
-            }         
+            }
         }
     }
     private void OnTriggerExit(Collider other)
