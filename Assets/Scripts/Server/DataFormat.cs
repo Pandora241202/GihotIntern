@@ -4,6 +4,7 @@ using UnityEngine;
 public class SendData<T>
 {
     public string player_id = Player_ID.MyPlayerID;
+    public string sessionId = Player_ID.SessionId;
     public T _event;
     public SendData(T _event)
     {
@@ -12,20 +13,40 @@ public class SendData<T>
 }
 
 [Serializable]
+public class FirstConnect
+{
+    public string event_name = "first connect";
+    public string name;
+    public FirstConnect(string name)
+    {
+        this.name = name;
+    }
+}
+
+[Serializable]
 class MoveEvent
 {
     public string event_name = "move";
     [field: SerializeField] Vector3 velocity;
-    [field: SerializeField] Vector3 position;
     [field: SerializeField] Quaternion rotation;
-    public MoveEvent(Vector3 velocity, Vector3 position,Quaternion rotation)
+    public MoveEvent(Vector3 velocity,Quaternion rotation)
     {
         this.velocity = velocity;
-        this.position = position;
         this.rotation = rotation;
 
     }
 }
+[Serializable]
+class PositionEvent
+{
+    public string event_name = "position";
+    [field: SerializeField] Vector3 position;
+    public PositionEvent(Vector3 position)
+    {
+        this.position = position;
+    }
+}
+
 [Serializable]
 class ChoseGunEvent
 {
@@ -147,10 +168,44 @@ public class AllPlayerSpanwPos
 }
 
 [Serializable]
-public class PlayerMove
+public class PlayerState
 {
+    public string event_name = "player state";
     public string player_id;
-    [field: SerializeField] public Vector3 velocity;
+    public int gun;
+    public bool isColliding;
     [field: SerializeField] public Vector3 position;
+    [field: SerializeField] public Vector3 velocity;
     [field: SerializeField] public Quaternion rotation;
+    public PlayerState(Vector3 position, Vector3 velocity, Quaternion rotation, bool isColliding)
+    {
+        this.position = position;
+        this.velocity = velocity;
+        this.rotation = rotation;
+        this.isColliding = isColliding;
+    }
+}
+[Serializable]
+public class PlayersState
+{
+    public ushort server_tick;
+    public PlayerState[] states;
+}
+
+[Serializable]
+public class PlayerPosition
+{
+    public string event_name = "player position";
+    public string player_id;
+    [field: SerializeField] public Vector3 position;
+    public PlayerPosition(Vector3 position)
+    {
+        this.position = position;
+    }
+}
+
+[Serializable]
+public class PlayersPosition
+{
+    public PlayerPosition[] players_position;
 }
