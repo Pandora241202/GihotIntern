@@ -27,6 +27,11 @@ public class Player
     public void ProcessDmg(int dmg)
     {
         health -= dmg;
+        if (health <= 0)
+        {
+            health = 0;
+        }
+        UIManager._instance.uiGameplay.UpdateHealthSlider(health);
     }
 }
 
@@ -47,10 +52,12 @@ public class PlayerManager
     {
         Debug.Log(expGain);
         exp += expGain;
+        UIManager._instance.uiGameplay.UpdateLevelSlider(exp);
         if (exp >= expRequire)
         {
             expRequire = Constants.PlayerBaseExp + (level - 1) * Constants.ExpIncrement + Constants.ScalingMultiplierExp * (level - 1) * (level - 1);
             level++;
+            UIManager._instance.uiGameplay.LevelUpdateSlider(expRequire);
             exp = 0;
         }
     }

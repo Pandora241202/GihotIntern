@@ -198,8 +198,11 @@ public class SocketCommunication
                     {
                         AllManager.Instance().playerManager.SpawnPlayer(all.data[i].spawn_pos, all.data[i].player_id, all.data[i].gun_id);
                     }
+                    UIManager._instance.uiGameplay.OnSetUp(AllManager._instance.playerManager.GetMaxHealthFromLevel(),AllManager._instance.playerManager.expRequire);
+
                     UIManager._instance.uiGameplay.gameObject.SetActive(true);
                     UIManager._instance._fjoystick.gameObject.SetActive(true);
+                    
                     break;
 
                 case "update players state":
