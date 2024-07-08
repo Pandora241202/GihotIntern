@@ -10,7 +10,6 @@ public class Player
     public int gunId;
     public GunConfig gunConfig;
     public PlayerConfig playerConfig;
-
     //Player stat 
 
     public int health;
@@ -46,12 +45,13 @@ public class PlayerManager
 
     public void ProcessExpGain(int expGain)
     {
+        Debug.Log(expGain);
         exp += expGain;
         if (exp >= expRequire)
         {
             expRequire = Constants.PlayerBaseExp + (level - 1) * Constants.ExpIncrement + Constants.ScalingMultiplierExp * (level - 1) * (level - 1);
             level++;
-            exp -= expRequire;
+            exp = 0;
         }
     }
 
@@ -123,24 +123,9 @@ public class PlayerManager
             }
 
             c_Controller.correctPositionTime = 0;
+            if (state.isFire) c_Controller.Shoot();
             //player.playerTrans.position = state.position;
         }
-    }
-
-    public void UpdatePlayerVelocity(PlayerState playersState)
-    {
-        //CharacterControl player = dictPlayers[playersState.player_id].playerTrans.gameObject.GetComponent<CharacterControl>();
-        //player.velocity = playersState.velocity;
-        //player.goChar.transform.rotation = playersState.rotation;
-        //if(!player.isColliding) if((player.transform.position - playersState.position).magnitude > 0.2) player.transform.position = playersState.position;
-        //player.newPosition = playersState.position;
-    }
-
-    public void UpdatePlayerPosition(PlayerPosition playerPosition)
-    {
-        //CharacterControl player = dictPlayers[playerPosition.player_id].playerTrans.gameObject.GetComponent<CharacterControl>();
-        //if ((player.transform.position - playerPosition.position).magnitude > 0.5) player.transform.position = playerPosition.position;
-        //player.correctPositionTime = 0;
     }
 
     public void ProcessCollisionCreep(string playerId, int creepId)

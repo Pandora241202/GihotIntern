@@ -177,12 +177,14 @@ public class PlayerState
     [field: SerializeField] public Vector3 position;
     [field: SerializeField] public Vector3 velocity;
     [field: SerializeField] public Quaternion rotation;
-    public PlayerState(Vector3 position, Vector3 velocity, Quaternion rotation, bool isColliding)
+    public bool isFire;
+    public PlayerState(Vector3 position, Vector3 velocity, Quaternion rotation, bool isColliding, bool isFire)
     {
         this.position = position;
         this.velocity = velocity;
         this.rotation = rotation;
         this.isColliding = isColliding;
+        this.isFire = isFire;
     }
 }
 [Serializable]
@@ -192,20 +194,3 @@ public class PlayersState
     public PlayerState[] states;
 }
 
-[Serializable]
-public class PlayerPosition
-{
-    public string event_name = "player position";
-    public string player_id;
-    [field: SerializeField] public Vector3 position;
-    public PlayerPosition(Vector3 position)
-    {
-        this.position = position;
-    }
-}
-
-[Serializable]
-public class PlayersPosition
-{
-    public PlayerPosition[] players_position;
-}

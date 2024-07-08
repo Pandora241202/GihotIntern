@@ -70,5 +70,6 @@ public class AllManager : MonoBehaviour
         SendData<EventName> ev = new SendData<EventName>(new EventName("done loading"));
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
         //SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
+        
     }
 }

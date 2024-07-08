@@ -31,7 +31,7 @@ public class CharacterControl : MonoBehaviour
     public int elapseFrame = 0;
     public Vector3 lerpVertor = Vector3.zero;
     public Vector3 lerpPosition = Vector3.zero;
-
+    //public bool isFire = false;
     //public static CharacterControl _instance { get; private set; }
     //public static CharacterControl Instance()
     //{
@@ -111,7 +111,7 @@ public class CharacterControl : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Shoot();
+        
 
         if (lerp)
         {
@@ -177,7 +177,7 @@ public class CharacterControl : MonoBehaviour
 
             Vector3 v = direction * speed;
 
-            SendData<PlayerState> data = new SendData<PlayerState>(new PlayerState(transform.position, v, Quaternion.LookRotation(direction), isColliding));
+            SendData<PlayerState> data = new SendData<PlayerState>(new PlayerState(transform.position, v, Quaternion.LookRotation(direction), isColliding, true));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
         }
 
@@ -215,7 +215,7 @@ public class CharacterControl : MonoBehaviour
         return targetObj;
     }
 
-    void Shoot()
+    public void Shoot()
     {
         GameObject targetObj = GetTagetObj();
 
