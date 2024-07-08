@@ -100,7 +100,7 @@ public class CharacterControl : MonoBehaviour
         elapseFrame++;
         Vector3 interpolationPosition = Vector3.Lerp(transform.position, lerpPosition, (float) elapseFrame/ frameLerp);
         transform.position = interpolationPosition;
-
+        final_velocity = (lerpVector.normalized + input_velocity.normalized).normalized * speed;
         lerpPosition += input_velocity * Time.fixedDeltaTime;
     }
 
@@ -112,21 +112,25 @@ public class CharacterControl : MonoBehaviour
         {
             Lerp();
         }
+        else
+        {
+            final_velocity = input_velocity;
+        }
 
         if (correctPositionTime < Time.fixedDeltaTime * 5)
         {
            
                 normal = Vector3.zero;
 
-                if (!collision) final_velocity = input_velocity;
-                else
+                if (collision) 
+                
                 {
                     for (int i = 0; i < collision_plane_normal_dict.Count; i++)
                     {
                         normal += collision_plane_normal_dict.ElementAt(i).Value;
                     }
 
-                    final_velocity += (normal + input_velocity.normalized).normalized * speed;
+                    final_velocity = (normal + final_velocity.normalized).normalized * speed;
                 }
 
 
@@ -140,7 +144,7 @@ public class CharacterControl : MonoBehaviour
         if (input_velocity != Vector3.zero)
         {
             charAnim.SetBool("isRun", true);
-            goChar.transform.rotation = Quaternion.LookRotation(final_velocity);
+            goChar.transform.rotation = Quaternion.LookRotation(input_velocity);
         }
         else
         {
