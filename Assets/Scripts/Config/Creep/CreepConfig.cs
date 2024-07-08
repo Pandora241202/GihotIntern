@@ -33,7 +33,7 @@ public class CreepConfig : ScriptableObject
 
     //public float MaxSpawnIntervalTime => maxSpawnIntervalTime;
 
-    public float Exp => exp;
+    public int Exp => exp;
 
     public AllDropItemConfig.PowerUpsType[] DropItemTypes => dropItemTypes;
 
