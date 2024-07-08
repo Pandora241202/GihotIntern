@@ -96,7 +96,7 @@ public class PlayerManager
     }
     public void AddPlayer(string name, string id, int gunId,PlayerConfig playerConfig)
     {
-        Player newPlayer = new Player(name, id, gunId,playerConfig);
+        Player newPlayer = new Player(name, id, gunId, playerConfig);
         dictPlayers.Add(id,newPlayer);
     }
 

@@ -103,7 +103,7 @@ public class SocketCommunication
                         First_Connect data = JsonUtility.FromJson<First_Connect>(response);
                         Player_ID.MyPlayerID = data.id;
 
-                        AllManager.Instance().playerManager.AddPlayer(data.player_name, data.id, data.gunId);
+                        AllManager.Instance().playerManager.AddPlayer(data.player_name, data.id, data.gunId, AllManager.Instance().playerConfig);
                         break;
                     case "rooms":
                         //get available rooms
@@ -114,7 +114,7 @@ public class SocketCommunication
                         //other player join room
                         SimplePlayerInfo playerInfo = JsonUtility.FromJson<SimplePlayerInfo>(response);
 
-                        AllManager.Instance().playerManager.AddPlayer(playerInfo.player_name, playerInfo.player_id, playerInfo.gun_id);
+                        AllManager.Instance().playerManager.AddPlayer(playerInfo.player_name, playerInfo.player_id, playerInfo.gun_id, AllManager.Instance().playerConfig);
                         UIManager._instance.uiMainMenu.HostChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
                             //UIManager._instance.uiMainMenu.JoinCall(0);
 
@@ -125,7 +125,7 @@ public class SocketCommunication
                         for (int i = 0; i < playerIn4List.players.Length; i++)
                         {
                                 if (playerIn4List.players[i].player_id == Player_ID.MyPlayerID) continue;
-                                AllManager.Instance().playerManager.AddPlayer(playerIn4List.players[i].player_name, playerIn4List.players[i].player_id, playerIn4List.players[i].gun_id);
+                                AllManager.Instance().playerManager.AddPlayer(playerIn4List.players[i].player_name, playerIn4List.players[i].player_id, playerIn4List.players[i].gun_id, AllManager.Instance().playerConfig);
                         }
                         UIManager._instance.uiOnlineLobby.OnGuessJoin();
                     break;
