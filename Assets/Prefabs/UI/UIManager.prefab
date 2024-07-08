@@ -1337,6 +1337,7 @@ MonoBehaviour:
   uiLogin: {fileID: 5888400483960505565}
   uiChoseGun: {fileID: 5888400482944282645}
   _joystick: {fileID: 8723760980364119711}
+  _fjoystick: {fileID: 965126078705638215}
 --- !u!1001 &1277073779180593345
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2335,7 +2336,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9014950383461640130, guid: d6682a1a5aeeacd45b57db0f6b5d5664, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d6682a1a5aeeacd45b57db0f6b5d5664, type: 3}
@@ -2699,15 +2700,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 813882249308739933, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5094929053485534286, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5094929053485534286, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6251122003062763855, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2743,11 +2744,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6251122003325922472, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6251122003325922472, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6251122003586936148, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2877,8 +2878,27 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -20
       objectReference: {fileID: 0}
+    - target: {fileID: 6311902162483674644, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
+      propertyPath: m_Color.b
+      value: 0.895419
+      objectReference: {fileID: 0}
+    - target: {fileID: 6311902162483674644, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
+      propertyPath: m_Color.r
+      value: 0.3339622
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
+--- !u!114 &965126078705638215 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6311902162173297046, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
+  m_PrefabInstance: {fileID: 6556309346000247505}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a47f546fc70ec8428172694e78e4288, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &5888400484718347149 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 813882249308739932, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}

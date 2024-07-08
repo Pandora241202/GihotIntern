@@ -12,7 +12,8 @@ public class CharacterControl : MonoBehaviour
     public GameObject goChar;
     [SerializeField] public int gunId;
     [SerializeField] LayerMask creepLayerMask;
-    private FixedJoystick joystick;
+    //private FixedJoystick joystick;
+    private FloatingJoystick joystick;
     GameObject curCreepTarget = null;
     public string id;
     int frame = 0;
@@ -49,7 +50,8 @@ public class CharacterControl : MonoBehaviour
 
     private void Start()
     {
-        joystick = UIManager._instance._joystick;
+        //joystick = UIManager._instance._joystick;
+        joystick = UIManager._instance._fjoystick;
     }
     public void SetGunAndBullet()
     {

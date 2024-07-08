@@ -198,7 +198,8 @@ public class SocketCommunication
                     {
                         AllManager.Instance().playerManager.SpawnPlayer(all.data[i].spawn_pos, all.data[i].player_id, all.data[i].gun_id);
                     }
-                    UIManager._instance._joystick.gameObject.SetActive(true);
+                    //UIManager._instance._joystick.gameObject.SetActive(true);
+                    UIManager._instance._fjoystick.gameObject.SetActive(true);
                     break;
 
                 case "update players state":

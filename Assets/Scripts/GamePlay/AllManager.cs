@@ -61,6 +61,7 @@ public class AllManager : MonoBehaviour
     private void OnSceneLoaded()
     {
         UIManager._instance.uiMainMenu.gameObject.SetActive(false);
+        UIManager._instance.uiGameplay.gameObject.SetActive(true);
         sceneUpdater = GameObject.FindObjectOfType<SceneUpdater>();
         //Debug.Log(sceneUpdater);
         creepManager = sceneUpdater.creepManager;

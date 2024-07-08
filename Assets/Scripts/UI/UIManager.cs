@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     public UILogin uiLogin;
     public UIChoseGun uiChoseGun;
     public FixedJoystick _joystick;
+    public FloatingJoystick _fjoystick;
     public static UIManager _instance { get; private set; }
 
 
@@ -27,6 +28,7 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         _joystick.gameObject.SetActive(false);
+        _fjoystick.gameObject.SetActive(false);
         uiOnlineLobby.OnSetUp();
         uiMainMenu.OnSetUp();
         uiChoseGun.OnSetUp();
