@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public class AllManager : MonoBehaviour
@@ -25,15 +24,19 @@ public class AllManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
+        SocketCommunication.GetInstance();
     }
 
-    private void Start() {
+    private void Start()
+    {
         playerManager = new PlayerManager(characterPrefab);
     }
-    private void Update() {
+    private void Update()
+    {
 
     }
-    private void LateUpdate() {
+    private void LateUpdate()
+    {
 
     }
 
@@ -58,7 +61,6 @@ public class AllManager : MonoBehaviour
     private void OnSceneLoaded()
     {
         UIManager._instance.uiMainMenu.gameObject.SetActive(false);
-        UIManager._instance.uiGameplay.gameObject.SetActive(true);
         sceneUpdater = GameObject.FindObjectOfType<SceneUpdater>();
         //Debug.Log(sceneUpdater);
         creepManager = sceneUpdater.creepManager;
