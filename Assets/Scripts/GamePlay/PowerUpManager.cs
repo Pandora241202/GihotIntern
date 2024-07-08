@@ -70,7 +70,7 @@ public class PowerUpManager
         PowerUpInfo newPowerUp = new PowerUpInfo(powerUpObj, powerUpAttr.powerUpConfig.timeToLive);
         powerUpInfoList.Add(newPowerUp);
     }
-    public void ActivatePowerUp(AllDropItemConfig.PowerUpsType powerUpType, int playerId)
+    public void ActivatePowerUp(AllDropItemConfig.PowerUpsType powerUpType)
     {
         var powerUpAttr = allDropItemConfig.powerUpAttributesList.Find(attr => attr.type == powerUpType);
         powerUpAttr.powerUpConfig.Activate();

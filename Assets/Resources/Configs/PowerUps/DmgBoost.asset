@@ -9,12 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4018fd6bf07f484caa3ae46af2bfb72, type: 3}
-  m_Name: LifeSteal
+  m_Script: {fileID: 11500000, guid: d8612deae10bf5c4b892bfae6075d6d6, type: 3}
+  m_Name: DmgBoost
   m_EditorClassIdentifier: 
-  powerUpPrefab: {fileID: 0}
+  powerUpPrefab: {fileID: 7307662045731730337, guid: 37ef61cc715c19e48b7ce3edb083a59a, type: 3}
   dropNumber: 1
   timeToLive: 15
-  duration: -1
-  boostAmount: 0.02
+  duration: 15
+  boostAmount: 10
   isStackable: 1
+  dropChance: 0

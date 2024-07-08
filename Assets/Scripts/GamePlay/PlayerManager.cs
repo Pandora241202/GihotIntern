@@ -17,7 +17,7 @@ public class Player
     //Player stat 
 
     public int health;
-    public int lifesteal;
+    public float lifeSteal;
     public float speed;
     public bool isDead;
     public float dmgBoostTime = 0;
@@ -28,7 +28,7 @@ public class Player
         this.gunId = gunId;
         this.playerConfig = config;
         this.health = Constants.PlayerBaseMaxHealth;
-        this.lifesteal = Constants.LifeSteal;
+        this.lifeSteal = Constants.LifeSteal;
         this.speed = Constants.PlayerBaseSpeed;
         isDead = false;
         levelUpEffect = null;
@@ -115,7 +115,7 @@ public class PlayerManager
         GunType gunType = AllManager.Instance().gunConfig.lsGunType[player.gunId];
         if (player.dmgBoostTime >= 0)
         {
-            return (int)(gunType.baseDamage + (level - 1) *(1.3f)* gunType.bulletMultiplier);
+            return (int)(gunType.baseDamage + (level - 1) *(1.3)* gunType.bulletMultiplier);
         }
         return gunType.baseDamage + (level - 1) * gunType.bulletMultiplier;
     }
@@ -216,7 +216,7 @@ public class PlayerManager
     public void ProcessLifeSteal()
     {
         int lifesteal = Random.Range(0, 100);
-        if (lifesteal <= AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].lifesteal)
+        if (lifesteal <= AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].lifeSteal)
         {
             Debug.Log("Hut dc 1 mau nha may em yeu");
             AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health++;

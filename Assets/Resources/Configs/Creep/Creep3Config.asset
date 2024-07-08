@@ -17,6 +17,10 @@ MonoBehaviour:
   baseSpeed: 2
   baseDmg: 5
   exp: 20
-  dropItemTypes: 04000000
+  dropItemConfigs:
+  - powerUpType: 0
+    dropChance: 0.9
+  - powerUpType: 4
+    dropChance: 0.1
   bulletConfig: {fileID: 11400000, guid: 5a6237f2bc2e34c489335df2f29de9fe, type: 2}
   fireRate: 7

@@ -12,7 +12,7 @@ public class PowerUpCollision : MonoBehaviour
             PowerUpManager powerUpManager = AllManager.Instance().powerUpManager;
             if (powerUpManager != null)
             {
-                powerUpManager.ActivatePowerUp(powerUpType, 1);
+                powerUpManager.ActivatePowerUp(powerUpType);
                 Destroy(gameObject); 
             }
         }
