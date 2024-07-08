@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +5,7 @@ using UnityEngine;
 
 public class CharacterControl : MonoBehaviour
 {
-    [SerializeField] public float speed = 0.5f;
+    [SerializeField] private float speed = 0.5f;
     public Transform gunTransform;
 
     [SerializeField] private GameObject prefabBullet;
@@ -17,20 +16,13 @@ public class CharacterControl : MonoBehaviour
     GameObject curCreepTarget = null;
     public string id;
     int frame = 0;
-    //public Vector3 velocity = new Vector3(0, 0, 0);
+    public Vector3 velocity = new Vector3(0, 0, 0);
     float lastFireTime = 0f;
     [SerializeField] private Animator charAnim;
-    public Vector3 input_velocity = Vector3.zero;
-    Vector3 final_velocity = Vector3.zero;
+    Vector3 colllide_velocity = new Vector3(0, 0, 0);
     bool collision = false;
-    Vector3 normal = Vector3.zero;
-    public float correctPositionTime = 0;
-    public bool isColliding = false;
-    public bool lerp = false;
-    public int frameLerp = 3;
-    public int elapseFrame = 0;
-    public Vector3 lerpPosition = Vector3.zero;
 
+    public CharacterController characterController;
     //public static CharacterControl _instance { get; private set; }
     //public static CharacterControl Instance()
     //{
@@ -62,123 +54,52 @@ public class CharacterControl : MonoBehaviour
 
     private void Update()
     {
-        //Debug.Log("collide with: " + collision_plane_normal_dict.Count + " obj");
-        //characterController.Move(velocity); 
-    }
-
-    public void Lerp()
-    {
-        Vector3 lerpVector = lerpPosition - transform.position;
-
-        //if(lerpVector.magnitude < speed * Time.fixedDeltaTime * 3)
-        //{
-        //    lerp = false ;
-        //    final_velocity = input_velocity;
-        //    transform.position = lerpPosition;
-        //}
-
-        //if (Vector3.Angle(lerpVector, input_velocity) > 90)
-        //{
-        //    lerp = false;
-        //}
-
-        //Vector3 lerpDirection = lerpVector.normalized;
-        //Vector3 direction = (lerpDirection + input_velocity.normalized).normalized;
-
-        //transform.position += direction * Time.fixedDeltaTime * speed;
-        //final_velocity = direction * speed;
-        
-        //if (Vector3.Angle(velocity, lerpDirection) > 70) return;
-
-        if ((transform.position - lerpPosition).magnitude < speed * Time.fixedDeltaTime)
+        Debug.Log("collide with: " + collision_plane_normal_dict.Count + " obj");
+        //characterController.Move(velocity);
+        if (!collision) transform.position += velocity;
+        else
         {
-            lerp = false;
-            transform.position = lerpPosition;
-            return;
+            Vector3 normal = Vector3.zero;
+            for (int i = 0; i < collision_plane_normal_dict.Count; i++)
+            {
+                normal += collision_plane_normal_dict.ElementAt(i).Value;
+            }
+
+            Debug.Log("normal: " + normal);
+            transform.position += (normal + velocity.normalized) * speed * Time.deltaTime;
         }
 
-        elapseFrame++;
-        Vector3 interpolationPosition = Vector3.Lerp(transform.position, lerpPosition, (float) elapseFrame/ frameLerp);
-        transform.position = interpolationPosition;
-
-        lerpPosition += input_velocity * Time.fixedDeltaTime;
-    }
-
-    private void FixedUpdate()
-    {
         Shoot();
-
-        if (lerp)
-        {
-            Lerp();
-        }
-
-        if (correctPositionTime < Time.fixedDeltaTime * 5)
-        {
-           
-                normal = Vector3.zero;
-
-                if (!collision) final_velocity = input_velocity;
-                else
-                {
-                    for (int i = 0; i < collision_plane_normal_dict.Count; i++)
-                    {
-                        normal += collision_plane_normal_dict.ElementAt(i).Value;
-                    }
-
-                    final_velocity += (normal + input_velocity.normalized).normalized * speed;
-                }
-
-
-
-            transform.position += final_velocity * Time.fixedDeltaTime;
-            correctPositionTime += Time.fixedDeltaTime;
-        }
-
-
-
-        if (input_velocity != Vector3.zero)
+        if (velocity != Vector3.zero)
         {
             charAnim.SetBool("isRun", true);
-            goChar.transform.rotation = Quaternion.LookRotation(final_velocity);
         }
         else
         {
             charAnim.SetBool("isRun", false);
         }
 
-        //if (correctingPosition) return;
-
-        //if (frame % 100 == 0) correctingPosition = true;
-
-
         if (id != Player_ID.MyPlayerID) return;
 
-        
-
-        
-
-        if(frame % 3 == 0)
+        if (frame % 3 == 0)
         {
             float horizontal = joystick.Horizontal;
             float vertical = joystick.Vertical;
 
-            Vector3 direction = new Vector3(horizontal, 0, vertical).normalized;
-
-            Vector3 v = direction * speed;
-
-            SendData<PlayerState> data = new SendData<PlayerState>(new PlayerState(transform.position, v, Quaternion.LookRotation(direction), isColliding));
+            Vector3 direction = (new Vector3(horizontal, 0, vertical)).normalized;
+            Vector3 velocity = direction * speed * Time.deltaTime;
+            SendData<MoveEvent> data =
+                new SendData<MoveEvent>(new MoveEvent(velocity, transform.position,
+                    Quaternion.LookRotation(direction)));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
         }
 
-
         frame++;
+    }
 
-        //if (frame % 10 == 0)
-        //{
-        //    SendData<PlayerPosition> position = new SendData<PlayerPosition>(new PlayerPosition(transform.position));
-        //    SocketCommunication.GetInstance().Send(JsonUtility.ToJson(position));
-        //}
+
+    private void FixedUpdate()
+    {
     }
 
 
@@ -262,20 +183,6 @@ public class CharacterControl : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.CompareTag("MapElement"))
-        {
-            int id = other.gameObject.GetInstanceID();
-            if (collision_plane_normal_dict.ContainsKey(id))
-            {
-                Vector3 collide_point = other.ClosestPoint(transform.position);
-                collide_point.y = transform.position.y;
-                collision = true;
-                collision_plane_normal_dict[id] = (transform.position - collide_point).normalized;
-            }         
-        }
-    }
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("MapElement"))
