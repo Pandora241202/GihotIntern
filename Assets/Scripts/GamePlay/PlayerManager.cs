@@ -2,7 +2,7 @@
 using JetBrains.Annotations;
 using System.Buffers.Text;
 using System.Collections.Generic;
-using UnityEditor.Rendering.PostProcessing;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using static Cinemachine.DocumentationSortingAttribute;
@@ -84,7 +84,7 @@ public class PlayerManager
         player.playerTrans = GameObject.Instantiate(characterPrefab, position, Quaternion.identity).transform;
         player.playerTrans.gameObject.GetComponent<CharacterControl>().id = id;
         player.playerTrans.gameObject.GetComponent<CharacterControl>().gunId = gun_id;
-        Debug.Log("Player: " + player.name + " gun: " + gun_id);
+        //Debug.Log("Player: " + player.name + " gun: " + gun_id);
         player.playerTrans.gameObject.GetComponent<CharacterControl>().SetGunAndBullet();
         if (id == Player_ID.MyPlayerID) 
             player.playerTrans.Find("CM vcam1").gameObject.GetComponent<CinemachineVirtualCamera>().Priority = 11;
@@ -100,13 +100,51 @@ public class PlayerManager
         dictPlayers.Add(id,newPlayer);
     }
 
-    public void UpdatePlayerVelocity(string id, Vector3 velocity, Vector3 position,Quaternion rotation)
+    public void UpdatePlayersState(PlayersState playersState)
     {
-        Player player = dictPlayers[id];
-        CharacterControl c_Controller = player.playerTrans.gameObject.GetComponent<CharacterControl>();
-        c_Controller.velocity = velocity;
-        player.playerTrans.position = position;
-        c_Controller.goChar.transform.rotation = rotation;
+        Player player;
+        PlayerState state;
+        for (int i = 0; i < playersState.states.Length; i++)
+        {
+            state = playersState.states[i];
+            player = dictPlayers[state.player_id];
+            CharacterControl c_Controller = player.playerTrans.gameObject.GetComponent<CharacterControl>();
+            c_Controller.input_velocity = state.velocity;
+            //c_Controller.goChar.transform.rotation = state.rotation;
+            if (!c_Controller.isColliding && c_Controller.id != Player_ID.MyPlayerID)
+            {
+                if ((player.playerTrans.position - state.position).magnitude <= Time.fixedDeltaTime * c_Controller.speed)
+                {
+                    c_Controller.lerp = false;
+                    c_Controller.transform.position = state.position;
+                }
+                else
+                {
+                    c_Controller.lerp = true;
+                    c_Controller.elapseFrame = 0;
+                    c_Controller.lerpPosition = state.position;
+                }
+            }
+                
+            c_Controller.correctPositionTime = 0;
+            //player.playerTrans.position = state.position;
+        }
+    }
+
+    public void UpdatePlayerVelocity(PlayerState playersState)
+    {
+        //CharacterControl player = dictPlayers[playersState.player_id].playerTrans.gameObject.GetComponent<CharacterControl>();
+        //player.velocity = playersState.velocity;
+        //player.goChar.transform.rotation = playersState.rotation;
+        //if(!player.isColliding) if((player.transform.position - playersState.position).magnitude > 0.2) player.transform.position = playersState.position;
+        //player.newPosition = playersState.position;
+    }
+
+    public void UpdatePlayerPosition(PlayerPosition playerPosition)
+    {
+        //CharacterControl player = dictPlayers[playerPosition.player_id].playerTrans.gameObject.GetComponent<CharacterControl>();
+        //if ((player.transform.position - playerPosition.position).magnitude > 0.5) player.transform.position = playerPosition.position;
+        //player.correctPositionTime = 0;
     }
 
     public void ProcessCollisionCreep(string playerId, int creepId)

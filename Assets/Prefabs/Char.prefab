@@ -2743,9 +2743,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   id: 
-  velocity: {x: 0, y: 0, z: 0}
   charAnim: {fileID: 7574242066490677593}
-  characterController: {fileID: 0}
+  velocity: {x: 0, y: 0, z: 0}
+  correctPositionTime: 0
+  isColliding: 0
 --- !u!65 &531198362995097150
 BoxCollider:
   m_ObjectHideFlags: 0

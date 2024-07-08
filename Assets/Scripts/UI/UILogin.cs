@@ -15,8 +15,9 @@ public class UILogin : MonoBehaviour
 
    public void OnLogin_Clicked()
    {
-      SocketCommunication.GetInstance().ConnectToServer(txtName.text);
-      this.gameObject.SetActive(false);
-      UIManager._instance.uiMainMenu.gameObject.SetActive(true);
+        SendData<FirstConnect> data = new SendData<FirstConnect>(new FirstConnect(txtName.text));
+        SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
+        this.gameObject.SetActive(false);
+        UIManager._instance.uiMainMenu.gameObject.SetActive(true);
    }
 }

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public class AllManager : MonoBehaviour
@@ -25,13 +24,14 @@ public class AllManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
+        SocketCommunication.GetInstance();
     }
 
     private void Start() {
         playerManager = new PlayerManager(characterPrefab);
     }
     private void Update() {
-
+        
     }
     private void LateUpdate() {
 
