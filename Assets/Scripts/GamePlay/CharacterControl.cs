@@ -87,7 +87,7 @@ public class CharacterControl : MonoBehaviour
 
         //transform.position += direction * Time.fixedDeltaTime * speed;
         //final_velocity = direction * speed;
-        
+
         //if (Vector3.Angle(velocity, lerpDirection) > 70) return;
 
         if ((lerpPosition - transform.position).magnitude <= speed * Time.fixedDeltaTime || elapseFrame == frameLerp)
@@ -162,11 +162,11 @@ public class CharacterControl : MonoBehaviour
 
         if (id != Player_ID.MyPlayerID) return;
 
-        
 
-        
 
-        if(frame % 3 == 0)
+
+
+        if (frame % 3 == 0)
         {
             float horizontal = joystick.Horizontal;
             float vertical = joystick.Vertical;
@@ -247,20 +247,21 @@ public class CharacterControl : MonoBehaviour
         //    AllManager.Instance().bulletManager.SpawnBullet(gunTransform.position, curCreepTarget, gunId);
         //}
     }
-    
+
     Dictionary<int, Vector3> collision_plane_normal_dict = new Dictionary<int, Vector3>();
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Creep"))
         {
             AllManager.Instance().playerManager.ProcessCollisionCreep(id, other.gameObject.GetInstanceID());
-        } 
+        }
         else if (other.gameObject.CompareTag("EnemyBullet"))
         {
             AllManager.Instance().playerManager.ProcessCollisionEnemyBullet(id, other.gameObject.GetInstanceID());
         }
         if (other.gameObject.CompareTag("MapElement"))
         {
+            Debug.Log("Collide with map element");
             int id = other.gameObject.GetInstanceID();
             if (collision_plane_normal_dict.ContainsKey(id)) return;
             Vector3 collide_point = other.ClosestPoint(transform.position);
@@ -281,7 +282,7 @@ public class CharacterControl : MonoBehaviour
                 collide_point.y = transform.position.y;
                 collision = true;
                 collision_plane_normal_dict[id] = (transform.position - collide_point).normalized;
-            }         
+            }
         }
     }
     private void OnTriggerExit(Collider other)

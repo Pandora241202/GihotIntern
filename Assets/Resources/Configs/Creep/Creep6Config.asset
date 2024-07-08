@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0c1f001f15eb2845bec9fbcf6da4497, type: 3}
   m_Name: Creep6Config
   m_EditorClassIdentifier: 
-  creepPrefab: {fileID: 8689480311849083149, guid: 9fdf3388443b3f3429f3d8cf51a13546, type: 3}
+  creepPrefab: {fileID: 4473772703222537841, guid: c8f30a276b03c6f478e2e8921db10a71, type: 3}
   baseHp: 100
   baseSpeed: 2
   baseDmg: 10
   exp: 20
   dropItemTypes: 04000000
+  skillCD: 7

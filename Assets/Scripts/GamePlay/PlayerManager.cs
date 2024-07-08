@@ -10,10 +10,10 @@ public class Player
     public int gunId;
     public GunConfig gunConfig;
     public PlayerConfig playerConfig;
-    
+
     //Player stat 
 
-    public int health; 
+    public int health;
     public float speed;
     public Player(string name, string id, int gunId, PlayerConfig config)
     {
@@ -49,7 +49,7 @@ public class PlayerManager
         exp += expGain;
         if (exp >= expRequire)
         {
-            expRequire = Constants.PlayerBaseExp + (level - 1) * Constants.ExpIncrement + Constants.ScalingMultiplierExp * (level-1) * (level-1);
+            expRequire = Constants.PlayerBaseExp + (level - 1) * Constants.ExpIncrement + Constants.ScalingMultiplierExp * (level - 1) * (level - 1);
             level++;
             exp -= expRequire;
         }
@@ -75,13 +75,13 @@ public class PlayerManager
 
     public void SpawnPlayer(Vector3 position, string id, int gun_id)
     {
-        Player player = this.dictPlayers[id]; 
+        Player player = this.dictPlayers[id];
         player.playerTrans = GameObject.Instantiate(characterPrefab, position, Quaternion.identity).transform;
         player.playerTrans.gameObject.GetComponent<CharacterControl>().id = id;
         player.playerTrans.gameObject.GetComponent<CharacterControl>().gunId = gun_id;
         //Debug.Log("Player: " + player.name + " gun: " + gun_id);
         player.playerTrans.gameObject.GetComponent<CharacterControl>().SetGunAndBullet();
-        if (id == Player_ID.MyPlayerID) 
+        if (id == Player_ID.MyPlayerID)
             player.playerTrans.Find("CM vcam1").gameObject.GetComponent<CinemachineVirtualCamera>().Priority = 11;
     }
 
@@ -89,10 +89,10 @@ public class PlayerManager
     {
         this.dictPlayers.Remove(id);
     }
-    public void AddPlayer(string name, string id, int gunId,PlayerConfig playerConfig)
+    public void AddPlayer(string name, string id, int gunId, PlayerConfig playerConfig)
     {
         Player newPlayer = new Player(name, id, gunId, playerConfig);
-        dictPlayers.Add(id,newPlayer);
+        dictPlayers.Add(id, newPlayer);
     }
 
     public void UpdatePlayersState(PlayersState playersState)
@@ -121,7 +121,7 @@ public class PlayerManager
                     c_Controller.lerpVertor = (c_Controller.lerpPosition - player.playerTrans.position);
                 }
             }
-                
+
             c_Controller.correctPositionTime = 0;
             //player.playerTrans.position = state.position;
         }
