@@ -1,11 +1,6 @@
 ﻿using Cinemachine;
-using JetBrains.Annotations;
-using System.Buffers.Text;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
-using static Cinemachine.DocumentationSortingAttribute;
 
 public class Player
 {
@@ -123,6 +118,7 @@ public class PlayerManager
                     c_Controller.lerp = true;
                     c_Controller.elapseFrame = 0;
                     c_Controller.lerpPosition = state.position;
+                    c_Controller.lerpVertor = (c_Controller.lerpPosition - player.playerTrans.position);
                 }
             }
                 
