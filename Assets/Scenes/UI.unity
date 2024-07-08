@@ -396,6 +396,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 881793802349950585, guid: a693e007f636b7149af67dc188ce19ea, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 881793802349950585, guid: a693e007f636b7149af67dc188ce19ea, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2037987029684950687, guid: a693e007f636b7149af67dc188ce19ea, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2037987029684950687, guid: a693e007f636b7149af67dc188ce19ea, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5888400483831368392, guid: a693e007f636b7149af67dc188ce19ea, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -483,6 +499,14 @@ PrefabInstance:
     - target: {fileID: 5888400483831368396, guid: a693e007f636b7149af67dc188ce19ea, type: 3}
       propertyPath: m_Name
       value: UIManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 5888400483960505567, guid: a693e007f636b7149af67dc188ce19ea, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5888400484718347148, guid: a693e007f636b7149af67dc188ce19ea, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a693e007f636b7149af67dc188ce19ea, type: 3}
