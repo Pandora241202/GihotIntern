@@ -73,7 +73,7 @@ public class PowerUpManager
     public void ActivatePowerUp(AllDropItemConfig.PowerUpsType powerUpType, int playerId)
     {
         var powerUpAttr = allDropItemConfig.powerUpAttributesList.Find(attr => attr.type == powerUpType);
-        powerUpAttr.powerUpConfig.Activate(1);
+        powerUpAttr.powerUpConfig.Activate();
         // setDeletePowerUp(powerUpType);
     }
     public void setDeletePowerUp(int index)

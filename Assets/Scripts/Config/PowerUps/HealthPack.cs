@@ -5,12 +5,12 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Config/PowerUpConfig/HealthPack")]
 public class HealthPack : PowerUpsConfig
 {
-    public override void Activate(int playerId)
+    public override void Activate()
     {
         Debug.Log("HealthPack activated");
-        AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health++;
+        int healAmount=(int)(AllManager.Instance().playerManager.GetMaxHealthFromLevel()*this.boostAmount);
+        AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health += healAmount;
         UIManager._instance.uiGameplay.sliderHealth.value =
             AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health;
-        Debug.Log(AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health);
     }
 }

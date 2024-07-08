@@ -11,4 +11,5 @@ public static class Constants
     public const int ExpIncrement = 135;
     public const int PlayerBaseMaxHealth = 10;
     public const int PlayerBaseSpeed = 5;
+    public const int LifeSteal = 3;
 }

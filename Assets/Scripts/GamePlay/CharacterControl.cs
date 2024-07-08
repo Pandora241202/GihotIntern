@@ -256,14 +256,17 @@ public class CharacterControl : MonoBehaviour
         int playerDmg = AllManager.Instance().playerManager.GetPlayerDmg(id);
         lastFireTime = AllManager.Instance().bulletManager
             .SpawnBullet(gunTransform.position, curCreepTarget, gunId, lastFireTime, "PlayerBullet", playerDmg, id);
+        //Life Steal
+        AllManager._instance.playerManager.ProcessLifeSteal();
 
         //float angle = Vector3.Angle(gunTransform.forward, directionToTarget);
         //if (angle < 10f)
         //{
         //    AllManager.Instance().bulletManager.SpawnBullet(gunTransform.position, curCreepTarget, gunId);
         //}
+        
     }
-
+    
     Dictionary<int, Vector3> collision_plane_normal_dict = new Dictionary<int, Vector3>();
     private void OnTriggerEnter(Collider other)
     {

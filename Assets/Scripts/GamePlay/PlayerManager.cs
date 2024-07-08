@@ -1,5 +1,7 @@
 ﻿using Cinemachine;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using Unity.VisualScripting;
 using System.Linq;
 using UnityEngine;
 
@@ -15,8 +17,10 @@ public class Player
     //Player stat 
 
     public int health;
+    public int lifesteal;
     public float speed;
     public bool isDead;
+    public float dmgBoostTime = 0;
     public Player(string name, string id, int gunId, PlayerConfig config)
     {
         this.name = name;
@@ -24,6 +28,7 @@ public class Player
         this.gunId = gunId;
         this.playerConfig = config;
         this.health = Constants.PlayerBaseMaxHealth;
+        this.lifesteal = Constants.LifeSteal;
         this.speed = Constants.PlayerBaseSpeed;
         isDead = false;
         levelUpEffect = null;
@@ -32,8 +37,8 @@ public class Player
     public void Onstart()
     {
         this.health = Constants.PlayerBaseMaxHealth;
+        this.lifesteal = Constants.LifeSteal;
         this.speed = Constants.PlayerBaseSpeed;
-        isDead = false;
     }
 
     public void ProcessDmg(int dmg)
@@ -108,7 +113,10 @@ public class PlayerManager
     {
         Player player = dictPlayers[playerId];
         GunType gunType = AllManager.Instance().gunConfig.lsGunType[player.gunId];
-
+        if (player.dmgBoostTime >= 0)
+        {
+            return (int)(gunType.baseDamage + (level - 1) *(1.3f)* gunType.bulletMultiplier);
+        }
         return gunType.baseDamage + (level - 1) * gunType.bulletMultiplier;
     }
 
@@ -203,5 +211,15 @@ public class PlayerManager
         BulletInfo bullet = AllManager.Instance().bulletManager.bulletInfoDict[bulletId];
         dictPlayers[playerId].ProcessDmg(bullet.damage);
         AllManager.Instance().bulletManager.SetDelete(bulletId);
+    }
+
+    public void ProcessLifeSteal()
+    {
+        int lifesteal = Random.Range(0, 100);
+        if (lifesteal <= AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].lifesteal)
+        {
+            Debug.Log("Hut dc 1 mau nha may em yeu");
+            AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health++;
+        }
     }
 }

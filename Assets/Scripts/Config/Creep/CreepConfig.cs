@@ -55,8 +55,8 @@ public class CreepConfig : ScriptableObject
     public virtual void OnDead(Creep creep) 
     {
         AllManager.Instance().creepManager.AddToDeactivateList(creep);
-        Debug.Log($"{creep.type} dropped item of type {dropItemTypes[0]}");
-        AllManager.Instance().powerUpManager.SpawnPowerUp(creep.creepTrans.position, DropItemTypes[0]);//, AllManager.Instance().powerUpConfig.GetPowerUpPrefab(PowerUpsType.HealthPack));
+        AllManager.Instance().powerUpManager.SpawnPowerUp(creep.creepTrans.position, DropItemTypes[0]);
+        // AllManager.Instance().powerUpConfig.GetPowerUpPrefab(PowerUpsType.HealthPack));
     }
 
     float DistanceBetween(Vector3 pos1, Vector3 pos2)
