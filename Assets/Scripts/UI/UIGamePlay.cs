@@ -17,13 +17,13 @@ public class UIGamePlay : MonoBehaviour
         sliderHealth.value = maxHealth; 
         sliderLevel.maxValue = maxExp; 
         sliderLevel.value = 0;
-        txtLevel.text = AllManager._instance.playerManager.level.ToString();
+        txtLevel.text = Constants.PlayerBaseLevel.ToString();
     }
 
     public void OnPause_Clicked()
     {
-        UIManager._instance.PauseGame();
-        UIManager._instance.uiPause.gameObject.SetActive(true);
+        SendData<PauseEvent> data = new SendData<PauseEvent>(new PauseEvent());
+        SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
     }
 
     public void UpdateHealthSlider(float currentHealth)

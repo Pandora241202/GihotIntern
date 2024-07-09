@@ -16,7 +16,7 @@ public class AllManager : MonoBehaviour
     public BulletManager bulletManager;
     public CreepManager creepManager;
     public PowerUpManager powerUpManager;
-
+    public bool isPause = false;
     public static AllManager Instance()
     {
         return _instance;
@@ -68,6 +68,7 @@ public class AllManager : MonoBehaviour
             UIManager._instance.uiMainMenu.gameObject.SetActive(false);
             UIManager._instance.uiGameplay.gameObject.SetActive(true);
             sceneUpdater = GameObject.FindObjectOfType<SceneUpdater>();
+            AllManager._instance.playerManager.FreshStart();
             //Debug.Log(sceneUpdater);
             creepManager = sceneUpdater.creepManager;
             bulletManager = sceneUpdater.bulletManager;
@@ -93,5 +94,12 @@ public class AllManager : MonoBehaviour
         }
         //SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
         
+    }
+
+    private void OnApplicationQuit()
+    {
+        SendData<QuitEvent> data = new SendData<QuitEvent>(new QuitEvent());
+        SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
+        SocketCommunication.GetInstance().Close();
     }
 }

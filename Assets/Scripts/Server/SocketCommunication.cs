@@ -211,7 +211,6 @@ public class SocketCommunication
                     break;
 
                 case "player out":
-                    Debug.Log("player out");
                     SimplePlayerInfo playerOut = JsonUtility.FromJson<SimplePlayerInfo>(response);
                     AllManager.Instance().playerManager.RemovePlayer(playerOut.player_id);
                     break;
@@ -221,6 +220,23 @@ public class SocketCommunication
                     AllManager.Instance().creepManager.SendCreepToDeadBySharedId(creepDestroyInfo.creep_id);
                     break;
 
+                case "pause":
+                    //pause
+                    AllManager.Instance().isPause = true;
+                    UIManager._instance.PauseGame();
+                    break;
+
+                case "resume":
+                    //resume the game
+                    AllManager.Instance().isPause = false;
+                    UIManager._instance.ResumeGame();
+                    break;
+
+                case "time to resume":
+                    TimeToResume time = JsonUtility.FromJson<TimeToResume>(response);
+                    //do render time left until resume
+                    Debug.Log(time.time);
+                    break;
 
             }
 
@@ -249,5 +265,11 @@ public class SocketCommunication
         Buffer.BlockCopy(lengthField, 0, sendData, 0, 4);
         Buffer.BlockCopy(messageBytes, 0, sendData, 4, messageBytes.Length);
         await socket.SendAsync(sendData, SocketFlags.None);
+    }
+
+    public void Close()
+    {
+        socket.Disconnect(false);
+        socket.Close();
     }
 }

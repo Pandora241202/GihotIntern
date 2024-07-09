@@ -173,17 +173,17 @@ public class PlayerState
     public string event_name = "player state";
     public string player_id;
     public int gun;
-    public bool isColliding;
+    public bool isDead;
     [field: SerializeField] public Vector3 position;
     [field: SerializeField] public Vector3 velocity;
     [field: SerializeField] public Quaternion rotation;
     public bool isFire;
-    public PlayerState(Vector3 position, Vector3 velocity, Quaternion rotation, bool isColliding, bool isFire)
+    public PlayerState(Vector3 position, Vector3 velocity, Quaternion rotation, Player player, bool isFire)
     {
         this.position = position;
         this.velocity = velocity;
         this.rotation = rotation;
-        this.isColliding = isColliding;
+        this.isDead = player.isDead;
         this.isFire = isFire;
     }
 }
@@ -227,4 +227,28 @@ public class CreepDestroyInfo
 public class PlayerOutEvent
 {
     public string event_name = "player out";
+}
+
+[Serializable]
+public class QuitEvent
+{
+    public string event_name = "quit";
+}
+
+[Serializable]
+public class PauseEvent
+{
+    public string event_name = "pause";
+}
+
+[Serializable]
+public class ResumeEvent
+{
+    public string event_name = "resume";
+}
+
+[Serializable]
+public class TimeToResume
+{
+    public int time;
 }

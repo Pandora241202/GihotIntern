@@ -2371,6 +2371,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 7655869531685127524, guid: e49696933e1f3cd42838a693fe6a7fd4, type: 3}
+      propertyPath: prefabBtnRoom
+      value: 
+      objectReference: {fileID: 1608614822029726131, guid: 4d6912279e057f140a62748a4e9a2b30, type: 3}
     - target: {fileID: 7655869531685127528, guid: e49696933e1f3cd42838a693fe6a7fd4, type: 3}
       propertyPath: m_Name
       value: UIOnline

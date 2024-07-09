@@ -306,45 +306,9 @@ MonoBehaviour:
   m_AtlasTextureIndex: 0
   m_IsMultiAtlasTexturesEnabled: 0
   m_ClearDynamicDataOnBuild: 1
-  m_UsedGlyphRects:
-  - m_X: 196
-    m_Y: 0
-    m_Width: 98
-    m_Height: 130
-  - m_X: 0
-    m_Y: 0
-    m_Width: 98
-    m_Height: 130
-  - m_X: 98
-    m_Y: 0
-    m_Width: 98
-    m_Height: 130
-  - m_X: 294
-    m_Y: 0
-    m_Width: 98
-    m_Height: 130
-  - m_X: 392
-    m_Y: 0
-    m_Width: 98
-    m_Height: 130
-  - m_X: 490
-    m_Y: 0
-    m_Width: 98
-    m_Height: 130
-  - m_X: 588
-    m_Y: 0
-    m_Width: 98
-    m_Height: 36
+  m_UsedGlyphRects: []
   m_FreeGlyphRects:
   - m_X: 0
-    m_Y: 130
-    m_Width: 1023
-    m_Height: 893
-  - m_X: 588
-    m_Y: 36
-    m_Width: 435
-    m_Height: 987
-  - m_X: 686
     m_Y: 0
     m_Width: 337
     m_Height: 1023

@@ -18,6 +18,7 @@ public class SceneUpdater : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (AllManager.Instance().isPause) return;
         bulletManager.MyUpdate();
         creepManager.MyUpdate();
         powerUpManager.MyUpdate();
@@ -25,6 +26,7 @@ public class SceneUpdater : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (AllManager.Instance().isPause) return;
         bulletManager.LateUpdate();
         creepManager.LateUpdate();
         powerUpManager.LateUpdate();
