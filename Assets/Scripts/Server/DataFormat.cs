@@ -228,3 +228,15 @@ public class PlayerOutEvent
 {
     public string event_name = "player out";
 }
+
+[Serializable]
+public class QuitEvent
+{
+    public string event_name = "quit";
+}
+
+[Serializable]
+public class TimeToResume
+{
+    public int time;
+}
