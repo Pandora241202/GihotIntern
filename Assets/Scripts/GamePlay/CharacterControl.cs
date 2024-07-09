@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CharacterControl : MonoBehaviour
 {
-    [SerializeField] public float speed = 0.5f;
+    public float speed;
     public Transform gunTransform;
 
     [SerializeField] private GameObject prefabBullet;

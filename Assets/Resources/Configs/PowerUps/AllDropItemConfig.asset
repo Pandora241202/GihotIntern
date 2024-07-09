@@ -19,3 +19,5 @@ MonoBehaviour:
     powerUpConfig: {fileID: 11400000, guid: 9901cfe60ebcfdd44ad0432a9f240397, type: 2}
   - type: 5
     powerUpConfig: {fileID: 11400000, guid: 4f039ba126e7b9243a5a33b41c25d1e9, type: 2}
+  - type: 1
+    powerUpConfig: {fileID: 11400000, guid: 91deeee73afd34c4f9847e04f13c8f72, type: 2}

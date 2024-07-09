@@ -22,6 +22,8 @@ public class Player
     public bool isDead;
     public float dmgBoostTime = 0;
     public float dmgBoostAmount = 1.2f;
+    public float speedBoostTime = 0;
+    public float speedBoostAmount = 1.2f;
     public Player(string name, string id, int gunId, PlayerConfig config)
     {
         this.name = name;
@@ -44,6 +46,12 @@ public class Player
     public void SetDamageBoost(float boostAmount)
     {
         this.dmgBoostAmount = boostAmount;
+    }
+    public void SetSpeedBoost(float boostAmount)
+    {
+        this.speed = Constants.PlayerBaseSpeed * (1+boostAmount);
+        playerTrans.gameObject.GetComponent<CharacterControl>().speed = this.speed;
+        
     }
     public void ProcessDmg(int dmg)
     {
@@ -80,6 +88,15 @@ public class PlayerManager
                 if (player.dmgBoostTime < 0)
                 {
                     player.dmgBoostTime = 0;
+                }
+            }
+            if (player.speedBoostTime > 0)
+            {
+                player.speedBoostTime -= Time.deltaTime;
+                if (player.speedBoostTime < 0)
+                {
+                    player.speedBoostTime = 0;
+                    player.speed = Constants.PlayerBaseSpeed;
                 }
             }
         }
@@ -141,6 +158,7 @@ public class PlayerManager
         player.playerTrans = GameObject.Instantiate(characterPrefab, position, Quaternion.identity).transform;
         player.playerTrans.gameObject.GetComponent<CharacterControl>().id = id;
         player.playerTrans.gameObject.GetComponent<CharacterControl>().gunId = gun_id;
+        player.playerTrans.gameObject.GetComponent<CharacterControl>().speed = player.speed;
         //Debug.Log("Player: " + player.name + " gun: " + gun_id);
         player.playerTrans.gameObject.GetComponent<CharacterControl>().SetGunAndBullet();
         if (id == Player_ID.MyPlayerID)
@@ -230,8 +248,8 @@ public class PlayerManager
 
     public void ProcessLifeSteal()
     {
-        int lifesteal = Random.Range(0, 100);
-        if (lifesteal <= AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].lifeSteal)
+        int lifeSteal = Random.Range(0, 100);
+        if (lifeSteal <= AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].lifeSteal)
         {
             Debug.Log("Hut dc 1 mau nha may em yeu");
             AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health++;
