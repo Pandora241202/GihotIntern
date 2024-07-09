@@ -67,7 +67,21 @@ public class PlayerManager
     public int level = Constants.PlayerBaseLevel;
     public int expRequire = Constants.PlayerBaseExp;
 
-
+    public void MyUpdate()
+    {
+        foreach (var player in dictPlayers.Values)
+        {
+            if (player.dmgBoostTime > 0)
+            {
+                player.dmgBoostTime -= Time.deltaTime;
+                if (player.dmgBoostTime < 0)
+                {
+                    player.dmgBoostTime = 0;
+                }
+            }
+        }
+    }
+    public void LateUpdate(){}
     public void ProcessExpGain(int expGain)
     {
         Debug.Log(expGain);
@@ -114,14 +128,9 @@ public class PlayerManager
     {
         Player player = dictPlayers[playerId];
         GunType gunType = AllManager.Instance().gunConfig.lsGunType[player.gunId];
-        // if (player.dmgBoostTime >= 0)
-        // {
-        //     Debug.Log("DMG Boost activated");
-        //     return (int)(gunType.baseDamage + (level - 1) *(1.3)* gunType.bulletMultiplier);
-        // }
-        // return gunType.baseDamage + (level - 1) * gunType.bulletMultiplier;
         float boostMultiplier = player.dmgBoostTime > 0 ? player.dmgBoostAmount : 1f;
         Debug.Log("BoostMultiplier: " + boostMultiplier);
+        Debug.Log("player.dmgBoostTime: "+ player.dmgBoostTime);
         if (boostMultiplier > 1f){
             Debug.Log("DMG Boost activated");
         }

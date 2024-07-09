@@ -7,12 +7,14 @@ public class SceneUpdater : MonoBehaviour
     public CreepManager creepManager;
     public BulletManager bulletManager;
     public PowerUpManager powerUpManager;
+    public PlayerManager playerManager;
     // Start is called before the first frame update
     void Start()
     {
         creepManager = new CreepManager(AllManager.Instance().allCreepConfig);
         bulletManager = new BulletManager(AllManager.Instance().gunConfig);
         powerUpManager = new PowerUpManager(AllManager.Instance().allDropItemConfig);
+        playerManager = AllManager.Instance().playerManager;
     }
 
     // Update is called once per frame
@@ -22,6 +24,7 @@ public class SceneUpdater : MonoBehaviour
         bulletManager.MyUpdate();
         creepManager.MyUpdate();
         powerUpManager.MyUpdate();
+        playerManager.MyUpdate();
     }
 
     private void LateUpdate()
@@ -30,5 +33,6 @@ public class SceneUpdater : MonoBehaviour
         bulletManager.LateUpdate();
         creepManager.LateUpdate();
         powerUpManager.LateUpdate();
+        playerManager.LateUpdate();
     }
 }
