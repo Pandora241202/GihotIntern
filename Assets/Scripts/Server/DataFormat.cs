@@ -173,17 +173,17 @@ public class PlayerState
     public string event_name = "player state";
     public string player_id;
     public int gun;
-    public bool isColliding;
+    public bool isDead;
     [field: SerializeField] public Vector3 position;
     [field: SerializeField] public Vector3 velocity;
     [field: SerializeField] public Quaternion rotation;
     public bool isFire;
-    public PlayerState(Vector3 position, Vector3 velocity, Quaternion rotation, bool isColliding, bool isFire)
+    public PlayerState(Vector3 position, Vector3 velocity, Quaternion rotation, Player player, bool isFire)
     {
         this.position = position;
         this.velocity = velocity;
         this.rotation = rotation;
-        this.isColliding = isColliding;
+        this.isDead = player.isDead;
         this.isFire = isFire;
     }
 }

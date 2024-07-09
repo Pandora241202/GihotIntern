@@ -15,6 +15,7 @@ public class Player
 
     public int health;
     public float speed;
+    public bool isDead;
     public Player(string name, string id, int gunId, PlayerConfig config)
     {
         this.name = name;
@@ -23,6 +24,7 @@ public class Player
         this.playerConfig = config;
         this.health = Constants.PlayerBaseMaxHealth;
         this.speed = Constants.PlayerBaseSpeed;
+        isDead = false;
     }
 
     public void ProcessDmg(int dmg)
@@ -31,6 +33,8 @@ public class Player
         if (health <= 0)
         {
             health = 0;
+            //died
+            isDead = true;
         }
         UIManager._instance.uiGameplay.UpdateHealthSlider(health);
     }
@@ -158,12 +162,15 @@ public class PlayerManager
 
     public void ProcessCollisionCreep(string playerId, int creepId)
     {
+        if(playerId!=Player_ID.MyPlayerID)return;
         Creep creep = AllManager.Instance().creepManager.GetActiveCreepById(creepId);
+        
         dictPlayers[playerId].ProcessDmg(creep.dmg);
     }
 
     public void ProcessCollisionEnemyBullet(string playerId, int bulletId)
     {
+        if(playerId!=Player_ID.MyPlayerID)return;
         BulletInfo bullet = AllManager.Instance().bulletManager.bulletInfoDict[bulletId];
         dictPlayers[playerId].ProcessDmg(bullet.damage);
         AllManager.Instance().bulletManager.SetDelete(bulletId);

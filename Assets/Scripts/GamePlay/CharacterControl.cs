@@ -163,11 +163,7 @@ public class CharacterControl : MonoBehaviour
 
 
         if (id != Player_ID.MyPlayerID) return;
-
-
-
-
-
+        
         if (frame % 3 == 0)
         {
             float horizontal = joystick.Horizontal;
@@ -177,7 +173,8 @@ public class CharacterControl : MonoBehaviour
 
             Vector3 v = direction * speed;
 
-            SendData<PlayerState> data = new SendData<PlayerState>(new PlayerState(transform.position, v, Quaternion.LookRotation(direction), isColliding, true));
+            SendData<PlayerState> data = new SendData<PlayerState>(new PlayerState(transform.position, v, 
+                Quaternion.LookRotation(direction),AllManager._instance.playerManager.dictPlayers[id],true));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
         }
 
