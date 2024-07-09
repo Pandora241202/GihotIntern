@@ -24,7 +24,7 @@ public class AllManager : MonoBehaviour
 
     private void Awake()
     {
-        _instance = this;
+        if(_instance == null) _instance = this;
         SocketCommunication.GetInstance();
     }
 
@@ -61,6 +61,7 @@ public class AllManager : MonoBehaviour
 
     private void OnSceneLoaded(string sceneName)
     {
+        
         if (sceneName == "level1")
         {
 
@@ -80,6 +81,7 @@ public class AllManager : MonoBehaviour
             UIManager._instance.uiGameplay.gameObject.SetActive(false);
             UIManager._instance.uiMainMenu.gameObject.SetActive(true);
             UIManager._instance.uiMainMenu.BackShowMain();
+            UIManager._instance.ResumeGame();
         }
         //SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
         

@@ -44,7 +44,7 @@ public class UIManager : MonoBehaviour
         }
             //new
 
-        }
+    }
 
         private void Update()
     {

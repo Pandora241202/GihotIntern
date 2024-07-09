@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Player
@@ -96,23 +97,17 @@ public class PlayerManager
     {
         if(id == Player_ID.MyPlayerID)
         {
-            Player pl;
-            for (int i = this.dictPlayers.Count - 1; i > 0; i--)
-            {
-                pl = this.dictPlayers[id];
-                if (pl.playerTrans != null)
-                {
-                    GameObject.Destroy(pl.playerTrans);
-                }
-                this.dictPlayers.Remove(id);
-            }
+            Player pl = dictPlayers.ElementAt(0).Value;
+            this.dictPlayers.Clear();
+            this.dictPlayers.Add(pl.id, pl);
             AllManager.Instance().LoadSceneAsync("UI");
             return;
         }
         Player player = this.dictPlayers[id];
         if (player.playerTrans != null)
         {
-            GameObject.Destroy(player.playerTrans);
+            Debug.Log("Player destroyed");
+            GameObject.Destroy(player.playerTrans.gameObject);
         }
         this.dictPlayers.Remove(id);
     }

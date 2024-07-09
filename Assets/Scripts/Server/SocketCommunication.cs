@@ -87,7 +87,7 @@ public class SocketCommunication
 ;                //data
             byte[] dataField = buffer.Skip(4).Take(dataLength).ToArray();
             string response = Encoding.UTF8.GetString(dataField);
-
+            //Debug.Log(response);
             //Debug.Log(response);
             EventName _event = JsonUtility.FromJson<EventName>(response);
 
@@ -130,7 +130,7 @@ public class SocketCommunication
                     break;
                 case "spawn creep":
                     var creepSpawnInfo = JsonUtility.FromJson<CreepSpawnInfo>(response);
-
+                    if (AllManager._instance.sceneUpdater.creepManager == null) break;
                     foreach (Vector3 pos in creepSpawnInfo.spawnPos)
                     {
                         AllManager._instance.sceneUpdater.creepManager.ActivateCreep(pos, (CreepManager.CreepType)creepSpawnInfo.creepTypeInt, creepSpawnInfo.time);
@@ -224,7 +224,7 @@ public class SocketCommunication
 
             }
 
-            Debug.Log(response);
+            //Debug.Log(response);
             //remove processed data from buffer
             buffer.RemoveRange(0, 4 + dataLength);
             //Debug.Log(response);
