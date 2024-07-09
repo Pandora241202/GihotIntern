@@ -15,9 +15,10 @@ public class Creep
     public float timer;
     public GameObject bombObj;
     public Animator animator;
+    public int sharedId;
     public Dictionary<int, Vector3> collision_plane_normal_dict = new Dictionary<int, Vector3>();
 
-    public Creep(Transform creepTrans, CreepManager.CreepType type, CreepConfig config)
+    public Creep(Transform creepTrans, CreepManager.CreepType type, CreepConfig config, int sharedId)
     {
         this.creepTrans = creepTrans;
         this.config = config;
@@ -25,6 +26,7 @@ public class Creep
         bombObj = null;
         animator = creepTrans.gameObject.GetComponent<Animator>();
         creepTrans.gameObject.SetActive(false);
+        this.sharedId = sharedId;
     }
 
     public void Set(Vector3 pos, float time)
@@ -55,28 +57,29 @@ public class Creep
 
     public void OnDead()
     {
+        AllManager.Instance().playerManager.ProcessExpGain(this.config.Exp);
+        CreepManager creepManager = AllManager.Instance().creepManager;
         config.OnDead(this);
     }
 
-    public void ProcessDmg(int dmg)
+    public void ProcessDmg(int dmg, string bulletOwnerId)
     {
         hp -= dmg;
         animator.SetTrigger("isTakeDmg");
-        if (hp <= 0)
+        if (hp <= 0 && bulletOwnerId == Player_ID.MyPlayerID)
         {
-            animator.SetTrigger("isDead");
-            AllManager.Instance().playerManager.ProcessExpGain(this.config.Exp);
-            Debug.Log("Tesst EXP "+ AllManager.Instance().playerManager.exp);
-            CreepManager creepManager = AllManager.Instance().creepManager;
-            config.OnDead(this);
+            // Send to server creep destroy
+            SendData<CreepDestroyInfo> data = new SendData<CreepDestroyInfo>(new CreepDestroyInfo(this.sharedId));
+            SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
         }
     }
 }
 
 public class CreepManager
 {
-    private Dictionary<int, Creep> creepActiveDict = new Dictionary<int, Creep>();
+    Dictionary<int, Creep> creepActiveDict = new Dictionary<int, Creep>();
     List<Creep>[] creepNotActiveByTypeList = new List<Creep>[7];
+    List<int> allCreeps = new List<int>(); // used to store creep id share between players and server and map to instanceId
     private List<int> creepIdsToDeactivate = new List<int>();
     //private List<CreepSpawnInfo> needSpawnCreeps = new List<CreepSpawnInfo>();
     private CreepConfig[] creepConfigs;
@@ -97,8 +100,9 @@ public class CreepManager
         CreepConfig config = GetCreepConfigByType(creepType);
         GameObject creepObj = GameObject.Instantiate(config.CreepPrefab);
         creepObj.layer = LayerMask.NameToLayer("creep");
-        Creep creep = new Creep(creepObj.transform, creepType, config);
+        Creep creep = new Creep(creepObj.transform, creepType, config, allCreeps.Count);
         creepNotActiveByTypeList[(int) creepType].Add(creep);
+        allCreeps.Add(creepObj.GetInstanceID());
     }
 
     public CreepManager(AllCreepConfig allCreepConfig)
@@ -155,6 +159,24 @@ public class CreepManager
         return null;
     }
 
+    public int MapSharedIdToInstanceId(int sharedId)
+    {
+        return allCreeps[sharedId];
+    }
+
+    public void SendCreepToDeadBySharedId(int sharedId)
+    {
+        int id = MapSharedIdToInstanceId(sharedId);
+        Creep creep = GetActiveCreepById(id);
+
+        if (creep == null)
+        {
+            return;
+        }
+
+        creep.OnDead();
+    }
+
     public void MyUpdate()
     {
         foreach (var pair in creepActiveDict)
@@ -196,7 +218,7 @@ public class CreepManager
     {
         Creep creep = GetActiveCreepById(creepId);
         BulletInfo bulletInfo = AllManager.Instance().bulletManager.bulletInfoDict[colliderObject.GetInstanceID()];
-        creep.ProcessDmg(bulletInfo.damage);
+        creep.ProcessDmg(bulletInfo.damage, bulletInfo.playerId);
         AllManager.Instance().bulletManager.SetDelete(colliderObject.GetInstanceID());
     }
 
@@ -233,27 +255,4 @@ public class CreepManager
         }
 
     }
-
-    //public void Reset()
-    //{
-    //    enemyIdsToDestroy.Clear();
-    //    enemyInfoDict.Clear();
-    //}
-
-    //public void DeleteAllObj()
-    //{
-    //    foreach (var pair in enemyInfoDict)
-    //    {
-    //        AddToDestroyList(pair.Value);
-    //        for (int i = 0; i < enemyConfigs.Length; i++)
-    //        {
-    //            timeCountForSpawnEnemys[i] = 0;
-    //        }
-    //    }
-    //}
-
-    //public bool isClean()
-    //{
-    //    return needSpawnedNums.All(n => n == 0) && enemyInfoDict.Count == 0;
-    //}
 }

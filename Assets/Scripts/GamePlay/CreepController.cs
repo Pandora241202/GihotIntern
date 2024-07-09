@@ -8,8 +8,6 @@ public class CreepController : MonoBehaviour
         {
             AllManager allManager = AllManager.Instance();
             allManager.creepManager.ProcessCollisionPlayerBullet(gameObject.GetInstanceID(), other.gameObject);
-            //allManager.bulletManager.ProcessCollision(other.gameObject.GetInstanceID());
-            //GameObject.Destroy(other.gameObject);
         } 
         else if (other.gameObject.CompareTag("MapElement"))
         {

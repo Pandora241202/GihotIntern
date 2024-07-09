@@ -216,6 +216,12 @@ public class SocketCommunication
                     AllManager.Instance().playerManager.RemovePlayer(playerOut.player_id);
                     break;
 
+                case "destroy creep":
+                    CreepDestroyInfo creepDestroyInfo = JsonUtility.FromJson<CreepDestroyInfo>(response);
+                    AllManager.Instance().creepManager.SendCreepToDeadBySharedId(creepDestroyInfo.creep_id);
+                    break;
+
+
             }
 
             Debug.Log(response);

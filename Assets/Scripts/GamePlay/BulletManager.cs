@@ -12,8 +12,9 @@ public class BulletInfo
     public float timer;
     public bool needDelayActive;
     public float delayActiveTime;
+    public string playerId;
 
-    public BulletInfo(Transform obj, Vector3 targetDirection, int damage, float bulletSpeed = 5f, bool needDelayActive = false, float delayActiveTime = 0)
+    public BulletInfo(Transform obj, Vector3 targetDirection, int damage, float bulletSpeed = 5f, bool needDelayActive = false, float delayActiveTime = 0, string playerId = null)
     {
         this.bulletObj = obj;
         this.direction = targetDirection.normalized;
@@ -22,11 +23,13 @@ public class BulletInfo
         this.needDelayActive = needDelayActive;
         this.delayActiveTime = delayActiveTime;
         this.damage = damage;
+        this.playerId = playerId;
         if (needDelayActive)
         {
             bulletObj.gameObject.SetActive(false);
         }
         Setup();
+        this.playerId = playerId;
     }
 
     public void Setup()
@@ -118,13 +121,13 @@ public class BulletManager
             in4.isNeedDestroy = true;
     }
 
-    public float SpawnBullet(Vector3 posSpawn, GameObject target, int gunId, float lastFireTime, string tagName, int playerDmg)
+    public float SpawnBullet(Vector3 posSpawn, GameObject target, int gunId, float lastFireTime, string tagName, int playerDmg, string playerId)
     {
         GunType gunType = gunConfig.lsGunType[gunId];
         localFireRate = gunType.Firerate;
         if (target && Time.time >= lastFireTime + 1f / localFireRate)
         {
-            gunType.bulletConfig.Fire(posSpawn, target.transform.position, playerDmg, this, tagName);
+            gunType.bulletConfig.Fire(posSpawn, target.transform.position, playerDmg, this, tagName, playerId: playerId);
             return Time.time;
         }
         return lastFireTime;

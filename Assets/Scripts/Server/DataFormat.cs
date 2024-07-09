@@ -194,6 +194,36 @@ public class PlayersState
 }
 
 [Serializable]
+public class PlayerPosition
+{
+    public string event_name = "player position";
+    public string player_id;
+    [field: SerializeField] public Vector3 position;
+    public PlayerPosition(Vector3 position)
+    {
+        this.position = position;
+    }
+}
+
+[Serializable]
+public class PlayersPosition
+{
+    public PlayerPosition[] players_position;
+}
+
+[Serializable]
+public class CreepDestroyInfo
+{
+    public string event_name = "creep destroy";
+    public int creep_id;
+
+    public CreepDestroyInfo(int  creep_id)
+    {
+        this.creep_id = creep_id;
+    }
+}
+
+[Serializable]
 public class PlayerOutEvent
 {
     public string event_name = "player out";
