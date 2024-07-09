@@ -162,7 +162,7 @@ public class SocketCommunication
                     UIManager._instance.uiMainMenu.BackShowMain();
 
                     break;
-                case "player_leave":
+                case "player leave":
                     SimplePlayerInfo leave_player = JsonUtility.FromJson<SimplePlayerInfo>(response);
 
                     AllManager.Instance().playerManager.RemovePlayer(leave_player.player_id);
