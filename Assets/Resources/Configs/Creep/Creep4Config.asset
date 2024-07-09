@@ -20,7 +20,7 @@ MonoBehaviour:
   dropItemConfigs:
   - powerUpType: 0
     dropChance: 0
-  - powerUpType: 1
+  - powerUpType: 2
     dropChance: 1
   startIncreaseSpeedDis: 5
   speedMultiplayer: 1.5

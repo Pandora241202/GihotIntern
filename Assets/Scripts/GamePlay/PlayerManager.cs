@@ -21,9 +21,10 @@ public class Player
     public float speed;
     public bool isDead;
     public float dmgBoostTime = 0;
-    public float dmgBoostAmount = 1.2f;
+    public float dmgBoostAmount;
     public float speedBoostTime = 0;
-    public float speedBoostAmount = 1.2f;
+    public float speedBoostAmount;
+    
     public Player(string name, string id, int gunId, PlayerConfig config)
     {
         this.name = name;
@@ -53,6 +54,10 @@ public class Player
         playerTrans.gameObject.GetComponent<CharacterControl>().speed = this.speed;
         
     }
+    // public void SetExpBoost(float boostAmount)
+    // {
+    //     this.expBoostAmount = boostAmount;
+    // }
     public void ProcessDmg(int dmg)
     {
         health -= dmg;
@@ -77,7 +82,8 @@ public class PlayerManager
     public int exp = 0;
     public int level = Constants.PlayerBaseLevel;
     public int expRequire = Constants.PlayerBaseExp;
-
+    public float expBoostTime = 0;
+    public float expBoostAmount = 1.5f;
     public void MyUpdate()
     {
         foreach (var player in dictPlayers.Values)
@@ -99,11 +105,20 @@ public class PlayerManager
                     player.speed = Constants.PlayerBaseSpeed;
                 }
             }
+            if (expBoostTime > 0){
+                expBoostTime -= Time.deltaTime;
+                if (expBoostTime < 0)
+                {
+                    expBoostTime = 0;
+                    expBoostAmount = 1f;
+                }
+            }
         }
     }
     public void LateUpdate(){}
     public void ProcessExpGain(int expGain)
     {
+        expGain = (int)(expGain * (1 + expBoostAmount));
         Debug.Log(expGain);
         exp += expGain;
         UIManager._instance.uiGameplay.UpdateLevelSlider(exp);
@@ -113,7 +128,6 @@ public class PlayerManager
             level++;
             UIManager._instance.uiGameplay.LevelUpdateSlider(expRequire);
             exp = 0;
-
             foreach (var pair in  dictPlayers)
             {
                 Player player = pair.Value;
@@ -121,6 +135,7 @@ public class PlayerManager
                 player.levelUpEffect = GameObject.Instantiate(player.playerConfig.levelUpEffect, player.playerTrans.position, Quaternion.identity);
             }
         }
+            
     }
 
     public void FreshStart()

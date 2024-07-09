@@ -20,5 +20,5 @@ MonoBehaviour:
   dropItemConfigs:
   - powerUpType: 0
     dropChance: 0
-  - powerUpType: 1
+  - powerUpType: 2
     dropChance: 1

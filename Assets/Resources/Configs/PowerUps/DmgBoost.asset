@@ -17,5 +17,4 @@ MonoBehaviour:
   timeToLive: 15
   duration: 15
   boostAmount: 10
-  isStackable: 1
-  dropChance: 0
+  isStackable: 0
