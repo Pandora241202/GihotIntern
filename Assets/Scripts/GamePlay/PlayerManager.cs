@@ -21,6 +21,7 @@ public class Player
     public float speed;
     public bool isDead;
     public float dmgBoostTime = 0;
+    public float dmgBoostAmount = 1.2f;
     public Player(string name, string id, int gunId, PlayerConfig config)
     {
         this.name = name;
@@ -113,11 +114,18 @@ public class PlayerManager
     {
         Player player = dictPlayers[playerId];
         GunType gunType = AllManager.Instance().gunConfig.lsGunType[player.gunId];
-        if (player.dmgBoostTime >= 0)
-        {
-            return (int)(gunType.baseDamage + (level - 1) *(1.3)* gunType.bulletMultiplier);
+        // if (player.dmgBoostTime >= 0)
+        // {
+        //     Debug.Log("DMG Boost activated");
+        //     return (int)(gunType.baseDamage + (level - 1) *(1.3)* gunType.bulletMultiplier);
+        // }
+        // return gunType.baseDamage + (level - 1) * gunType.bulletMultiplier;
+        float boostMultiplier = player.dmgBoostTime > 0 ? player.dmgBoostAmount : 1f;
+        Debug.Log("BoostMultiplier: " + boostMultiplier);
+        if (boostMultiplier > 1f){
+            Debug.Log("DMG Boost activated");
         }
-        return gunType.baseDamage + (level - 1) * gunType.bulletMultiplier;
+        return (int)(gunType.baseDamage + (level - 1) * boostMultiplier * gunType.bulletMultiplier);
     }
 
     public void SpawnPlayer(Vector3 position, string id, int gun_id)

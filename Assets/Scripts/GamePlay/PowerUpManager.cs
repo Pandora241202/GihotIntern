@@ -10,7 +10,7 @@ public class PowerUpInfo
     private float spawnTime;
     private float duration;
 
-    public PowerUpInfo(Transform obj, float timeToLive = 15f)
+    public PowerUpInfo(Transform obj, float timeToLive = 15f) //15f for ALL power-up
     {
         this.powerUpObj = obj;
         this.timeToLive = timeToLive;
@@ -74,7 +74,6 @@ public class PowerUpManager
     {
         var powerUpAttr = allDropItemConfig.powerUpAttributesList.Find(attr => attr.type == powerUpType);
         powerUpAttr.powerUpConfig.Activate();
-        // setDeletePowerUp(powerUpType);
     }
     public void setDeletePowerUp(int index)
     {
