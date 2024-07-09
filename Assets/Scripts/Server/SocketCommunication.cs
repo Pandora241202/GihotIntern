@@ -239,7 +239,7 @@ public class SocketCommunication
                     break;
                 case "game end":
                     AllManager.Instance().StartCoroutine(Wait());
-                    AllManager.Instance().GameEnd();
+                    
                     break;
 
             }
@@ -254,7 +254,8 @@ public class SocketCommunication
     public IEnumerator Wait()
     {
         AllManager.Instance().isPause = true;
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSecondsRealtime(0f);
+        AllManager.Instance().GameEnd();
 
     }
    

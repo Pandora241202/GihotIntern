@@ -62,7 +62,7 @@ public class AllManager : MonoBehaviour
 
     private void OnSceneLoaded(string sceneName, string mode)
     {
-        
+        sceneUpdater = null;
         if (sceneName == "level1")
         {
 
