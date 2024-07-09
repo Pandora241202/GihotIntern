@@ -123,14 +123,6 @@ public class PlayerManager
         this.dictPlayers.Remove(id);
     }
 
-    public void GameEnd()
-    {
-        foreach(var player in dictPlayers)
-        {
-            GameObject.Destroy(player.Value.playerTrans.gameObject);
-        }
-        AllManager.Instance().LoadSceneAsync("UI", "Room");
-    }
 
     public void AddPlayer(string name, string id, int gunId, PlayerConfig playerConfig)
     {

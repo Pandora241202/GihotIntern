@@ -237,6 +237,9 @@ public class SocketCommunication
                     //do render time left until resume
                     Debug.Log(time.time);
                     break;
+                case "game end":
+                    AllManager.Instance().GameEnd();
+                    break;
 
             }
 
