@@ -100,7 +100,7 @@ public class PlayerManager
             Player pl = dictPlayers.ElementAt(0).Value;
             this.dictPlayers.Clear();
             this.dictPlayers.Add(pl.id, pl);
-            AllManager.Instance().LoadSceneAsync("UI");
+            AllManager.Instance().LoadSceneAsync("UI", "Main Menu");
             return;
         }
         Player player = this.dictPlayers[id];

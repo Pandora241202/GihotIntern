@@ -41,12 +41,12 @@ public class AllManager : MonoBehaviour
 
     }
 
-    public void LoadSceneAsync(string sceneName)
+    public void LoadSceneAsync(string sceneName, string mode = "")
     {
-        StartCoroutine(LoadScene(sceneName));
+        StartCoroutine(LoadScene(sceneName, mode));
     }
 
-    private IEnumerator LoadScene(string sceneName)
+    private IEnumerator LoadScene(string sceneName, string mode)
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
 
@@ -54,12 +54,12 @@ public class AllManager : MonoBehaviour
         {
             yield return null;
         }
-        OnSceneLoaded(sceneName);
+        OnSceneLoaded(sceneName, mode);
         Debug.Log("Scene loaded!");
 
     }
 
-    private void OnSceneLoaded(string sceneName)
+    private void OnSceneLoaded(string sceneName, string mode)
     {
         
         if (sceneName == "level1")
@@ -77,11 +77,19 @@ public class AllManager : MonoBehaviour
         }
         else if(sceneName == "UI")
         {
-            UIManager._instance.uiPause.gameObject.SetActive(false);
-            UIManager._instance.uiGameplay.gameObject.SetActive(false);
-            UIManager._instance.uiMainMenu.gameObject.SetActive(true);
-            UIManager._instance.uiMainMenu.BackShowMain();
-            UIManager._instance.ResumeGame();
+            if(mode == "Main Menu")
+            {
+                UIManager._instance.uiPause.gameObject.SetActive(false);
+                UIManager._instance.uiGameplay.gameObject.SetActive(false);
+                UIManager._instance.uiMainMenu.gameObject.SetActive(true);
+                UIManager._instance.uiMainMenu.BackShowMain();
+                UIManager._instance.ResumeGame();
+            }
+            else if(mode == "room")
+            {
+                //open room ui
+            }
+            
         }
         //SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
         
