@@ -219,19 +219,23 @@ public class SocketCommunication
                     CreepDestroyInfo creepDestroyInfo = JsonUtility.FromJson<CreepDestroyInfo>(response);
                     AllManager.Instance().creepManager.SendCreepToDeadBySharedId(creepDestroyInfo.creep_id);
                     break;
+
                 case "pause":
                     //pause
+                    AllManager.Instance().isPause = true;
+                    UIManager._instance.PauseGame();
                     break;
 
                 case "resume":
                     //resume the game
-                    Debug.Log(response);
+                    AllManager.Instance().isPause = false;
+                    UIManager._instance.ResumeGame();
                     break;
 
                 case "time to resume":
                     TimeToResume time = JsonUtility.FromJson<TimeToResume>(response);
                     //do render time left until resume
-                    Debug.Log(response);
+                    Debug.Log(time.time);
                     break;
 
             }

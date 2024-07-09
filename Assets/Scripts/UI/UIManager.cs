@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
@@ -19,11 +18,11 @@ public class UIManager : MonoBehaviour
 
     public void PauseGame()
     {
-        Time.timeScale = 0;
+        uiPause.gameObject.SetActive(true);
     }
     public void ResumeGame()
     {
-        Time.timeScale = 1;
+        uiPause.gameObject.SetActive(false);
     }
     private void Awake()
     {

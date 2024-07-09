@@ -16,7 +16,7 @@ public class AllManager : MonoBehaviour
     public BulletManager bulletManager;
     public CreepManager creepManager;
     public PowerUpManager powerUpManager;
-
+    public bool isPause = false;
     public static AllManager Instance()
     {
         return _instance;
