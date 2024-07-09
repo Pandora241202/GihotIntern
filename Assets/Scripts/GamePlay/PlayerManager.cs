@@ -27,6 +27,13 @@ public class Player
         isDead = false;
     }
 
+    public void Onstart()
+    {
+        this.health = Constants.PlayerBaseMaxHealth;
+        this.speed = Constants.PlayerBaseSpeed;
+        isDead = false;
+    }
+
     public void ProcessDmg(int dmg)
     {
         health -= dmg;
@@ -72,6 +79,11 @@ public class PlayerManager
         exp = 0;
         level = Constants.PlayerBaseLevel;
         expRequire = Constants.PlayerBaseExp;
+        foreach (var item in dictPlayers)
+        {
+            item.Value.Onstart();
+        }
+
     }
     public int GetMaxHealthFromLevel()
     {

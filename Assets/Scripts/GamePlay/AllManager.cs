@@ -62,14 +62,13 @@ public class AllManager : MonoBehaviour
 
     private void OnSceneLoaded(string sceneName, string mode)
     {
-        sceneUpdater = null;
+        //sceneUpdater = null;
         if (sceneName == "level1")
         {
-
             UIManager._instance.uiMainMenu.gameObject.SetActive(false);
             UIManager._instance.uiGameplay.gameObject.SetActive(true);
             sceneUpdater = GameObject.FindObjectOfType<SceneUpdater>();
-            AllManager._instance.playerManager.FreshStart();
+            playerManager.FreshStart();
             //Debug.Log(sceneUpdater);
             creepManager = sceneUpdater.creepManager;
             bulletManager = sceneUpdater.bulletManager;
