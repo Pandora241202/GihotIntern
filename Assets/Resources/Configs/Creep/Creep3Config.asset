@@ -19,4 +19,4 @@ MonoBehaviour:
   exp: 20
   dropItemTypes: 04000000
   bulletConfig: {fileID: 11400000, guid: 5a6237f2bc2e34c489335df2f29de9fe, type: 2}
-  fireRate: 5
+  fireRate: 7

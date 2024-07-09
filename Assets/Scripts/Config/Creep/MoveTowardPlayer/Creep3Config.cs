@@ -11,11 +11,7 @@ public class Creep3Config : MoveTowardPlayerCreepConfig
     {
         Dictionary<string, Player> dictPlayers = AllManager.Instance().playerManager.dictPlayers;
 
-        (string playerId, float _) = GetNearestPlayerWithDis(creep.creepTrans);
-
-        Vector3 rotateDir = dictPlayers[playerId].playerTrans.position - creep.creepTrans.position;
-        rotateDir.y = 0;
-        creep.creepTrans.rotation = Quaternion.LookRotation(rotateDir);
+        string playerId = base.RotateTowardPlayer(creep);
 
         if (creep.timer >= fireRate)
         {

@@ -1,34 +1,53 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "Creep5Config", menuName = "Config/CreepConfig/MoveTowardPlayer/Creep5")]
 public class Creep5Config : MoveTowardPlayerCreepConfig
 {
-    [SerializeField] GameObject bombPrefab;
-    [SerializeField] float timeToExplode;
+    [SerializeField] GameObject explosion;
 
     public override void OnDead(Creep creep)
     {
-        GameObject bombObj = GameObject.Instantiate(bombPrefab, creep.creepTrans.position, Quaternion.identity);
-        creep.bombObj = bombObj;
+        GameObject explosionObj = GameObject.Instantiate(explosion, creep.creepTrans.position, Quaternion.identity);
+        creep.weaponObj = explosionObj;
         creep.UnSet();
     }
 
     public override void Attack(Creep creep)
     {
-        if (creep.bombObj == null) 
+        if (creep.weaponObj == null) 
         {
-            base.Attack(creep);
+            base.RotateTowardPlayer(creep);
             return;
         }
 
-        if (creep.timer >= timeToExplode)
+        if (creep.weaponObj != null)
         {
-            GameObject.Destroy(creep.bombObj);
-            creep.bombObj = null;
-            AllManager.Instance().creepManager.AddToDeactivateList(creep);
-        } else
-        {
-            creep.timer += Time.deltaTime;
+            ParticleSystem ps = creep.weaponObj.GetComponent<ParticleSystem>();
+
+            if (ps != null)
+            {
+                if (ps.time >= 0.8 && ps.time <= 1)
+                {
+                    Dictionary<string, Player> dictPlayers = AllManager.Instance().playerManager.dictPlayers;
+
+                    foreach (var pair in dictPlayers)
+                    {
+                        Player player = pair.Value;
+                        if (Vector3.Magnitude(player.playerTrans.position - ps.transform.position) <= 3)
+                        {
+                            player.ProcessDmg(creep.dmg);
+                        }
+                    }
+                }
+
+                if (ps.isStopped)
+                {
+                    Destroy(creep.weaponObj);
+                    creep.weaponObj = null;
+                    AllManager.Instance().creepManager.AddToDeactivateList(creep);
+                }
+            }
         }
     }
 }

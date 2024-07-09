@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: Creep5Config
   m_EditorClassIdentifier: 
   creepPrefab: {fileID: 8987020003840325061, guid: 1fb6f03a381e7b043be0f11819f7be4b, type: 3}
-  baseHp: 250
+  baseHp: 50
   baseSpeed: 3
   baseDmg: 15
   exp: 100
   dropItemTypes: 04000000
-  bombPrefab: {fileID: 4901116006423645643, guid: 3ecd94f95cd54a04983fa6cbf5374f55, type: 3}
-  timeToExplode: 2
+  explosion: {fileID: 1535640691960112, guid: b345030ffc29a664cad1d2a6e384a252, type: 3}

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class MoveTowardPlayerCreepConfig : CreepConfig
 {
-    public override void Attack(Creep creep) 
+    public virtual string RotateTowardPlayer(Creep creep) 
     {
         Dictionary<string, Player> dictPlayers = AllManager.Instance().playerManager.dictPlayers;
 
@@ -13,6 +13,6 @@ public class MoveTowardPlayerCreepConfig : CreepConfig
         rotateDir.y = 0;
         creep.creepTrans.rotation = Quaternion.LookRotation(rotateDir);
 
-        //creep.creepTrans.rotation = Quaternion.LookRotation(CharacterControl.Instance().transform.position - creep.creepTrans.position);
+        return playerId;
     }
 }

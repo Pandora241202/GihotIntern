@@ -13,7 +13,7 @@ public class Creep
     public float speed;
     public int dmg;
     public float timer;
-    public GameObject bombObj;
+    public GameObject weaponObj;
     public Animator animator;
     public int sharedId;
     public Dictionary<int, Vector3> collision_plane_normal_dict = new Dictionary<int, Vector3>();
@@ -23,7 +23,7 @@ public class Creep
         this.creepTrans = creepTrans;
         this.config = config;
         this.type = type;
-        bombObj = null;
+        weaponObj = null;
         animator = creepTrans.gameObject.GetComponent<Animator>();
         creepTrans.gameObject.SetActive(false);
         this.sharedId = sharedId;
