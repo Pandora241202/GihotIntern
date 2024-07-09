@@ -108,9 +108,8 @@ public class UIMainMenu : MonoBehaviour
     }
     public void ChangeLobbyListName(Dictionary<string, Player> players)
     {
-        for (int i = players.Count-1; i >= 0; i--)
+        for (int i = goPlayerList.Count-1; i >= 0; i--)
         {
-            if (goPlayerList.Count == 0) break;
             Destroy(goPlayerList[i].goPlayerListItem);
             goPlayerList.RemoveAt(i);
         }
