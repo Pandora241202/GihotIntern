@@ -122,7 +122,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5643468083627299393}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 647822052}
+        m_TargetAssemblyTypeName: UIPause, Assembly-CSharp
+        m_MethodName: OnBtn_Clicked
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &944308746587739675
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,7 +392,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6537706982452006995}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 647822052}
+        m_TargetAssemblyTypeName: UIPause, Assembly-CSharp
+        m_MethodName: OnBtn_Clicked
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2681662315995271996
 GameObject:
   m_ObjectHideFlags: 0
@@ -738,13 +762,16 @@ GameObject:
   - component: {fileID: 4615871708288685630}
   - component: {fileID: 4615871708288685628}
   - component: {fileID: 4615871708288685629}
+  - component: {fileID: 647822052}
+  - component: {fileID: 1277073779827841573}
+  - component: {fileID: 8814557399085094176}
   m_Layer: 5
   m_Name: UIPause
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4615871708288685630
 RectTransform:
   m_ObjectHideFlags: 0
@@ -806,6 +833,54 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &647822052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4615871708288685631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a1de4c5b682c6e46ac3337ced307e14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lsBtnPause:
+  - {fileID: 1564219041269607320}
+  - {fileID: 1350738680941300302}
+  - {fileID: 6322834141021420695}
+--- !u!114 &1277073779827841573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4615871708288685631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a1de4c5b682c6e46ac3337ced307e14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lsBtnPause:
+  - {fileID: 1564219041269607320}
+  - {fileID: 1350738680941300302}
+  - {fileID: 6322834141021420695}
+--- !u!114 &8814557399085094176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4615871708288685631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a1de4c5b682c6e46ac3337ced307e14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lsBtnPause:
+  - {fileID: 1564219041269607320}
+  - {fileID: 1350738680941300302}
+  - {fileID: 6322834141021420695}
 --- !u!1 &5418157573768289958
 GameObject:
   m_ObjectHideFlags: 0
@@ -833,7 +908,7 @@ RectTransform:
   m_GameObject: {fileID: 5418157573768289958}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 5217140203470186672}
@@ -1139,7 +1214,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 110526832601363719}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 647822052}
+        m_TargetAssemblyTypeName: UIPause, Assembly-CSharp
+        m_MethodName: OnBtn_Clicked
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7291196777723819339
 GameObject:
   m_ObjectHideFlags: 0

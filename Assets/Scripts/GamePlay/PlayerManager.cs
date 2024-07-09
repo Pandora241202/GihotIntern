@@ -63,6 +63,12 @@ public class PlayerManager
         }
     }
 
+    public void FreshStart()
+    {
+        exp = 0;
+        level = Constants.PlayerBaseLevel;
+        expRequire = Constants.PlayerBaseExp;
+    }
     public int GetMaxHealthFromLevel()
     {
         return Constants.PlayerBaseMaxHealth + (level - 1) * 3;
