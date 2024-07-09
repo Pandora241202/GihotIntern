@@ -17,6 +17,7 @@ public class AllManager : MonoBehaviour
     public CreepManager creepManager;
     public PowerUpManager powerUpManager;
     public bool isPause = false;
+    public bool isHost=false;
     public static AllManager Instance()
     {
         return _instance;
@@ -88,7 +89,17 @@ public class AllManager : MonoBehaviour
             }
             else if(mode == "Room")
             {
-                //open room ui
+                UIManager._instance.uiPause.gameObject.SetActive(false);
+                UIManager._instance.uiGameplay.gameObject.SetActive(false);
+                UIManager._instance.uiMainMenu.gameObject.SetActive(true);
+                if (isHost)
+                {
+                    UIManager._instance.uiMainMenu.BackShowRoom(1);
+                }
+                else
+                {
+                    UIManager._instance.uiMainMenu.BackShowRoom(0);
+                }
             }
             
         }
@@ -102,4 +113,14 @@ public class AllManager : MonoBehaviour
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
         SocketCommunication.GetInstance().Close();
     }
+    
+    public void GameEnd()
+    {
+        foreach(var player in playerManager.dictPlayers)
+        {
+            GameObject.Destroy(player.Value.playerTrans.gameObject);
+        }
+       LoadSceneAsync("UI", "Room");
+    }
+    
 }

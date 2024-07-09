@@ -238,6 +238,7 @@ public class SocketCommunication
                     Debug.Log(time.time);
                     break;
                 case "game end":
+                    AllManager.Instance().StartCoroutine(Wait());
                     AllManager.Instance().GameEnd();
                     break;
 
@@ -250,7 +251,13 @@ public class SocketCommunication
             yield return null;
         }
     }
+    public IEnumerator Wait()
+    {
+        AllManager.Instance().isPause = true;
+        yield return new WaitForSeconds(3f);
 
+    }
+   
     //public async void Send(string msg)
     //{
     //    var messageBytes = Encoding.UTF8.GetBytes(msg);
