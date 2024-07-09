@@ -12,12 +12,10 @@ public class CharacterControl : MonoBehaviour
     public GameObject goChar;
     [SerializeField] public int gunId;
     [SerializeField] LayerMask creepLayerMask;
-    //private FixedJoystick joystick;
     private FloatingJoystick joystick;
     GameObject curCreepTarget = null;
     public string id;
     int frame = 0;
-    //public Vector3 velocity = new Vector3(0, 0, 0);
     float lastFireTime = 0f;
     public Animator charAnim;
     public Vector3 input_velocity = Vector3.zero;
@@ -31,6 +29,8 @@ public class CharacterControl : MonoBehaviour
     public int elapseFrame = 0;
     public Vector3 lerpVertor = Vector3.zero;
     public Vector3 lerpPosition = Vector3.zero;
+
+    private bool isInvincible = false;
     //public bool isFire = false;
     //public static CharacterControl _instance { get; private set; }
     //public static CharacterControl Instance()
@@ -266,18 +266,38 @@ public class CharacterControl : MonoBehaviour
         //}
         
     }
-    
+    public void EnableInvincibility(float duration)
+    {
+        StartCoroutine(InvincibilityRoutine(duration));
+        Debug.Log("despair");
+    }
+    private IEnumerator InvincibilityRoutine(float duration)
+    {
+        isInvincible = true;
+        yield return new WaitForSeconds(duration);
+        isInvincible = false;
+    }
     Dictionary<int, Vector3> collision_plane_normal_dict = new Dictionary<int, Vector3>();
     private void OnTriggerEnter(Collider other)
     {
         
         if (other.gameObject.CompareTag("Creep"))
         {
+            if (isInvincible)
+            {
+                return;
+            }
             AllManager.Instance().playerManager.ProcessCollisionCreep(id, other.gameObject.GetInstanceID());
+            EnableInvincibility(1f);
         }
         else if (other.gameObject.CompareTag("EnemyBullet"))
         {
+            if (isInvincible)
+            {
+                return;
+            }
             AllManager.Instance().playerManager.ProcessCollisionEnemyBullet(id, other.gameObject.GetInstanceID());
+            EnableInvincibility(1f);
         }
         if (other.gameObject.CompareTag("MapElement"))
         {
