@@ -8,7 +8,9 @@ public class DmgBoost : PowerUpsConfig
     public override void Activate()
     {
         Debug.Log("DMG Boost pickup");
-        AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].dmgBoostTime=15f;
+        var player = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID];
+        player.SetDamageBoost(boostAmount);
+        player.dmgBoostTime = 15f;
         //Activate UI show Boost
         
     }

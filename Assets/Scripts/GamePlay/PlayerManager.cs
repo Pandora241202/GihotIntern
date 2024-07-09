@@ -41,7 +41,10 @@ public class Player
         this.lifesteal = Constants.LifeSteal;
         this.speed = Constants.PlayerBaseSpeed;
     }
-
+    public void SetDamageBoost(float boostAmount)
+    {
+        this.dmgBoostAmount = boostAmount;
+    }
     public void ProcessDmg(int dmg)
     {
         health -= dmg;
@@ -129,11 +132,6 @@ public class PlayerManager
         Player player = dictPlayers[playerId];
         GunType gunType = AllManager.Instance().gunConfig.lsGunType[player.gunId];
         float boostMultiplier = player.dmgBoostTime > 0 ? player.dmgBoostAmount : 1f;
-        Debug.Log("BoostMultiplier: " + boostMultiplier);
-        Debug.Log("player.dmgBoostTime: "+ player.dmgBoostTime);
-        if (boostMultiplier > 1f){
-            Debug.Log("DMG Boost activated");
-        }
         return (int)(gunType.baseDamage + (level - 1) * boostMultiplier * gunType.bulletMultiplier);
     }
 
