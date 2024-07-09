@@ -95,4 +95,11 @@ public class AllManager : MonoBehaviour
         //SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
         
     }
+
+    private void OnApplicationQuit()
+    {
+        SendData<QuitEvent> data = new SendData<QuitEvent>(new QuitEvent());
+        SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
+        SocketCommunication.GetInstance().Close();
+    }
 }

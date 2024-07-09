@@ -241,7 +241,7 @@ public class CharacterControl : MonoBehaviour
         gunTransform.rotation = lookRotation;
         int playerDmg = AllManager.Instance().playerManager.GetPlayerDmg(id);
         lastFireTime = AllManager.Instance().bulletManager
-            .SpawnBullet(gunTransform.position, curCreepTarget, gunId, lastFireTime, "PlayerBullet", playerDmg);
+            .SpawnBullet(gunTransform.position, curCreepTarget, gunId, lastFireTime, "PlayerBullet", playerDmg, id);
 
         //float angle = Vector3.Angle(gunTransform.forward, directionToTarget);
         //if (angle < 10f)
@@ -253,6 +253,7 @@ public class CharacterControl : MonoBehaviour
     Dictionary<int, Vector3> collision_plane_normal_dict = new Dictionary<int, Vector3>();
     private void OnTriggerEnter(Collider other)
     {
+        
         if (other.gameObject.CompareTag("Creep"))
         {
             AllManager.Instance().playerManager.ProcessCollisionCreep(id, other.gameObject.GetInstanceID());
