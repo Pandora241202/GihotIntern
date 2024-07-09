@@ -19,7 +19,7 @@ public class CharacterControl : MonoBehaviour
     int frame = 0;
     //public Vector3 velocity = new Vector3(0, 0, 0);
     float lastFireTime = 0f;
-    [SerializeField] private Animator charAnim;
+    public Animator charAnim;
     public Vector3 input_velocity = Vector3.zero;
     Vector3 final_velocity = Vector3.zero;
     bool collision = false;

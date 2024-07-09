@@ -3130,6 +3130,7 @@ MonoBehaviour:
   playerConfig: {fileID: 11400000, guid: 2aa4ff2f49b57754b89c8a1520ebe077, type: 2}
   characterPrefab: {fileID: 7902174039242817089, guid: eb315ad2f4977474fa487a3025c7bd73, type: 3}
   sceneUpdater: {fileID: 0}
+  isPause: 0
 --- !u!224 &6228561652204780281
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4279,6 +4280,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1170851542}
     m_Modifications:
+    - target: {fileID: 9014950382244939489, guid: d6682a1a5aeeacd45b57db0f6b5d5664, type: 3}
+      propertyPath: m_text
+      value: Ngu
+      objectReference: {fileID: 0}
+    - target: {fileID: 9014950382244939489, guid: d6682a1a5aeeacd45b57db0f6b5d5664, type: 3}
+      propertyPath: m_fontSize
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 9014950382244939489, guid: d6682a1a5aeeacd45b57db0f6b5d5664, type: 3}
       propertyPath: m_fontStyle
       value: 1
