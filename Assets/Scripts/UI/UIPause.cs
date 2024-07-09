@@ -16,8 +16,8 @@ public class UIPause : MonoBehaviour
                 break;
             case 1:
                 //Resume
-                UIManager._instance.ResumeGame();
-                UIManager._instance.uiPause.gameObject.SetActive(false);
+                SendData<ResumeEvent> dt = new SendData<ResumeEvent>(new ResumeEvent());
+                SocketCommunication.GetInstance().Send(JsonUtility.ToJson(dt));
                 break;
             case 2:
                 //Leave

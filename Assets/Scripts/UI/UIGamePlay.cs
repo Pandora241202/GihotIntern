@@ -22,8 +22,8 @@ public class UIGamePlay : MonoBehaviour
 
     public void OnPause_Clicked()
     {
-        UIManager._instance.PauseGame();
-        UIManager._instance.uiPause.gameObject.SetActive(true);
+        SendData<PauseEvent> data = new SendData<PauseEvent>(new PauseEvent());
+        SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
     }
 
     public void UpdateHealthSlider(float currentHealth)

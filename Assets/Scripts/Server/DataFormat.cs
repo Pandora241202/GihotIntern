@@ -236,6 +236,18 @@ public class QuitEvent
 }
 
 [Serializable]
+public class PauseEvent
+{
+    public string event_name = "pause";
+}
+
+[Serializable]
+public class ResumeEvent
+{
+    public string event_name = "resume";
+}
+
+[Serializable]
 public class TimeToResume
 {
     public int time;

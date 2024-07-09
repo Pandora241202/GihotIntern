@@ -92,7 +92,7 @@ public class CharacterControl : MonoBehaviour
 
         //if (Vector3.Angle(velocity, lerpDirection) > 70) return;
 
-        if ((lerpPosition - transform.position).magnitude <= speed * Time.fixedDeltaTime || elapseFrame == frameLerp)
+        if ((lerpPosition - transform.position).magnitude <= speed * Time.fixedDeltaTime)
         {
             lerp = false;
             transform.position = lerpPosition;
@@ -111,7 +111,7 @@ public class CharacterControl : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
+        if (AllManager.Instance().isPause) return;
 
         if (lerp)
         {
