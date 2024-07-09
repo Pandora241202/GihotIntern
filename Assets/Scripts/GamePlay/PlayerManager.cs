@@ -113,6 +113,7 @@ public class PlayerManager
             AllManager.Instance().LoadSceneAsync("UI", "Main Menu");
             return;
         }
+
         Player player = this.dictPlayers[id];
         if (player.playerTrans != null)
         {
@@ -121,6 +122,16 @@ public class PlayerManager
         }
         this.dictPlayers.Remove(id);
     }
+
+    public void GameEnd()
+    {
+        foreach(var player in dictPlayers)
+        {
+            GameObject.Destroy(player.Value.playerTrans.gameObject);
+        }
+        AllManager.Instance().LoadSceneAsync("UI", "Room");
+    }
+
     public void AddPlayer(string name, string id, int gunId, PlayerConfig playerConfig)
     {
         Player newPlayer = new Player(name, id, gunId, playerConfig);

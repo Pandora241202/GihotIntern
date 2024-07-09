@@ -86,7 +86,7 @@ public class AllManager : MonoBehaviour
                 UIManager._instance.uiMainMenu.BackShowMain();
                 UIManager._instance.ResumeGame();
             }
-            else if(mode == "room")
+            else if(mode == "Room")
             {
                 //open room ui
             }
