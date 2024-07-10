@@ -9,22 +9,16 @@ on:
       - develop
 
 jobs:
-  compile-check:
+  syntax-check:
+    name: Check Unity Syntax
     runs-on: ubuntu-latest
-
+    
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+    - uses: actions/checkout@v2
+    - name: Use Unity (version)
+      uses: game-ci/unity-action@v2
       with:
-        dotnet-version: '2.1.x'
-
-    - name: Install C# Compiler
-      run: sudo apt-get install -y mono-mcs
-
-    - name: Compile C# Scripts
+        unityVersion: 2021.3.19f1
+    - name: Run Unity Syntax Check
       run: |
-        # Find all .cs files and try to compile them
-        find . -name "*.cs" -print0 | xargs -0 -I {} mcs -nologo {}
+        /opt/Unity/Editor/Unity -batchmode -logFile - -projectPath . -quit -executeMethod UnityEditor.Build.Reporting.BuildReportUtility.CheckSyntax
