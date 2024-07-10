@@ -164,15 +164,15 @@ public class CharacterControl : MonoBehaviour
             final_velocity = (normal + final_velocity.normalized).normalized * speed;
         }
 
-        if (correctPositionTime < Time.fixedDeltaTime * 5)
+        if (correctPositionTime < Time.fixedDeltaTime * 10)
         {
             transform.position += final_velocity * Time.fixedDeltaTime;
-
+            correctPositionTime += Time.fixedDeltaTime;
         }
 
 
 
-        correctPositionTime += Time.fixedDeltaTime;
+        
 
 
 
