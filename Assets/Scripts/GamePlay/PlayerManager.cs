@@ -19,7 +19,6 @@ public class Player
     public float lifeSteal;
     public float speed;
     public bool isDead;
-    public float dmgBoostTime = 0;
     public float dmgBoostAmount;
     public float speedBoostTime = 0;
     public float speedBoostAmount;
@@ -126,14 +125,6 @@ public class PlayerManager
     {
         foreach (var player in dictPlayers.Values)
         {
-            if (player.dmgBoostTime > 0)
-            {
-                player.dmgBoostTime -= Time.deltaTime;
-                if (player.dmgBoostTime < 0)
-                {
-                    player.dmgBoostTime = 0;
-                }
-            }
             if (player.speedBoostTime > 0)
             {
                 player.speedBoostTime -= Time.deltaTime;
@@ -201,7 +192,7 @@ public class PlayerManager
     {
         Player player = dictPlayers[playerId];
         GunType gunType = AllManager.Instance().gunConfig.lsGunType[player.gunId];
-        float boostMultiplier = player.dmgBoostTime > 0 ? player.dmgBoostAmount : 1f;
+        float boostMultiplier = player.dmgBoostAmount;
         return (int)(gunType.baseDamage + (level - 1) * boostMultiplier * gunType.bulletMultiplier);
     }
 
