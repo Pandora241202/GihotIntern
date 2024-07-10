@@ -1,5 +1,5 @@
-﻿using OpenCover.Framework.Model;
-using System.Collections.Generic;
+﻿//using OpenCover.Framework.Model;
+//using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Creep7Config", menuName = "Config/CreepConfig/MoveFarPlayer/Creep7")]

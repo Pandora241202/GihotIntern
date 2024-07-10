@@ -22,5 +22,4 @@ MonoBehaviour:
     dropChance: 0
   - powerUpType: 2
     dropChance: 1
-  bombPrefab: {fileID: 4901116006423645643, guid: 3ecd94f95cd54a04983fa6cbf5374f55, type: 3}
-  timeToExplode: 2
+  explosion: {fileID: 1535640691960112, guid: b345030ffc29a664cad1d2a6e384a252, type: 3}
