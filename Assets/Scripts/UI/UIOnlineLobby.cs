@@ -62,6 +62,7 @@ public class UIOnlineLobby : MonoBehaviour
         UIManager._instance.uiMainMenu.HostChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
         UIManager._instance.uiMainMenu.AfterCreate();
         //UIManager._instance.uiMainMenu.btnStart.interactable = false;
+        AllManager._instance.isHost = true;
         gameObject.SetActive(false);
     }
 

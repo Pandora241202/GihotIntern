@@ -17,6 +17,7 @@ public class AllManager : MonoBehaviour
     public CreepManager creepManager;
     public PowerUpManager powerUpManager;
     public bool isPause = false;
+    public bool isHost=false;
     public static AllManager Instance()
     {
         return _instance;
@@ -61,14 +62,13 @@ public class AllManager : MonoBehaviour
 
     private void OnSceneLoaded(string sceneName, string mode)
     {
-        
+        //sceneUpdater = null;
         if (sceneName == "level1")
         {
-
             UIManager._instance.uiMainMenu.gameObject.SetActive(false);
             UIManager._instance.uiGameplay.gameObject.SetActive(true);
             sceneUpdater = GameObject.FindObjectOfType<SceneUpdater>();
-            AllManager._instance.playerManager.FreshStart();
+            playerManager.FreshStart();
             //Debug.Log(sceneUpdater);
             creepManager = sceneUpdater.creepManager;
             bulletManager = sceneUpdater.bulletManager;
@@ -86,9 +86,19 @@ public class AllManager : MonoBehaviour
                 UIManager._instance.uiMainMenu.BackShowMain();
                 UIManager._instance.ResumeGame();
             }
-            else if(mode == "room")
+            else if(mode == "Room")
             {
-                //open room ui
+                UIManager._instance.uiPause.gameObject.SetActive(false);
+                UIManager._instance.uiGameplay.gameObject.SetActive(false);
+                UIManager._instance.uiMainMenu.gameObject.SetActive(true);
+                if (isHost)
+                {
+                    UIManager._instance.uiMainMenu.BackShowRoom(1);
+                }
+                else
+                {
+                    UIManager._instance.uiMainMenu.BackShowRoom(0);
+                }
             }
             
         }
@@ -102,4 +112,14 @@ public class AllManager : MonoBehaviour
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
         SocketCommunication.GetInstance().Close();
     }
+    
+    public void GameEnd()
+    {
+        foreach(var player in playerManager.dictPlayers)
+        {
+            GameObject.Destroy(player.Value.playerTrans.gameObject);
+        }
+       LoadSceneAsync("UI", "Room");
+    }
+    
 }

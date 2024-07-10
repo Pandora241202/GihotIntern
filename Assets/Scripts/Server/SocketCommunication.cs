@@ -130,10 +130,10 @@ public class SocketCommunication
                     break;
                 case "spawn creep":
                     var creepSpawnInfo = JsonUtility.FromJson<CreepSpawnInfo>(response);
-                    if (AllManager._instance.sceneUpdater.creepManager == null) break;
+                    //if (AllManager._instance.sceneUpdater == null) break;
                     foreach (Vector3 pos in creepSpawnInfo.spawnPos)
                     {
-                        AllManager._instance.sceneUpdater.creepManager.ActivateCreep(pos, (CreepManager.CreepType)creepSpawnInfo.creepTypeInt, creepSpawnInfo.time);
+                        AllManager._instance.creepManager.ActivateCreep(pos, (CreepManager.CreepType)creepSpawnInfo.creepTypeInt, creepSpawnInfo.time);
                     }
 
                     break;
@@ -237,17 +237,28 @@ public class SocketCommunication
                     //do render time left until resume
                     Debug.Log(time.time);
                     break;
+                case "game end":
+                    AllManager.Instance().StartCoroutine(Wait());
+                    
+                    break;
 
             }
 
-            //Debug.Log(response);
+            Debug.Log(response);
             //remove processed data from buffer
             buffer.RemoveRange(0, 4 + dataLength);
             //Debug.Log(response);
             yield return null;
         }
     }
+    public IEnumerator Wait()
+    {
+        AllManager.Instance().isPause = true;
+        yield return new WaitForSecondsRealtime(0f);
+        AllManager.Instance().GameEnd();
 
+    }
+   
     //public async void Send(string msg)
     //{
     //    var messageBytes = Encoding.UTF8.GetBytes(msg);

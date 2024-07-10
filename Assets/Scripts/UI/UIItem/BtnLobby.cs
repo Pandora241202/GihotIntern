@@ -29,12 +29,14 @@ public class BtnLobby
         this.room_id = room_id;
         this.room_name = room_name;
         this.game_mode = game_mode;
-
+        
         this.button.onClick.AddListener(() =>
         {
+            
             SendData<JoinRequestEvent> data = new SendData<JoinRequestEvent>(new JoinRequestEvent(room_id));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
-            
+            AllManager._instance.isHost = false;
         });
+        
     }
 }

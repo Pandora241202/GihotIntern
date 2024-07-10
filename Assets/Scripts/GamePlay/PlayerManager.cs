@@ -29,6 +29,13 @@ public class Player
         levelUpEffect = null;
     }
 
+    public void Onstart()
+    {
+        this.health = Constants.PlayerBaseMaxHealth;
+        this.speed = Constants.PlayerBaseSpeed;
+        isDead = false;
+    }
+
     public void ProcessDmg(int dmg)
     {
         health -= dmg;
@@ -81,6 +88,11 @@ public class PlayerManager
         exp = 0;
         level = Constants.PlayerBaseLevel;
         expRequire = Constants.PlayerBaseExp;
+        foreach (var item in dictPlayers)
+        {
+            item.Value.Onstart();
+        }
+
     }
     public int GetMaxHealthFromLevel()
     {
@@ -122,6 +134,7 @@ public class PlayerManager
             AllManager.Instance().LoadSceneAsync("UI", "Main Menu");
             return;
         }
+
         Player player = this.dictPlayers[id];
         if (player.playerTrans != null)
         {
@@ -130,6 +143,8 @@ public class PlayerManager
         }
         this.dictPlayers.Remove(id);
     }
+
+
     public void AddPlayer(string name, string id, int gunId, PlayerConfig playerConfig)
     {
         Player newPlayer = new Player(name, id, gunId, playerConfig);
@@ -144,6 +159,7 @@ public class PlayerManager
         {
             state = playersState.states[i];
             player = dictPlayers[state.player_id];
+            player.isDead = state.isDead;
             CharacterControl c_Controller = player.playerTrans.gameObject.GetComponent<CharacterControl>();
             c_Controller.input_velocity = state.velocity;
             //c_Controller.goChar.transform.rotation = state.rotation;
@@ -165,6 +181,10 @@ public class PlayerManager
 
             c_Controller.correctPositionTime = 0;
             if (state.isFire) c_Controller.Shoot();
+            if (state.isDead)
+            {
+                c_Controller.charAnim.SetBool("isDead",true);
+            }
             //player.playerTrans.position = state.position;
         }
     }

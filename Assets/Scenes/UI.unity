@@ -4281,6 +4281,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 1170851542}
     m_Modifications:
     - target: {fileID: 9014950382244939489, guid: d6682a1a5aeeacd45b57db0f6b5d5664, type: 3}
+      propertyPath: m_text
+      value: Ngu
+      objectReference: {fileID: 0}
+    - target: {fileID: 9014950382244939489, guid: d6682a1a5aeeacd45b57db0f6b5d5664, type: 3}
+      propertyPath: m_fontSize
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 9014950382244939489, guid: d6682a1a5aeeacd45b57db0f6b5d5664, type: 3}
       propertyPath: m_fontStyle
       value: 1
       objectReference: {fileID: 0}
