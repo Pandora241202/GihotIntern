@@ -20,7 +20,7 @@ MonoBehaviour:
   dropItemConfigs:
   - powerUpType: 0
     dropChance: 0
-  - powerUpType: 2
+  - powerUpType: 4
     dropChance: 1
   bulletConfig: {fileID: 11400000, guid: 5a6237f2bc2e34c489335df2f29de9fe, type: 2}
   fireRate: 7

@@ -20,6 +20,6 @@ MonoBehaviour:
   dropItemConfigs:
   - powerUpType: 0
     dropChance: 0
-  - powerUpType: 2
+  - powerUpType: 4
     dropChance: 1
   explosion: {fileID: 1535640691960112, guid: b345030ffc29a664cad1d2a6e384a252, type: 3}
