@@ -102,6 +102,7 @@ public class Player
             health = 0;
             //died
             isDead = true;
+            playerTrans.gameObject.GetComponent<CharacterControl>().goCircleRes.SetActive(true);
         }
         UIManager._instance.uiGameplay.UpdateHealthSlider(health);
     }
@@ -280,6 +281,11 @@ public class PlayerManager
         AllManager.Instance().bulletManager.SetDelete(bulletId);
     }
 
+    public void OnRevive(string id)
+    {
+        dictPlayers[id].playerTrans.gameObject.GetComponent<CharacterControl>().goCircleRes.SetActive(false);
+        
+    }
     public void ProcessLifeSteal()
     {
         int lifeSteal = Random.Range(0, 100);
