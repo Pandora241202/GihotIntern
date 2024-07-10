@@ -252,3 +252,14 @@ public class TimeToResume
 {
     public int time;
 }
+
+[Serializable]
+public class ReviveEvent
+{
+    public string event_name = "revive";
+    public string revive_player_id;
+    public ReviveEvent(string id)
+    {
+        this.revive_player_id = id;
+    }
+}
