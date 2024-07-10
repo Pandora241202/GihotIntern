@@ -106,7 +106,10 @@ public class CreepManager
         Creep6,
         Creep7
     }
-
+    public Dictionary<int, Creep> GetCreepActiveDict()
+    {
+        return creepActiveDict;
+    }
     private void SpawnCreep(CreepType creepType)
     {
         CreepConfig config = GetCreepConfigByType(creepType);
