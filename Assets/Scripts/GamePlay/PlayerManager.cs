@@ -119,7 +119,7 @@ public class PlayerManager
     public int level = Constants.PlayerBaseLevel;
     public int expRequire = Constants.PlayerBaseExp;
     public float expBoostTime = 0;
-    public float expBoostAmount = 1.5f;
+    public float expBoostAmount; // Since all player share a single EXP bar, we use the variable here instead of in each player's class
     public void MyUpdate()
     {
         foreach (var player in dictPlayers.Values)
