@@ -198,11 +198,13 @@ public class SocketCommunication
                     {
                         AllManager.Instance().playerManager.SpawnPlayer(all.data[i].spawn_pos, all.data[i].player_id, all.data[i].gun_id);
                     }
-                    UIManager._instance.uiGameplay.OnSetUp(AllManager._instance.playerManager.GetMaxHealthFromLevel(),AllManager._instance.playerManager.expRequire);
+                    AllManager.Instance().isPause = false;
+                    SendData<EventName> dataDoneSpawn = new SendData<EventName>(new EventName("spawn done"));
+                    Send(JsonUtility.ToJson(dataDoneSpawn));
 
+                    UIManager._instance.uiGameplay.OnSetUp(AllManager._instance.playerManager.GetMaxHealthFromLevel(), AllManager._instance.playerManager.expRequire);
                     UIManager._instance.uiGameplay.gameObject.SetActive(true);
                     UIManager._instance._fjoystick.gameObject.SetActive(true);
-                    
                     break;
 
                 case "update players state":
@@ -244,7 +246,7 @@ public class SocketCommunication
 
             }
 
-            Debug.Log(response);
+            // Debug.Log(response);
             //remove processed data from buffer
             buffer.RemoveRange(0, 4 + dataLength);
             //Debug.Log(response);

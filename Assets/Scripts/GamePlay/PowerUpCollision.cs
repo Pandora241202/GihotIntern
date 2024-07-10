@@ -12,7 +12,8 @@ public class PowerUpCollision : MonoBehaviour
             PowerUpManager powerUpManager = AllManager.Instance().powerUpManager;
             if (powerUpManager != null)
             {
-                powerUpManager.ActivatePowerUp(powerUpType);
+                string playerId = other.GetComponent<CharacterControl>().id;
+                powerUpManager.ApplyPowerUp(playerId, powerUpType);
                 Destroy(gameObject); 
             }
         }

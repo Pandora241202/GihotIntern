@@ -15,7 +15,6 @@ public class Player
     public PlayerConfig playerConfig;
     public GameObject levelUpEffect;
     //Player stat 
-
     public int health;
     public float lifeSteal;
     public float speed;
@@ -24,6 +23,8 @@ public class Player
     public float dmgBoostAmount;
     public float speedBoostTime = 0;
     public float speedBoostAmount;
+
+    private Dictionary<string, float> activePowerUps;
     
     public Player(string name, string id, int gunId, PlayerConfig config)
     {
@@ -36,6 +37,7 @@ public class Player
         this.speed = Constants.PlayerBaseSpeed;
         isDead = false;
         levelUpEffect = null;
+        activePowerUps = new Dictionary<string, float>();
     }
 
     public void Onstart()
@@ -43,6 +45,46 @@ public class Player
         this.health = Constants.PlayerBaseMaxHealth;
         this.lifeSteal = Constants.LifeSteal;
         this.speed = Constants.PlayerBaseSpeed;
+        activePowerUps.Clear();
+    }
+    public void AddPowerUp(string powerUpName, float duration)
+    {
+        if (activePowerUps.ContainsKey(powerUpName))
+        {
+            activePowerUps[powerUpName] = duration; // Reset the duration if already active
+            Debug.Log($"Resetting power-up: {powerUpName}");
+        }
+        else
+        {
+            activePowerUps.Add(powerUpName, duration);
+            Debug.Log($"Activating power-up: {powerUpName}");
+        }
+    }
+    public void UpdatePowerUps()
+    {
+        List<string> expiredPowerUps = new List<string>();
+
+        foreach (var powerUp in activePowerUps.Keys.ToList())
+        {
+            activePowerUps[powerUp] -= Time.deltaTime;
+            Debug.Log($"Power-up: {powerUp} has {activePowerUps[powerUp]}s left");
+            if (activePowerUps[powerUp] <= 0)
+            {
+                expiredPowerUps.Add(powerUp);
+            }
+        }
+
+        foreach (var powerUp in expiredPowerUps)
+        {
+            DeactivatePowerUp(powerUp);
+            activePowerUps.Remove(powerUp);
+        }
+    }
+
+    private void DeactivatePowerUp(string powerUpName)
+    {
+        Debug.Log($"Deactivating power-up: {powerUpName}");
+        AllManager.Instance().powerUpManager.DeactivatePowerUp(powerUpName);
     }
     public void SetDamageBoost(float boostAmount)
     {
@@ -54,10 +96,6 @@ public class Player
         playerTrans.gameObject.GetComponent<CharacterControl>().speed = this.speed;
         
     }
-    // public void SetExpBoost(float boostAmount)
-    // {
-    //     this.expBoostAmount = boostAmount;
-    // }
     public void ProcessDmg(int dmg)
     {
         health -= dmg;

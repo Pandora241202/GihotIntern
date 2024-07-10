@@ -17,12 +17,10 @@ MonoBehaviour:
   baseSpeed: 2
   baseDmg: 10
   exp: 20
-  dropItemTypes: 04000000
-  skillCD: 10
-  meteor: {fileID: 1839445213900760, guid: 23f972538c5ab5b4f94000c5657b9754, type: 3}
   dropItemConfigs:
   - powerUpType: 0
     dropChance: 0
-  - powerUpType: 2
+  - powerUpType: 0
     dropChance: 1
   skillCD: 7
+  meteor: {fileID: 1839445213900760, guid: 23f972538c5ab5b4f94000c5657b9754, type: 3}

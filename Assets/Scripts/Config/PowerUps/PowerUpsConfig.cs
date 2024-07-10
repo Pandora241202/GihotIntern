@@ -14,4 +14,12 @@ public class PowerUpsConfig : ScriptableObject
     {
 
     }
+    public virtual void ApplyEffect()
+    {
+
+    }
+    public virtual void Deactivate()
+    {
+
+    }
 }
