@@ -20,7 +20,6 @@ public class Player
     public float speed;
     public bool isDead;
     public float dmgBoostAmount;
-    public float speedBoostTime = 0;
     public float speedBoostAmount;
 
     private Dictionary<string, float> activePowerUps;
@@ -125,15 +124,6 @@ public class PlayerManager
     {
         foreach (var player in dictPlayers.Values)
         {
-            if (player.speedBoostTime > 0)
-            {
-                player.speedBoostTime -= Time.deltaTime;
-                if (player.speedBoostTime < 0)
-                {
-                    player.speedBoostTime = 0;
-                    player.speed = Constants.PlayerBaseSpeed;
-                }
-            }
             if (expBoostTime > 0){
                 expBoostTime -= Time.deltaTime;
                 if (expBoostTime < 0)

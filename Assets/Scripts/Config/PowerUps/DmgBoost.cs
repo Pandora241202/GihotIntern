@@ -11,7 +11,6 @@ public class DmgBoost : PowerUpsConfig
         var player = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID];
         player.SetDamageBoost(boostAmount);
         player.AddPowerUp("DmgBoost", duration);
-        // player.dmgBoostTime = duration;
         //TODO: Activate UI show Boost
     }
     public override void ApplyEffect()
