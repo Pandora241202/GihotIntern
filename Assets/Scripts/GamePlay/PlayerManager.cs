@@ -1,5 +1,7 @@
 ﻿using Cinemachine;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using Unity.VisualScripting;
 using System.Linq;
 using UnityEngine;
 
@@ -15,8 +17,14 @@ public class Player
     //Player stat 
 
     public int health;
+    public float lifeSteal;
     public float speed;
     public bool isDead;
+    public float dmgBoostTime = 0;
+    public float dmgBoostAmount;
+    public float speedBoostTime = 0;
+    public float speedBoostAmount;
+    
     public Player(string name, string id, int gunId, PlayerConfig config)
     {
         this.name = name;
@@ -24,6 +32,7 @@ public class Player
         this.gunId = gunId;
         this.playerConfig = config;
         this.health = Constants.PlayerBaseMaxHealth;
+        this.lifeSteal = Constants.LifeSteal;
         this.speed = Constants.PlayerBaseSpeed;
         isDead = false;
         levelUpEffect = null;
@@ -32,10 +41,23 @@ public class Player
     public void Onstart()
     {
         this.health = Constants.PlayerBaseMaxHealth;
+        this.lifesteal = Constants.LifeSteal;
         this.speed = Constants.PlayerBaseSpeed;
-        isDead = false;
     }
-
+    public void SetDamageBoost(float boostAmount)
+    {
+        this.dmgBoostAmount = boostAmount;
+    }
+    public void SetSpeedBoost(float boostAmount)
+    {
+        this.speed = Constants.PlayerBaseSpeed * (1+boostAmount);
+        playerTrans.gameObject.GetComponent<CharacterControl>().speed = this.speed;
+        
+    }
+    // public void SetExpBoost(float boostAmount)
+    // {
+    //     this.expBoostAmount = boostAmount;
+    // }
     public void ProcessDmg(int dmg)
     {
         health -= dmg;
@@ -60,10 +82,43 @@ public class PlayerManager
     public int exp = 0;
     public int level = Constants.PlayerBaseLevel;
     public int expRequire = Constants.PlayerBaseExp;
-
-
+    public float expBoostTime = 0;
+    public float expBoostAmount = 1.5f;
+    public void MyUpdate()
+    {
+        foreach (var player in dictPlayers.Values)
+        {
+            if (player.dmgBoostTime > 0)
+            {
+                player.dmgBoostTime -= Time.deltaTime;
+                if (player.dmgBoostTime < 0)
+                {
+                    player.dmgBoostTime = 0;
+                }
+            }
+            if (player.speedBoostTime > 0)
+            {
+                player.speedBoostTime -= Time.deltaTime;
+                if (player.speedBoostTime < 0)
+                {
+                    player.speedBoostTime = 0;
+                    player.speed = Constants.PlayerBaseSpeed;
+                }
+            }
+            if (expBoostTime > 0){
+                expBoostTime -= Time.deltaTime;
+                if (expBoostTime < 0)
+                {
+                    expBoostTime = 0;
+                    expBoostAmount = 1f;
+                }
+            }
+        }
+    }
+    public void LateUpdate(){}
     public void ProcessExpGain(int expGain)
     {
+        expGain = (int)(expGain * (1 + expBoostAmount));
         Debug.Log(expGain);
         exp += expGain;
         UIManager._instance.uiGameplay.UpdateLevelSlider(exp);
@@ -73,7 +128,6 @@ public class PlayerManager
             level++;
             UIManager._instance.uiGameplay.LevelUpdateSlider(expRequire);
             exp = 0;
-
             foreach (var pair in  dictPlayers)
             {
                 Player player = pair.Value;
@@ -81,6 +135,7 @@ public class PlayerManager
                 player.levelUpEffect = GameObject.Instantiate(player.playerConfig.levelUpEffect, player.playerTrans.position, Quaternion.identity);
             }
         }
+            
     }
 
     public void FreshStart()
@@ -108,8 +163,8 @@ public class PlayerManager
     {
         Player player = dictPlayers[playerId];
         GunType gunType = AllManager.Instance().gunConfig.lsGunType[player.gunId];
-
-        return gunType.baseDamage + (level - 1) * gunType.bulletMultiplier;
+        float boostMultiplier = player.dmgBoostTime > 0 ? player.dmgBoostAmount : 1f;
+        return (int)(gunType.baseDamage + (level - 1) * boostMultiplier * gunType.bulletMultiplier);
     }
 
     public void SpawnPlayer(Vector3 position, string id, int gun_id)
@@ -118,6 +173,7 @@ public class PlayerManager
         player.playerTrans = GameObject.Instantiate(characterPrefab, position, Quaternion.identity).transform;
         player.playerTrans.gameObject.GetComponent<CharacterControl>().id = id;
         player.playerTrans.gameObject.GetComponent<CharacterControl>().gunId = gun_id;
+        player.playerTrans.gameObject.GetComponent<CharacterControl>().speed = player.speed;
         //Debug.Log("Player: " + player.name + " gun: " + gun_id);
         player.playerTrans.gameObject.GetComponent<CharacterControl>().SetGunAndBullet();
         if (id == Player_ID.MyPlayerID)
@@ -203,5 +259,15 @@ public class PlayerManager
         BulletInfo bullet = AllManager.Instance().bulletManager.bulletInfoDict[bulletId];
         dictPlayers[playerId].ProcessDmg(bullet.damage);
         AllManager.Instance().bulletManager.SetDelete(bulletId);
+    }
+
+    public void ProcessLifeSteal()
+    {
+        int lifeSteal = Random.Range(0, 100);
+        if (lifeSteal <= AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].lifeSteal)
+        {
+            Debug.Log("Hut dc 1 mau nha may em yeu");
+            AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health++;
+        }
     }
 }

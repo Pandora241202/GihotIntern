@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 961223bb16ba24549b2674030298bfac, type: 3}
-  m_Name: HealthPackConfig
+  m_Script: {fileID: 11500000, guid: 3d6bbf0e922d8e749b840747aaa094b2, type: 3}
+  m_Name: SpeedBoost
   m_EditorClassIdentifier: 
-  powerUpPrefab: {fileID: 3381290432503541099, guid: 8f51ef6210c64a145a8d2b6057ecc138, type: 3}
+  powerUpPrefab: {fileID: 3087900745603537365, guid: 2148fff0bcf96d94889d7291a550c6a1, type: 3}
   dropNumber: 1
   timeToLive: 15
-  duration: 0
-  boostAmount: 0.2
+  duration: 15
+  boostAmount: 0.5
   isStackable: 0

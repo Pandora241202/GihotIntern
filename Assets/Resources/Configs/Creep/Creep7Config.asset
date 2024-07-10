@@ -17,7 +17,11 @@ MonoBehaviour:
   baseSpeed: 1
   baseDmg: 0
   exp: 30
-  dropItemTypes: 04000000
+  dropItemConfigs:
+  - powerUpType: 0
+    dropChance: 0
+  - powerUpType: 2
+    dropChance: 1
   startMoveAwayDistance: 5
   healing: {fileID: 9017484664307500583, guid: 016eb712ee010394aa2dd710d9003fc6, type: 3}
   skillCD: 10

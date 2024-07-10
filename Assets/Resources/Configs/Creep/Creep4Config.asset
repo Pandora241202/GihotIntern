@@ -17,6 +17,10 @@ MonoBehaviour:
   baseSpeed: 4
   baseDmg: 5
   exp: 30
-  dropItemTypes: 04000000
+  dropItemConfigs:
+  - powerUpType: 0
+    dropChance: 0
+  - powerUpType: 2
+    dropChance: 1
   startIncreaseSpeedDis: 5
   speedMultiplayer: 1.5

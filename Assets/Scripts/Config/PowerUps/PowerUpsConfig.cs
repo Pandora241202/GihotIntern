@@ -10,8 +10,7 @@ public class PowerUpsConfig : ScriptableObject
     public float duration;
     public float boostAmount;
     public bool isStackable;
-    public float dropChance;
-    public virtual void Activate(int playerId)
+    public virtual void Activate()
     {
 
     }

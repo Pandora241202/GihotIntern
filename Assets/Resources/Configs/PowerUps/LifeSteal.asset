@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 961223bb16ba24549b2674030298bfac, type: 3}
-  m_Name: HealthPackConfig
+  m_Script: {fileID: 11500000, guid: e4018fd6bf07f484caa3ae46af2bfb72, type: 3}
+  m_Name: LifeSteal
   m_EditorClassIdentifier: 
-  powerUpPrefab: {fileID: 3381290432503541099, guid: 8f51ef6210c64a145a8d2b6057ecc138, type: 3}
+  powerUpPrefab: {fileID: 0}
   dropNumber: 1
   timeToLive: 15
-  duration: 0
-  boostAmount: 0.2
+  duration: -1
+  boostAmount: 0.02
   isStackable: 0
