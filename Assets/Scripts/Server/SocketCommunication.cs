@@ -239,6 +239,12 @@ public class SocketCommunication
                     //do render time left until resume
                     Debug.Log(time.time);
                     break;
+
+                case "revive":
+                    ReviveEvent revive = JsonUtility.FromJson<ReviveEvent>(response);
+                    AllManager.Instance().playerManager.OnRevive(revive.revive_player_id);
+                    break;
+
                 case "game end":
                     AllManager.Instance().StartCoroutine(Wait());
                     

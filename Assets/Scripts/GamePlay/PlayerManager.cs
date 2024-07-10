@@ -102,7 +102,6 @@ public class Player
             health = 0;
             //died
             isDead = true;
-            playerTrans.gameObject.GetComponent<CharacterControl>().goCircleRes.SetActive(true);
         }
         UIManager._instance.uiGameplay.UpdateHealthSlider(health);
     }
@@ -259,7 +258,7 @@ public class PlayerManager
             if (state.isFire) c_Controller.Shoot();
             if (state.isDead)
             {
-                c_Controller.charAnim.SetBool("isDead",true);
+                if (!c_Controller.goCircleRes.activeSelf) OnDead(player.id);
             }
             //player.playerTrans.position = state.position;
         }
@@ -283,9 +282,25 @@ public class PlayerManager
 
     public void OnRevive(string id)
     {
-        dictPlayers[id].playerTrans.gameObject.GetComponent<CharacterControl>().goCircleRes.SetActive(false);
-        
+        Player player = dictPlayers[id];
+        player.isDead = false;
+        CharacterControl c_Controller = dictPlayers[id].playerTrans.gameObject.GetComponent<CharacterControl>();
+        c_Controller.goCircleRes.SetActive(false);
+        c_Controller.charAnim.SetBool("isDead", false);
+        if (id == Player_ID.MyPlayerID)
+        {
+            player.health = (int)(GetMaxHealthFromLevel() * 0.3f);
+            UIManager._instance.uiGameplay.UpdateHealthSlider(player.health);
+        } 
     }
+
+    public void OnDead(string id)
+    {
+        CharacterControl c_Controller = dictPlayers[id].playerTrans.gameObject.GetComponent<CharacterControl>();
+        c_Controller.goCircleRes.SetActive(true);
+        c_Controller.charAnim.SetBool("isDead", true);
+    }
+
     public void ProcessLifeSteal()
     {
         int lifeSteal = Random.Range(0, 100);

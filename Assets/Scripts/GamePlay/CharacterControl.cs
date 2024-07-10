@@ -194,7 +194,7 @@ public class CharacterControl : MonoBehaviour
 
         if (id != Player_ID.MyPlayerID) return;
         
-        if (frame % 3 == 0)
+        if (frame % 3 == 0 && !charAnim.GetBool("isDead"))
         {
             float horizontal = joystick.Horizontal;
             float vertical = joystick.Vertical;
@@ -295,7 +295,10 @@ public class CharacterControl : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Respawn"))
         {
-            timeRevive = 1f;
+            //timeRevive = 1f;
+            string player_id = other.gameObject.GetComponentInParent<CharacterControl>().id;
+            SendData<ReviveEvent> data =  new SendData<ReviveEvent>(new ReviveEvent(player_id));
+            SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
         }
         if (other.gameObject.CompareTag("Creep"))
         {
@@ -329,10 +332,10 @@ public class CharacterControl : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.CompareTag("Respawn"))
-        {
-            isRevive = true;
-        }
+        //if (other.gameObject.CompareTag("Respawn"))
+        //{
+        //    isRevive = true;
+        //}
         if (other.gameObject.CompareTag("MapElement"))
         {
             int id = other.gameObject.GetInstanceID();
@@ -347,10 +350,10 @@ public class CharacterControl : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Respawn"))
-        {
-            isRevive = false;
-        }
+        //if (other.gameObject.CompareTag("Respawn"))
+        //{
+        //    isRevive = false;
+        //}
         if (other.gameObject.CompareTag("MapElement"))
         {
             if (collision_plane_normal_dict.ContainsKey(other.gameObject.GetInstanceID()))
