@@ -66,6 +66,23 @@ public class CharacterControl : MonoBehaviour
     {
         //Debug.Log("collide with: " + collision_plane_normal_dict.Count + " obj");
         //characterController.Move(velocity); 
+        
+        GameObject levelUpEffect = AllManager.Instance().playerManager.dictPlayers[id].levelUpEffect;
+
+        if (levelUpEffect != null)
+        {
+            levelUpEffect.transform.position = transform.position;
+
+            ParticleSystem ps = levelUpEffect.GetComponent<ParticleSystem>();
+            if (ps)
+            { 
+                if (ps.isStopped)
+                {
+                    Destroy(levelUpEffect);
+                    AllManager.Instance().playerManager.dictPlayers[id].levelUpEffect = null;
+                }
+            }
+        }
     }
 
     public void Lerp()

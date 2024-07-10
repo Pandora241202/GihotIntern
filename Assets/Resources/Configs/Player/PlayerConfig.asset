@@ -12,22 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c207f6a13d2f0dd4c959dcca6ed86780, type: 3}
   m_Name: PlayerConfig
   m_EditorClassIdentifier: 
-  LsClassStats:
-  - skillType: 0
-    level: 1
-    health: 10
-    speed: 5
-    expBaseCost: 10
-    skillName: Shield
-  - skillType: 0
-    level: 1
-    health: 10
-    speed: 5
-    expBaseCost: 10
-    skillName: Crazy
-  - skillType: 0
-    level: 1
-    health: 10
-    speed: 5
-    expBaseCost: 10
-    skillName: Heal
+  skillType: 0
+  speed: 0
+  levelUpEffect: {fileID: 7155335147208632822, guid: ecca538a7e0c62a4f844d11614b9a870, type: 3}

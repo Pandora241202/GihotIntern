@@ -8,6 +8,8 @@ public class PlayerConfig : ScriptableObject
     public SkillType skillType;
 
     public float speed;
+
+    public GameObject levelUpEffect;
 }
 public enum SkillType
 {

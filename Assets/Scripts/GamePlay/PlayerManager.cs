@@ -11,6 +11,7 @@ public class Player
     public int gunId;
     public GunConfig gunConfig;
     public PlayerConfig playerConfig;
+    public GameObject levelUpEffect;
     //Player stat 
 
     public int health;
@@ -25,6 +26,7 @@ public class Player
         this.health = Constants.PlayerBaseMaxHealth;
         this.speed = Constants.PlayerBaseSpeed;
         isDead = false;
+        levelUpEffect = null;
     }
 
     public void ProcessDmg(int dmg)
@@ -64,6 +66,13 @@ public class PlayerManager
             level++;
             UIManager._instance.uiGameplay.LevelUpdateSlider(expRequire);
             exp = 0;
+
+            foreach (var pair in  dictPlayers)
+            {
+                Player player = pair.Value;
+
+                player.levelUpEffect = GameObject.Instantiate(player.playerConfig.levelUpEffect, player.playerTrans.position, Quaternion.identity);
+            }
         }
     }
 

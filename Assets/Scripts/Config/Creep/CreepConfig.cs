@@ -15,7 +15,7 @@ public class CreepConfig : ScriptableObject
 
     [SerializeField] int exp;
 
-    [SerializeField]  AllDropItemConfig.PowerUpsType[] dropItemTypes;
+    [SerializeField] AllDropItemConfig.PowerUpsType[] dropItemTypes;
 
     public GameObject CreepPrefab => creepPrefab;
 

@@ -9,13 +9,20 @@ public class Creep
     public Transform creepTrans;
     public CreepConfig config;
     public CreepManager.CreepType type;
+    public int sharedId;
+
     public int hp;
     public float speed;
     public int dmg;
+
+    public int maxHp;
+    public int resetDmg;
+    public float resetSpeed;
+
     public float timer;
     public GameObject weaponObj;
     public Animator animator;
-    public int sharedId;
+ 
     public Dictionary<int, Vector3> collision_plane_normal_dict = new Dictionary<int, Vector3>();
 
     public Creep(Transform creepTrans, CreepManager.CreepType type, CreepConfig config, int sharedId)
@@ -34,6 +41,11 @@ public class Creep
         hp = config.BaseHp + (int)(time / 60) * 5;
         dmg = config.BaseDmg + (int)(time / 60) * 2;
         speed = config.BaseSpeed;
+
+        maxHp = config.BaseHp + (int)(time / 60) * 5;
+        resetDmg = config.BaseDmg + (int)(time / 60) * 2;
+        resetSpeed = config.BaseSpeed;
+
         creepTrans.position = pos;
         creepTrans.gameObject.SetActive(true);
   
@@ -121,6 +133,20 @@ public class CreepManager
                 SpawnCreep(type);
             }
         }
+    }
+
+    public Creep GetRandomHurtCreep()
+    {
+        foreach (var pair in creepActiveDict)
+        {
+            Creep creep = pair.Value;
+            if (creep.hp < creep.maxHp)
+            {
+                return creep;
+            }
+        }
+
+        return null;
     }
 
     public CreepConfig GetCreepConfigByType(CreepType type)
