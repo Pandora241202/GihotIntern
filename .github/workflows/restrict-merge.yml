@@ -1,0 +1,17 @@
+name: Restrict Merge to Main
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-source-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if the source branch is valid
+        run: |
+          if [[ "${{ github.head_ref }}" != release/* && "${{ github.head_ref }}" != hotfix/* ]]; then
+            echo "Pull request to main must come from 'release/*' or 'hotfix/*' branch."
+            exit 1
+          fi
