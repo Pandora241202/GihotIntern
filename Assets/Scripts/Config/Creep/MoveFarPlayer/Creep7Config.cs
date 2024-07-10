@@ -13,7 +13,7 @@ public class Creep7Config : MoveFarPlayerCreepConfig
     {
         if (creep.weaponObj != null)
         {
-            creep.UnSet();
+            creep.UnSet()
         }
         else
         {
