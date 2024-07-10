@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Creep6Config", menuName = "Config/CreepConfig/MoveTowardPlayer/Creep6")]
@@ -48,7 +49,7 @@ public class Creep6Config : MoveTowardPlayerCreepConfig
                         Player player = pair.Value;
                         if (Vector3.Magnitude(player.playerTrans.position - ps.transform.position) <= 3)
                         {
-                            player.ProcessDmg(creep.dmg);
+                            if(player.id == Player_ID.MyPlayerID) player.ProcessDmg(creep.dmg);
                         }
                     }
                 }

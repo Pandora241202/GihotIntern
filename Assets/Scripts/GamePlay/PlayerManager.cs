@@ -41,7 +41,7 @@ public class Player
     public void Onstart()
     {
         this.health = Constants.PlayerBaseMaxHealth;
-        this.lifesteal = Constants.LifeSteal;
+        this.lifeSteal = Constants.LifeSteal;
         this.speed = Constants.PlayerBaseSpeed;
     }
     public void SetDamageBoost(float boostAmount)
@@ -255,7 +255,7 @@ public class PlayerManager
 
     public void ProcessCollisionEnemyBullet(string playerId, int bulletId)
     {
-        if(playerId!=Player_ID.MyPlayerID)return;
+        if(playerId!=Player_ID.MyPlayerID) return;
         BulletInfo bullet = AllManager.Instance().bulletManager.bulletInfoDict[bulletId];
         dictPlayers[playerId].ProcessDmg(bullet.damage);
         AllManager.Instance().bulletManager.SetDelete(bulletId);

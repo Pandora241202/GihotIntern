@@ -36,7 +36,7 @@ public class Creep5Config : MoveTowardPlayerCreepConfig
                         Player player = pair.Value;
                         if (Vector3.Magnitude(player.playerTrans.position - ps.transform.position) <= 3)
                         {
-                            player.ProcessDmg(creep.dmg);
+                           if(player.id == Player_ID.MyPlayerID) player.ProcessDmg(creep.dmg);
                         }
                     }
                 }
