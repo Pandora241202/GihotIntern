@@ -246,6 +246,7 @@ public class SocketCommunication
 
             }
 
+            // Debug.Log(response);
             //remove processed data from buffer
             buffer.RemoveRange(0, 4 + dataLength);
             //Debug.Log(response);
