@@ -40,6 +40,7 @@ public class Player
 
     public void Onstart()
     {
+        this.isDead = false;
         this.health = Constants.PlayerBaseMaxHealth;
         this.lifeSteal = Constants.LifeSteal;
         this.speed = Constants.PlayerBaseSpeed;
