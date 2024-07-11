@@ -2767,6 +2767,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIGamePlay
       objectReference: {fileID: 0}
+    - target: {fileID: 6311902162173297046, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
+      propertyPath: snapX
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6311902162173297046, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
+      propertyPath: snapY
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
 --- !u!1001 &1359267924679042153

@@ -31,6 +31,10 @@ public class CharacterControl : MonoBehaviour
     public Vector3 lerpPosition = Vector3.zero;
 
     private bool isInvincible = false;
+    public GameObject goCircleRes;
+    public float timeRevive;
+
+    public bool isRevive = false;
     //public bool isFire = false;
     //public static CharacterControl _instance { get; private set; }
     //public static CharacterControl Instance()
@@ -52,6 +56,8 @@ public class CharacterControl : MonoBehaviour
     {
         //joystick = UIManager._instance._joystick;
         joystick = UIManager._instance._fjoystick;
+        isRevive = false;
+        timeRevive = 1f;
     }
     public void SetGunAndBullet()
     {
@@ -66,7 +72,14 @@ public class CharacterControl : MonoBehaviour
     {
         //Debug.Log("collide with: " + collision_plane_normal_dict.Count + " obj");
         //characterController.Move(velocity); 
-        
+        if (isRevive)
+        {
+            timeRevive -= Time.deltaTime;
+            if (timeRevive <= 0)
+            {
+                Debug.Log("Revived");
+            }
+        }
         GameObject levelUpEffect = AllManager.Instance().playerManager.dictPlayers[id].levelUpEffect;
 
         if (levelUpEffect != null)
@@ -151,15 +164,15 @@ public class CharacterControl : MonoBehaviour
             final_velocity = (normal + final_velocity.normalized).normalized * speed;
         }
 
-        if (correctPositionTime < Time.fixedDeltaTime * 5)
+        if (correctPositionTime < Time.fixedDeltaTime * 10)
         {
             transform.position += final_velocity * Time.fixedDeltaTime;
-
+            correctPositionTime += Time.fixedDeltaTime;
         }
 
 
 
-        correctPositionTime += Time.fixedDeltaTime;
+        
 
 
 
@@ -181,7 +194,7 @@ public class CharacterControl : MonoBehaviour
 
         if (id != Player_ID.MyPlayerID) return;
         
-        if (frame % 3 == 0)
+        if (frame % 3 == 0 && !charAnim.GetBool("isDead"))
         {
             float horizontal = joystick.Horizontal;
             float vertical = joystick.Vertical;
@@ -280,7 +293,13 @@ public class CharacterControl : MonoBehaviour
     Dictionary<int, Vector3> collision_plane_normal_dict = new Dictionary<int, Vector3>();
     private void OnTriggerEnter(Collider other)
     {
-        
+        if (other.gameObject.CompareTag("Respawn"))
+        {
+            //timeRevive = 1f;
+            string player_id = other.gameObject.GetComponentInParent<CharacterControl>().id;
+            SendData<ReviveEvent> data =  new SendData<ReviveEvent>(new ReviveEvent(player_id));
+            SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
+        }
         if (other.gameObject.CompareTag("Creep"))
         {
             if (isInvincible)
@@ -313,6 +332,10 @@ public class CharacterControl : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        //if (other.gameObject.CompareTag("Respawn"))
+        //{
+        //    isRevive = true;
+        //}
         if (other.gameObject.CompareTag("MapElement"))
         {
             int id = other.gameObject.GetInstanceID();
@@ -327,6 +350,10 @@ public class CharacterControl : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
+        //if (other.gameObject.CompareTag("Respawn"))
+        //{
+        //    isRevive = false;
+        //}
         if (other.gameObject.CompareTag("MapElement"))
         {
             if (collision_plane_normal_dict.ContainsKey(other.gameObject.GetInstanceID()))

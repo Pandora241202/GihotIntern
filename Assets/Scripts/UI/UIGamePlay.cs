@@ -43,5 +43,6 @@ public class UIGamePlay : MonoBehaviour
         txtLevel.text = AllManager._instance.playerManager.level.ToString();
         sliderLevel.value = 0;
         sliderHealth.maxValue = AllManager._instance.playerManager.GetMaxHealthFromLevel();
+        sliderHealth.value = sliderHealth.maxValue;
     }
 }
