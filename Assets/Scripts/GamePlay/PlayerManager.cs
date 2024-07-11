@@ -67,7 +67,7 @@ public class Player
         foreach (var powerUp in activePowerUps.Keys.ToList())
         {
             activePowerUps[powerUp] -= Time.deltaTime;
-            Debug.Log($"Power-up: {powerUp} has {activePowerUps[powerUp]}s left");
+            // Debug.Log($"Power-up: {powerUp} has {activePowerUps[powerUp]}s left");
             if (activePowerUps[powerUp] <= 0)
             {
                 expiredPowerUps.Add(powerUp);
@@ -113,9 +113,11 @@ public class PlayerManager
 {
     public Dictionary<string, Player> dictPlayers = new Dictionary<string, Player>();
     GameObject characterPrefab;
-    public PlayerManager(GameObject characterPrefab)
+    public AllLevelUpConfig allLevelUpConfig;
+    public PlayerManager(GameObject characterPrefab, AllLevelUpConfig levelUpConfig)
     {
         this.characterPrefab = characterPrefab;
+        this.allLevelUpConfig = levelUpConfig;
     }
     public int exp = 0;
     public int level = Constants.PlayerBaseLevel;
@@ -154,6 +156,10 @@ public class PlayerManager
                 Player player = pair.Value;
                 player.health = GetMaxHealthFromLevel();
                 player.levelUpEffect = GameObject.Instantiate(player.playerConfig.levelUpEffect, player.playerTrans.position, Quaternion.identity);
+
+                LevelUpConfig levelUpConfig = allLevelUpConfig.allLevelUpConfigList[Mathf.Min(level - 1, allLevelUpConfig.allLevelUpConfigList.Count - 1)];
+                levelUpConfig.ApplyChoice();
+                ApplyLevelUpConfig(levelUpConfig);
             }
         }
             
@@ -314,6 +320,15 @@ public class PlayerManager
         {
             Debug.Log("Hut dc 1 mau nha may em yeu");
             AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health++;
+        }
+    }
+    public void ApplyLevelUpConfig(LevelUpConfig levelUpConfig)
+    {
+        foreach (var player in dictPlayers.Values)
+        {
+            player.health += levelUpConfig.healthIncrease;
+            player.SetSpeedBoost(levelUpConfig.speedIncrease);
+            player.SetDamageBoost(levelUpConfig.damageIncrease);
         }
     }
 }
