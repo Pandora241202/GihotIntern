@@ -263,3 +263,16 @@ public class ReviveEvent
         this.revive_player_id = id;
     }
 }
+
+[Serializable]
+public class GameEnd
+{
+    public Score[] result;
+}
+
+[Serializable]
+public class Score
+{
+    public string player_id;
+    public int enemy_kill;
+}
