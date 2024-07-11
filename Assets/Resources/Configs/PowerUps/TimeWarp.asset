@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a189aab2c26bd740ab321370bda0ad8, type: 3}
-  m_Name: Invincibility
+  m_Script: {fileID: 11500000, guid: 2d64f27304034624c9a4d322b53938ba, type: 3}
+  m_Name: TimeWarp
   m_EditorClassIdentifier: 
-  powerUpPrefab: {fileID: 3387109298835000276, guid: 66ed259dd92ed70499e10332c2f3e1fb, type: 3}
+  powerUpPrefab: {fileID: 1946281214106292739, guid: ef21ff753d57dc54fbbe3fbc228cc563, type: 3}
   dropNumber: 1
   timeToLive: 15
-  duration: 3
-  boostAmount: 0
+  duration: 15
+  boostAmount: -0.5
   isStackable: 0

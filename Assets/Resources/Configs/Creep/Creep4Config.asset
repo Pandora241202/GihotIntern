@@ -15,12 +15,12 @@ MonoBehaviour:
   creepPrefab: {fileID: 1691303173787263157, guid: 8019d2ba9e4c646448045f6cd31b339c, type: 3}
   baseHp: 120
   baseSpeed: 4
-  baseDmg: 5
+  baseDmg: 0
   exp: 30
   dropItemConfigs:
   - powerUpType: 0
     dropChance: 0
-  - powerUpType: 0
+  - powerUpType: 12
     dropChance: 1
   startIncreaseSpeedDis: 5
   speedMultiplayer: 1.5

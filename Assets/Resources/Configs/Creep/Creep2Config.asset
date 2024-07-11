@@ -15,12 +15,12 @@ MonoBehaviour:
   creepPrefab: {fileID: 774386170910885780, guid: 88dcf90e6c352b049ae64a3d2c0aae10, type: 3}
   baseHp: 20
   baseSpeed: 0
-  baseDmg: 3
+  baseDmg: 0
   exp: 15
   dropItemConfigs:
   - powerUpType: 0
     dropChance: 0
-  - powerUpType: 0
+  - powerUpType: 12
     dropChance: 1
   bulletConfig: {fileID: 11400000, guid: 6a1dae1fb069c1945bd6abbed9c0dea7, type: 2}
   fireRate: 5

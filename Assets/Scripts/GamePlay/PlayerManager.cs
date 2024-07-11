@@ -19,9 +19,7 @@ public class Player
     public float lifeSteal;
     public float speed;
     public bool isDead;
-    public float dmgBoostTime = 0;
     public float dmgBoostAmount;
-    public float speedBoostTime = 0;
     public float speedBoostAmount;
 
     private Dictionary<string, float> activePowerUps;
@@ -121,28 +119,11 @@ public class PlayerManager
     public int level = Constants.PlayerBaseLevel;
     public int expRequire = Constants.PlayerBaseExp;
     public float expBoostTime = 0;
-    public float expBoostAmount = 1.5f;
+    public float expBoostAmount; // Since all player share a single EXP bar, we use the variable here instead of in each player's class
     public void MyUpdate()
     {
         foreach (var player in dictPlayers.Values)
         {
-            if (player.dmgBoostTime > 0)
-            {
-                player.dmgBoostTime -= Time.deltaTime;
-                if (player.dmgBoostTime < 0)
-                {
-                    player.dmgBoostTime = 0;
-                }
-            }
-            if (player.speedBoostTime > 0)
-            {
-                player.speedBoostTime -= Time.deltaTime;
-                if (player.speedBoostTime < 0)
-                {
-                    player.speedBoostTime = 0;
-                    player.speed = Constants.PlayerBaseSpeed;
-                }
-            }
             if (expBoostTime > 0){
                 expBoostTime -= Time.deltaTime;
                 if (expBoostTime < 0)
@@ -201,7 +182,7 @@ public class PlayerManager
     {
         Player player = dictPlayers[playerId];
         GunType gunType = AllManager.Instance().gunConfig.lsGunType[player.gunId];
-        float boostMultiplier = player.dmgBoostTime > 0 ? player.dmgBoostAmount : 1f;
+        float boostMultiplier = player.dmgBoostAmount;
         return (int)(gunType.baseDamage + (level - 1) * boostMultiplier * gunType.bulletMultiplier);
     }
 

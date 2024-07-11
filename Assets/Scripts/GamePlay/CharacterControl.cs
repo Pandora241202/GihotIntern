@@ -269,7 +269,7 @@ public class CharacterControl : MonoBehaviour
     public void EnableInvincibility(float duration)
     {
         StartCoroutine(InvincibilityRoutine(duration));
-        Debug.Log("despair");
+        Debug.Log("Cant touch me");
     }
     private IEnumerator InvincibilityRoutine(float duration)
     {
