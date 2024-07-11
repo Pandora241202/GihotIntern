@@ -259,11 +259,12 @@ public class SocketCommunication
                 case "game end":
                     //AllManager.Instance().StartCoroutine(Wait());
                     GameEnd end = JsonUtility.FromJson<GameEnd>(response);
+                    
                     foreach(var sc in end.result)
                     {
                         Debug.Log($"Player id: {sc.player_id}, score: {sc.enemy_kill}");
                     }
-                    Debug.Break();
+                    UIManager._instance.uiDefeat.OnSetUp(end);
                     //call function to show result
                     break;
 
