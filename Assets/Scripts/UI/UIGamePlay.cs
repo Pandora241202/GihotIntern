@@ -32,8 +32,11 @@ public class UIGamePlay : MonoBehaviour
         sliderHealth.value = currentHealth;
     }
 
-    public void UpdatePingText(int ping)
+    public void UpdatePingText(long ping)
     {
+        if (ping < 50) txtPing.color = Color.green;
+        else if (ping < 80) txtPing.color = Color.yellow;
+        else txtPing.color = Color.red;
         txtPing.text = ping.ToString() + "ms";
     }
 

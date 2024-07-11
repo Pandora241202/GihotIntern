@@ -116,8 +116,10 @@ public class AllManager : MonoBehaviour
         SocketCommunication.GetInstance().Close();
     }
     
-    public void GameEnd()
+    public IEnumerator GameEnd()
     {
+        isPause = true;
+        yield return new WaitForEndOfFrame();
         foreach(var player in playerManager.dictPlayers)
         {
             GameObject.Destroy(player.Value.playerTrans.gameObject);
