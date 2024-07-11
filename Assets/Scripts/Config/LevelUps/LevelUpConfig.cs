@@ -36,10 +36,9 @@ public class LevelUpConfig : ScriptableObject
                 finalOptions.Add(option);
             }
         }
-        Debug.Log("final options are: " + string.Join(", ", finalOptions.ToArray()));
     }
 
-    public virtual void ApplyDefault()
+    public virtual void ApplyDefault(string buff = "")
     {
         foreach (string option in finalOptions)
         {
@@ -63,6 +62,7 @@ public class LevelUpConfig : ScriptableObject
                     critDamageIncrease += getCritDamageIncrements()[Random.Range(0, getCritDamageIncrements().Length)];
                     break;
                 default:
+                    Debug.Log("No buff applied");
                     break;
             }
         }
@@ -71,10 +71,20 @@ public class LevelUpConfig : ScriptableObject
     {
         Debug.Log("Applying additional options");
     }
+    //TODO: implement this for each level up UI (player choose) @Quoc
+    public virtual string FinalChoice()
+    {
+        Debug.Log("final options list are: " + string.Join(", ", finalOptions.ToArray()));
+        string chosenOption = finalOptions[Random.Range(0, finalOptions.Count)];
+        Debug.Log("Chosen option: " + chosenOption);
+        return chosenOption;
+    }
     public virtual void ApplyChoice()
     {
         RandomLevelUpChoice();
-        ApplyDefault();
-        ApplyAdditional();
+        var chosen = FinalChoice();
+        ApplyDefault(chosen);
+        ApplyAdditional(chosen);
     }
+
 }

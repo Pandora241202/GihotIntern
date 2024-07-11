@@ -327,7 +327,7 @@ public class PlayerManager
         foreach (var player in dictPlayers.Values)
         {
             player.health += levelUpConfig.healthIncrease;
-            player.SetSpeedBoost(levelUpConfig.speedIncrease);
+            // player.SetSpeedBoost(levelUpConfig.speedIncrease);
             player.SetDamageBoost(levelUpConfig.damageIncrease);
         }
     }
