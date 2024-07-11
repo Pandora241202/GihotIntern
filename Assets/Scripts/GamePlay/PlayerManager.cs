@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using Unity.VisualScripting;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Player
 {
@@ -150,7 +151,7 @@ public class PlayerManager
             foreach (var pair in  dictPlayers)
             {
                 Player player = pair.Value;
-
+                player.health = GetMaxHealthFromLevel();
                 player.levelUpEffect = GameObject.Instantiate(player.playerConfig.levelUpEffect, player.playerTrans.position, Quaternion.identity);
             }
         }
@@ -166,6 +167,10 @@ public class PlayerManager
         {
             item.Value.Onstart();
         }
+
+        UIManager._instance._fjoystick.input = Vector2.zero;
+        UIManager._instance._fjoystick.background.gameObject.SetActive(false);
+
 
     }
     public int GetMaxHealthFromLevel()
