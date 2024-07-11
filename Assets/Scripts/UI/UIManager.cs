@@ -54,4 +54,10 @@ public class UIManager : MonoBehaviour
     {
         this.gameObject.SetActive(false);
     }
+
+    public void OnLogin()
+    {
+        uiLogin.gameObject.SetActive(false);
+        uiMainMenu.gameObject.SetActive(true);
+    }
 }

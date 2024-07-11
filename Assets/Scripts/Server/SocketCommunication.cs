@@ -17,7 +17,7 @@ public class SocketCommunication
         return instance;
     }
     Socket socket;
-    public string address = "192.168.6.180";
+    public string address = "127.0.0.1";
     public int port = 9999;
     Thread receiveData;
     public string player_id;
@@ -78,7 +78,7 @@ public class SocketCommunication
             byte[] lengthField = buffer.Take(4).ToArray();
             int dataLength = BitConverter.ToInt32(lengthField, 0);
 
-            while (buffer.Count < dataLength + 4)
+            while (buffer.Count < dataLength + 5)
             {
                 yield return null;
                 continue;
@@ -87,6 +87,16 @@ public class SocketCommunication
 ;                //data
             byte[] dataField = buffer.Skip(4).Take(dataLength).ToArray();
             string response = Encoding.UTF8.GetString(dataField);
+
+            byte sum = buffer[dataLength + 4];
+            buffer.RemoveRange(0, 4 + dataLength + 1);
+           
+            if (!CheckSum(dataField, sum))
+            {
+                continue;
+            }
+            
+
             //Debug.Log(response);
             //Debug.Log(response);
             EventName _event = JsonUtility.FromJson<EventName>(response);
@@ -103,6 +113,7 @@ public class SocketCommunication
                     Player_ID.MyPlayerID = data.id;
 
                     AllManager.Instance().playerManager.AddPlayer(data.player_name, data.id, data.gunId, AllManager.Instance().playerConfig);
+                    UIManager._instance.OnLogin();
                     break;
                 case "rooms":
                     //get available rooms
@@ -254,11 +265,21 @@ public class SocketCommunication
 
             // Debug.Log(response);
             //remove processed data from buffer
-            buffer.RemoveRange(0, 4 + dataLength);
             //Debug.Log(response);
             yield return null;
         }
     }
+
+    private bool CheckSum(byte[] buffer, byte sum)
+    {
+        int check = 0;
+        foreach(byte b in buffer)
+        {
+            check = (check + b) % 256;
+        }
+        return (byte)check == sum;
+    }
+
     public IEnumerator Wait()
     {
         AllManager.Instance().isPause = true;
@@ -273,16 +294,33 @@ public class SocketCommunication
     //    await udpClient.SendAsync(messageBytes, messageBytes.Length, address, port);
     //}
 
+    private byte CalSum(byte[] bytes)
+    {
+        int sum = 0;
+        foreach(byte b in bytes)
+        {
+            sum = (sum + b) % 256;
+        }
+
+        return (byte)sum;
+    }
+
     public async void Send(string msg)
     {
         var messageBytes = Encoding.UTF8.GetBytes(msg);
         var messageLength = messageBytes.Length;
+
         byte[] lengthField = new byte[4];
         Buffer.BlockCopy(BitConverter.GetBytes(messageLength), 0, lengthField, 0, 4);
         Array.Reverse(lengthField);
-        byte[] sendData = new byte[4 + messageBytes.Length];
+
+        byte sum = CalSum(messageBytes);
+
+        byte[] sendData = new byte[4 + messageBytes.Length + 1];
         Buffer.BlockCopy(lengthField, 0, sendData, 0, 4);
-        Buffer.BlockCopy(messageBytes, 0, sendData, 4, messageBytes.Length);
+        Buffer.BlockCopy(messageBytes, 0, sendData, 4, messageLength);
+        sendData[4 + messageLength] = sum;
+
         await socket.SendAsync(sendData, SocketFlags.None);
     }
 
