@@ -9,12 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4018fd6bf07f484caa3ae46af2bfb72, type: 3}
-  m_Name: LifeSteal
+  m_Script: {fileID: 11500000, guid: 7130e18aee2f82740b766bad6b07578d, type: 3}
+  m_Name: LevelUpConfig
   m_EditorClassIdentifier: 
-  powerUpPrefab: {fileID: 6808692802758872443, guid: b619557233782074988e1be12ae065b1, type: 3}
-  dropNumber: 1
-  timeToLive: 15
-  duration: 2.1474836e+9
-  boostAmount: 100
-  isStackable: 0
+  allLevelUpConfigList:
+  - {fileID: 11400000, guid: 9169f2382241a9248966f56ecac743d1, type: 2}
