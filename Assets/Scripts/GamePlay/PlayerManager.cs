@@ -45,6 +45,7 @@ public class Player
         this.lifeSteal = Constants.LifeSteal;
         this.speed = Constants.PlayerBaseSpeed;
         activePowerUps.Clear();
+        isDead = false;
     }
     public void AddPowerUp(string powerUpName, float duration)
     {
