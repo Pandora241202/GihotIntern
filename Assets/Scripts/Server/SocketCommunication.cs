@@ -269,11 +269,7 @@ public class SocketCommunication
 
             }
 
-            if (buffer.Count > 4) continue; // By Tung
-
-            // Debug.Log(response);
-            //remove processed data from buffer
-            //Debug.Log(response);
+            if (buffer.Count > 4) continue;
             yield return null;
         }
     }
