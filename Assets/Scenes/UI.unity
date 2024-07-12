@@ -3615,6 +3615,7 @@ MonoBehaviour:
   allDropItemConfig: {fileID: 11400000, guid: 20a183ad6a998ab43965f56d4f7107a5, type: 2}
   playerConfig: {fileID: 11400000, guid: 2aa4ff2f49b57754b89c8a1520ebe077, type: 2}
   characterPrefab: {fileID: 7902174039242817089, guid: eb315ad2f4977474fa487a3025c7bd73, type: 3}
+  AllLevelUpConfig: {fileID: 11400000, guid: 27ab9b7d9dcf32a4cad9cb088a7458ae, type: 2}
   sceneUpdater: {fileID: 0}
   isPause: 0
   isHost: 0
