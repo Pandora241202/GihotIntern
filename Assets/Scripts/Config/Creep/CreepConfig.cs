@@ -98,15 +98,16 @@ public class CreepConfig : ScriptableObject
     }
     private AllDropItemConfig.PowerUpsType? DetermineDrop()
     {
-        float totalDropChance = dropItemConfigs.Sum(config => config.dropChance);
+        float totalDropChance = 1;
         float roll = Random.Range(0, totalDropChance);
         float cumulative = 0f;
-
+        Debug.Log("Roll: " + roll);
         foreach (var config in dropItemConfigs)
         {
             cumulative += config.dropChance;
             if (roll < cumulative)
             {
+                Debug.Log("Dropped: " + config.powerUpType);
                 return config.powerUpType;
             }
         }
