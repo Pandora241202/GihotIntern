@@ -218,9 +218,10 @@ public class SocketCommunication
                     UIManager._instance._fjoystick.gameObject.SetActive(true);
                     break;
 
-                case "update players state":
-                    PlayersState playersState = JsonUtility.FromJson<PlayersState>(response);
-                    AllManager.Instance().playerManager.UpdatePlayersState(playersState);
+                case "update game state":
+                    GameState gameState = JsonUtility.FromJson<GameState>(response);
+                    //Debug.Log(response);
+                    AllManager.Instance().UpdateGameState(gameState);
                     break;
 
                 case "player out":
@@ -233,28 +234,10 @@ public class SocketCommunication
                     AllManager.Instance().creepManager.SendCreepToDeadBySharedId(creepDestroyInfo.creep_id);
                     break;
 
-                case "pause":
-                    //pause
-                    AllManager.Instance().isPause = true;
-                    UIManager._instance.PauseGame();
-                    break;
-
-                case "resume":
-                    //resume the game
-                    AllManager.Instance().isPause = false;
-                    UIManager._instance.ResumeGame();
-                    break;
-
-                case "time to resume":
-                    TimeToResume time = JsonUtility.FromJson<TimeToResume>(response);
-                    //do render time left until resume
-                    Debug.Log(time.time);
-                    break;
-
-                case "revive":
-                    ReviveEvent revive = JsonUtility.FromJson<ReviveEvent>(response);
-                    AllManager.Instance().playerManager.OnRevive(revive.revive_player_id);
-                    break;
+                //case "revive":
+                //    ReviveEvent revive = JsonUtility.FromJson<ReviveEvent>(response);
+                //    AllManager.Instance().playerManager.OnRevive(revive.revive_player_id);
+                //    break;
 
                 case "game end":
                     AllManager.Instance().StartCoroutine(Wait());
