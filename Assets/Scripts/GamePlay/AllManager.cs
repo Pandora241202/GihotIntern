@@ -125,4 +125,23 @@ public class AllManager : MonoBehaviour
        LoadSceneAsync("UI", "Room");
     }
     
+    public void UpdateGameState(GameState gameState)
+    {
+        GameStateData state = gameState.state;
+
+        if(state.resume.isResume)
+        {
+            //show resume coutdown
+            Debug.Log(state.resume.time);
+        }
+
+        if(isPause != state.isPause)
+        {
+            isPause = state.isPause;
+            if (isPause) UIManager._instance.PauseGame();
+            else UIManager._instance.ResumeGame();
+        }
+
+        playerManager.UpdatePlayersState(state.player_states);
+    }
 }

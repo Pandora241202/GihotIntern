@@ -248,12 +248,6 @@ public class ResumeEvent
 }
 
 [Serializable]
-public class TimeToResume
-{
-    public int time;
-}
-
-[Serializable]
 public class ReviveEvent
 {
     public string event_name = "revive";
@@ -262,4 +256,25 @@ public class ReviveEvent
     {
         this.revive_player_id = id;
     }
+}
+
+[Serializable]
+public class ResumeInfo
+{
+    public bool isResume;
+    public float time;
+}
+
+[Serializable]
+public class GameStateData
+{
+    public PlayersState player_states;
+    public bool isPause;
+    public ResumeInfo resume;
+}
+
+[Serializable]
+public class GameState
+{
+    public GameStateData state;
 }

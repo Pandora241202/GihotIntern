@@ -98,14 +98,17 @@ public class Player
     }
     public void ProcessDmg(int dmg)
     {
-        health -= dmg;
-        if (health <= 0)
+        if(id == Player_ID.MyPlayerID)
         {
-            health = 0;
-            //died
-            isDead = true;
+            health -= dmg;
+            if (health <= 0)
+            {
+                health = 0;
+                //died
+                isDead = true;
+            }
+            UIManager._instance.uiGameplay.UpdateHealthSlider(health);
         }
-        UIManager._instance.uiGameplay.UpdateHealthSlider(health);
     }
 }
 
@@ -142,7 +145,7 @@ public class PlayerManager
     public void ProcessExpGain(int expGain)
     {
         expGain = (int)(expGain * (1 + expBoostAmount));
-        Debug.Log(expGain);
+        //Debug.Log(expGain);
         exp += expGain;
         UIManager._instance.uiGameplay.UpdateLevelSlider(exp);
         if (exp >= expRequire)
@@ -268,10 +271,10 @@ public class PlayerManager
 
             c_Controller.correctPositionTime = 0;
             if (state.isFire) c_Controller.Shoot();
-            if (state.isDead)
-            {
-                if (!c_Controller.goCircleRes.activeSelf) OnDead(player.id);
-            }
+            if (state.isDead && !c_Controller.goCircleRes.activeSelf) OnDead(player.id);
+            //if (player.id == state.player_id) Debug.Log(state.isDead + "/" + player.isDead);
+            else if (!state.isDead && c_Controller.goCircleRes.activeSelf) OnRevive(player.id);
+
             //player.playerTrans.position = state.position;
         }
     }
@@ -324,11 +327,11 @@ public class PlayerManager
     }
     public void ApplyLevelUpConfig(LevelUpConfig levelUpConfig)
     {
-        foreach (var player in dictPlayers.Values)
-        {
-            player.health += levelUpConfig.healthIncrease;
-            // player.SetSpeedBoost(levelUpConfig.speedIncrease);
-            player.SetDamageBoost(levelUpConfig.damageIncrease);
-        }
+        //foreach (var player in dictPlayers.Values)
+        //{
+        //    player.health += levelUpConfig.healthIncrease;
+        //    // player.SetSpeedBoost(levelUpConfig.speedIncrease);
+        //    player.SetDamageBoost(levelUpConfig.damageIncrease);
+        //}
     }
 }
