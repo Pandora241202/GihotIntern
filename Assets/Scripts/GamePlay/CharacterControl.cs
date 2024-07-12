@@ -296,11 +296,11 @@ public class CharacterControl : MonoBehaviour
         if (other.gameObject.CompareTag("Respawn"))
         {
             //timeRevive = 1f;
-            string player_id = other.gameObject.GetComponentInParent<CharacterControl>().id;
-            SendData<ReviveEvent> data =  new SendData<ReviveEvent>(new ReviveEvent(player_id));
-            SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
+            //string player_id = other.gameObject.GetComponentInParent<CharacterControl>().id;
+            //SendData<ReviveEvent> data =  new SendData<ReviveEvent>(new ReviveEvent(player_id));
+            //SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
         }
-        if (other.gameObject.CompareTag("Creep"))
+        else if (other.gameObject.CompareTag("Creep"))
         {
             if (isInvincible)
             {

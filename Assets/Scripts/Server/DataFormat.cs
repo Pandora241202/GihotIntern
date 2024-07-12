@@ -249,12 +249,6 @@ public class ResumeEvent
 }
 
 [Serializable]
-public class TimeToResume
-{
-    public int time;
-}
-
-[Serializable]
 public class ReviveEvent
 {
     public string event_name = "revive";
@@ -281,4 +275,24 @@ public class Score
 public class PingEvent
 {
     public string event_name = "ping";
+}
+
+public class ResumeInfo
+{
+    public bool isResume;
+    public float time;
+}
+
+[Serializable]
+public class GameStateData
+{
+    public PlayersState player_states;
+    public bool isPause;
+    public ResumeInfo resume;
+}
+
+[Serializable]
+public class GameState
+{
+    public GameStateData state;
 }
