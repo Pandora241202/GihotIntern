@@ -12,6 +12,7 @@ public class AllManager : MonoBehaviour
     [SerializeField] public AllDropItemConfig allDropItemConfig;
     [SerializeField] public PlayerConfig playerConfig;
     [SerializeField] GameObject characterPrefab;
+    [SerializeField] AllLevelUpConfig AllLevelUpConfig;
     public SceneUpdater sceneUpdater;
     public BulletManager bulletManager;
     public CreepManager creepManager;
@@ -30,7 +31,7 @@ public class AllManager : MonoBehaviour
     }
     private void Start()
     {
-        playerManager = new PlayerManager(characterPrefab);
+        playerManager = new PlayerManager(characterPrefab, AllLevelUpConfig);
     }
     private void Update()
     {
@@ -62,12 +63,15 @@ public class AllManager : MonoBehaviour
     private void OnSceneLoaded(string sceneName, string mode)
     {
         //sceneUpdater = null;
+        //bulletManager = null;
+        //creepManager = null;
+        //powerUpManager = null;
         if (sceneName == "level1")
         {
+            playerManager.FreshStart();
             UIManager._instance.uiMainMenu.gameObject.SetActive(false);
             UIManager._instance.uiGameplay.gameObject.SetActive(true);
             sceneUpdater = GameObject.FindObjectOfType<SceneUpdater>();
-            playerManager.FreshStart();
             //Debug.Log(sceneUpdater);
             creepManager = sceneUpdater.creepManager;
             bulletManager = sceneUpdater.bulletManager;
@@ -112,8 +116,10 @@ public class AllManager : MonoBehaviour
         SocketCommunication.GetInstance().Close();
     }
     
-    public void GameEnd()
+    public IEnumerator GameEnd()
     {
+        isPause = true;
+        yield return new WaitForEndOfFrame();
         foreach(var player in playerManager.dictPlayers)
         {
             GameObject.Destroy(player.Value.playerTrans.gameObject);
@@ -121,4 +127,23 @@ public class AllManager : MonoBehaviour
        LoadSceneAsync("UI", "Room");
     }
     
+    public void UpdateGameState(GameState gameState)
+    {
+        GameStateData state = gameState.state;
+
+        if(state.resume.isResume)
+        {
+            //show resume coutdown
+            Debug.Log(state.resume.time);
+        }
+
+        if(isPause != state.isPause)
+        {
+            isPause = state.isPause;
+            if (isPause) UIManager._instance.PauseGame();
+            else UIManager._instance.ResumeGame();
+        }
+
+        playerManager.UpdatePlayersState(state.player_states);
+    }
 }

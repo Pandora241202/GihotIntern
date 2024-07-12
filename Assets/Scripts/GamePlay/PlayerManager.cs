@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using Unity.VisualScripting;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Player
 {
@@ -15,15 +16,14 @@ public class Player
     public PlayerConfig playerConfig;
     public GameObject levelUpEffect;
     //Player stat 
-
     public int health;
     public float lifeSteal;
     public float speed;
     public bool isDead;
-    public float dmgBoostTime = 0;
     public float dmgBoostAmount;
-    public float speedBoostTime = 0;
     public float speedBoostAmount;
+
+    private Dictionary<string, float> activePowerUps;
     
     public Player(string name, string id, int gunId, PlayerConfig config)
     {
@@ -36,6 +36,7 @@ public class Player
         this.speed = Constants.PlayerBaseSpeed;
         isDead = false;
         levelUpEffect = null;
+        activePowerUps = new Dictionary<string, float>();
     }
 
     public void Onstart()
@@ -43,6 +44,47 @@ public class Player
         this.health = Constants.PlayerBaseMaxHealth;
         this.lifeSteal = Constants.LifeSteal;
         this.speed = Constants.PlayerBaseSpeed;
+        activePowerUps.Clear();
+        isDead = false;
+    }
+    public void AddPowerUp(string powerUpName, float duration)
+    {
+        if (activePowerUps.ContainsKey(powerUpName))
+        {
+            activePowerUps[powerUpName] = duration; // Reset the duration if already active
+            Debug.Log($"Resetting power-up: {powerUpName}");
+        }
+        else
+        {
+            activePowerUps.Add(powerUpName, duration);
+            Debug.Log($"Activating power-up: {powerUpName}");
+        }
+    }
+    public void UpdatePowerUps()
+    {
+        List<string> expiredPowerUps = new List<string>();
+
+        foreach (var powerUp in activePowerUps.Keys.ToList())
+        {
+            activePowerUps[powerUp] -= Time.deltaTime;
+            // Debug.Log($"Power-up: {powerUp} has {activePowerUps[powerUp]}s left");
+            if (activePowerUps[powerUp] <= 0)
+            {
+                expiredPowerUps.Add(powerUp);
+            }
+        }
+
+        foreach (var powerUp in expiredPowerUps)
+        {
+            DeactivatePowerUp(powerUp);
+            activePowerUps.Remove(powerUp);
+        }
+    }
+
+    private void DeactivatePowerUp(string powerUpName)
+    {
+        Debug.Log($"Deactivating power-up: {powerUpName}");
+        AllManager.Instance().powerUpManager.DeactivatePowerUp(powerUpName);
     }
     public void SetDamageBoost(float boostAmount)
     {
@@ -54,20 +96,19 @@ public class Player
         playerTrans.gameObject.GetComponent<CharacterControl>().speed = this.speed;
         
     }
-    // public void SetExpBoost(float boostAmount)
-    // {
-    //     this.expBoostAmount = boostAmount;
-    // }
     public void ProcessDmg(int dmg)
     {
-        health -= dmg;
-        if (health <= 0)
+        if(id == Player_ID.MyPlayerID)
         {
-            health = 0;
-            //died
-            isDead = true;
+            health -= dmg;
+            if (health <= 0)
+            {
+                health = 0;
+                //died
+                isDead = true;
+            }
+            UIManager._instance.uiGameplay.UpdateHealthSlider(health);
         }
-        UIManager._instance.uiGameplay.UpdateHealthSlider(health);
     }
 }
 
@@ -75,36 +116,21 @@ public class PlayerManager
 {
     public Dictionary<string, Player> dictPlayers = new Dictionary<string, Player>();
     GameObject characterPrefab;
-    public PlayerManager(GameObject characterPrefab)
+    public AllLevelUpConfig allLevelUpConfig;
+    public PlayerManager(GameObject characterPrefab, AllLevelUpConfig levelUpConfig)
     {
         this.characterPrefab = characterPrefab;
+        this.allLevelUpConfig = levelUpConfig;
     }
     public int exp = 0;
     public int level = Constants.PlayerBaseLevel;
     public int expRequire = Constants.PlayerBaseExp;
     public float expBoostTime = 0;
-    public float expBoostAmount = 1.5f;
+    public float expBoostAmount; // Since all player share a single EXP bar, we use the variable here instead of in each player's class
     public void MyUpdate()
     {
         foreach (var player in dictPlayers.Values)
         {
-            if (player.dmgBoostTime > 0)
-            {
-                player.dmgBoostTime -= Time.deltaTime;
-                if (player.dmgBoostTime < 0)
-                {
-                    player.dmgBoostTime = 0;
-                }
-            }
-            if (player.speedBoostTime > 0)
-            {
-                player.speedBoostTime -= Time.deltaTime;
-                if (player.speedBoostTime < 0)
-                {
-                    player.speedBoostTime = 0;
-                    player.speed = Constants.PlayerBaseSpeed;
-                }
-            }
             if (expBoostTime > 0){
                 expBoostTime -= Time.deltaTime;
                 if (expBoostTime < 0)
@@ -119,7 +145,7 @@ public class PlayerManager
     public void ProcessExpGain(int expGain)
     {
         expGain = (int)(expGain * (1 + expBoostAmount));
-        Debug.Log(expGain);
+        //Debug.Log(expGain);
         exp += expGain;
         UIManager._instance.uiGameplay.UpdateLevelSlider(exp);
         if (exp >= expRequire)
@@ -131,8 +157,12 @@ public class PlayerManager
             foreach (var pair in  dictPlayers)
             {
                 Player player = pair.Value;
-
+                player.health = GetMaxHealthFromLevel();
                 player.levelUpEffect = GameObject.Instantiate(player.playerConfig.levelUpEffect, player.playerTrans.position, Quaternion.identity);
+
+                LevelUpConfig levelUpConfig = allLevelUpConfig.allLevelUpConfigList[Mathf.Min(level - 1, allLevelUpConfig.allLevelUpConfigList.Count - 1)];
+                levelUpConfig.ApplyChoice();
+                ApplyLevelUpConfig(levelUpConfig);
             }
         }
             
@@ -147,6 +177,10 @@ public class PlayerManager
         {
             item.Value.Onstart();
         }
+
+        UIManager._instance._fjoystick.input = Vector2.zero;
+        UIManager._instance._fjoystick.background.gameObject.SetActive(false);
+
 
     }
     public int GetMaxHealthFromLevel()
@@ -163,7 +197,7 @@ public class PlayerManager
     {
         Player player = dictPlayers[playerId];
         GunType gunType = AllManager.Instance().gunConfig.lsGunType[player.gunId];
-        float boostMultiplier = player.dmgBoostTime > 0 ? player.dmgBoostAmount : 1f;
+        float boostMultiplier = player.dmgBoostAmount;
         return (int)(gunType.baseDamage + (level - 1) * boostMultiplier * gunType.bulletMultiplier);
     }
 
@@ -237,10 +271,10 @@ public class PlayerManager
 
             c_Controller.correctPositionTime = 0;
             if (state.isFire) c_Controller.Shoot();
-            if (state.isDead)
-            {
-                c_Controller.charAnim.SetBool("isDead",true);
-            }
+            if (state.isDead && !c_Controller.goCircleRes.activeSelf) OnDead(player.id);
+            //if (player.id == state.player_id) Debug.Log(state.isDead + "/" + player.isDead);
+            else if (!state.isDead && c_Controller.goCircleRes.activeSelf) OnRevive(player.id);
+
             //player.playerTrans.position = state.position;
         }
     }
@@ -261,13 +295,44 @@ public class PlayerManager
         AllManager.Instance().bulletManager.SetDelete(bulletId);
     }
 
+    public void OnRevive(string id)
+    {
+        Player player = dictPlayers[id];
+        player.isDead = false;
+        CharacterControl c_Controller = dictPlayers[id].playerTrans.gameObject.GetComponent<CharacterControl>();
+        c_Controller.goCircleRes.SetActive(false);
+        c_Controller.charAnim.SetBool("isDead", false);
+        if (id == Player_ID.MyPlayerID)
+        {
+            player.health = (int)(GetMaxHealthFromLevel() * 0.3f);
+            UIManager._instance.uiGameplay.UpdateHealthSlider(player.health);
+        } 
+    }
+
+    public void OnDead(string id)
+    {
+        CharacterControl c_Controller = dictPlayers[id].playerTrans.gameObject.GetComponent<CharacterControl>();
+        c_Controller.goCircleRes.SetActive(true);
+        c_Controller.charAnim.SetBool("isDead", true);
+    }
+
     public void ProcessLifeSteal()
     {
         int lifeSteal = Random.Range(0, 100);
         if (lifeSteal <= AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].lifeSteal)
         {
             Debug.Log("Hut dc 1 mau nha may em yeu");
-            AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health++;
+            //AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health++;
+            //if(  AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health>GetMaxHealthFromLevel())
         }
+    }
+    public void ApplyLevelUpConfig(LevelUpConfig levelUpConfig)
+    {
+        // foreach (var player in dictPlayers.Values)
+        // {
+        //     player.health += levelUpConfig.healthIncrease;
+        //     player.SetSpeedBoost(levelUpConfig.speedIncrease);
+        //     player.SetDamageBoost(levelUpConfig.damageIncrease);
+        // }
     }
 }

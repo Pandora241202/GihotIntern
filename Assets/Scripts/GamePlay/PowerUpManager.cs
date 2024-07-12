@@ -45,6 +45,7 @@ public class PowerUpManager
         {
             powerUpInfoList[i].Update();
         }
+        UpdatePlayerPowerUps();
     }
 
     public void LateUpdate()
@@ -70,10 +71,32 @@ public class PowerUpManager
         PowerUpInfo newPowerUp = new PowerUpInfo(powerUpObj, powerUpAttr.powerUpConfig.timeToLive);
         powerUpInfoList.Add(newPowerUp);
     }
-    public void ActivatePowerUp(AllDropItemConfig.PowerUpsType powerUpType)
+    // public void ActivatePowerUp(AllDropItemConfig.PowerUpsType powerUpType)
+    // {
+    //     var powerUpAttr = allDropItemConfig.powerUpAttributesList.Find(attr => attr.type == powerUpType);
+    //     powerUpAttr.powerUpConfig.Activate();
+    // }
+    public void ApplyPowerUp(string playerId, AllDropItemConfig.PowerUpsType powerUpType)
     {
         var powerUpAttr = allDropItemConfig.powerUpAttributesList.Find(attr => attr.type == powerUpType);
+        Player player = AllManager.Instance().playerManager.dictPlayers[playerId];
+        
         powerUpAttr.powerUpConfig.Activate();
+        player.AddPowerUp(powerUpType.ToString(), powerUpAttr.powerUpConfig.duration);
+    }
+
+    public void DeactivatePowerUp(string powerUpName)
+    {
+        var powerUpAttr = allDropItemConfig.powerUpAttributesList.Find(attr => attr.type.ToString() == powerUpName);
+        powerUpAttr?.powerUpConfig.Deactivate();
+    }
+
+    public void UpdatePlayerPowerUps()
+    {
+        foreach (var player in AllManager.Instance().playerManager.dictPlayers.Values)
+        {
+            player.UpdatePowerUps();
+        }
     }
     public void setDeletePowerUp(int index)
     {

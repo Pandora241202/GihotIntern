@@ -190,6 +190,7 @@ public class PlayerState
 [Serializable]
 public class PlayersState
 {
+    public long time;
     public PlayerState[] states;
 }
 
@@ -248,7 +249,51 @@ public class ResumeEvent
 }
 
 [Serializable]
-public class TimeToResume
+public class ReviveEvent
 {
-    public int time;
+    public string event_name = "revive";
+    public string revive_player_id;
+    public ReviveEvent(string id)
+    {
+        this.revive_player_id = id;
+    }
+}
+
+[Serializable]
+public class GameEnd
+{
+    public Score[] result;
+}
+
+[Serializable]
+public class Score
+{
+    public string player_id;
+    public int enemy_kill;
+}
+[Serializable]
+public class PingEvent
+{
+    public string event_name = "ping";
+}
+
+[Serializable]
+public class ResumeInfo
+{
+    public bool isResume;
+    public float time;
+}
+
+[Serializable]
+public class GameStateData
+{
+    public PlayersState player_states;
+    public bool isPause;
+    public ResumeInfo resume;
+}
+
+[Serializable]
+public class GameState
+{
+    public GameStateData state;
 }

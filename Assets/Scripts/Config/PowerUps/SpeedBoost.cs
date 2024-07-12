@@ -10,7 +10,17 @@ public class SpeedBoost : PowerUpsConfig
         Debug.Log("Speed Boost pickup");
         var player = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID];
         player.SetSpeedBoost(boostAmount);
-        player.speedBoostTime = 15f;
+        player.AddPowerUp("SpeedBoost", duration);
         //TODO: Activate UI show Boost
+    }
+    public override void ApplyEffect()
+    {
+        Debug.Log("SpeedBoost Boost apply effect");
+    }
+    public override void Deactivate()
+    {
+        Debug.Log("Speed Boost deactivate");
+        var player = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID];
+        player.SetSpeedBoost(0);
     }
 }

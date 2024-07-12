@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4018fd6bf07f484caa3ae46af2bfb72, type: 3}
   m_Name: LifeSteal
   m_EditorClassIdentifier: 
-  powerUpPrefab: {fileID: 0}
+  powerUpPrefab: {fileID: 6808692802758872443, guid: b619557233782074988e1be12ae065b1, type: 3}
   dropNumber: 1
   timeToLive: 15
-  duration: -1
-  boostAmount: 0.02
+  duration: 2.1474836e+9
+  boostAmount: 100
   isStackable: 0

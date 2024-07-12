@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a189aab2c26bd740ab321370bda0ad8, type: 3}
   m_Name: Invincibility
   m_EditorClassIdentifier: 
-  powerUpPrefab: {fileID: 0}
+  powerUpPrefab: {fileID: 3387109298835000276, guid: 66ed259dd92ed70499e10332c2f3e1fb, type: 3}
   dropNumber: 1
   timeToLive: 15
   duration: 3
-  boostAmount: -1
+  boostAmount: 0
   isStackable: 0

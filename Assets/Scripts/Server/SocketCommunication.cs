@@ -8,6 +8,12 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
+class PingData
+{
+    public static System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+    public static bool pinged = false;
+}
+
 public class SocketCommunication
 {
     private static SocketCommunication instance;
@@ -42,6 +48,8 @@ public class SocketCommunication
         //bufferProcessing.IsBackground = true;
         //bufferProcessing.Start();
         AllManager.Instance().StartCoroutine(ProcessBuffer());
+
+        AllManager.Instance().StartCoroutine(Ping());
     }
     private IEnumerator StartSocketReading()
     {
@@ -78,7 +86,7 @@ public class SocketCommunication
             byte[] lengthField = buffer.Take(4).ToArray();
             int dataLength = BitConverter.ToInt32(lengthField, 0);
 
-            while (buffer.Count < dataLength + 4)
+            while (buffer.Count < dataLength + 5)
             {
                 yield return null;
                 continue;
@@ -87,6 +95,16 @@ public class SocketCommunication
 ;                //data
             byte[] dataField = buffer.Skip(4).Take(dataLength).ToArray();
             string response = Encoding.UTF8.GetString(dataField);
+
+            byte sum = buffer[dataLength + 4];
+            buffer.RemoveRange(0, 4 + dataLength + 1);
+           
+            if (!CheckSum(dataField, sum))
+            {
+                continue;
+            }
+            
+
             //Debug.Log(response);
             //Debug.Log(response);
             EventName _event = JsonUtility.FromJson<EventName>(response);
@@ -103,6 +121,7 @@ public class SocketCommunication
                     Player_ID.MyPlayerID = data.id;
 
                     AllManager.Instance().playerManager.AddPlayer(data.player_name, data.id, data.gunId, AllManager.Instance().playerConfig);
+                    UIManager._instance.OnLogin();
                     break;
                 case "rooms":
                     //get available rooms
@@ -128,6 +147,13 @@ public class SocketCommunication
                     }
                     UIManager._instance.uiOnlineLobby.OnGuessJoin();
                     break;
+
+                case "pong":
+                    //Debug.Log($"Ping: {PingData.stopwatch.ElapsedMilliseconds} ms");
+                    UIManager._instance.uiGameplay.UpdatePingText(PingData.stopwatch.ElapsedMilliseconds);
+                    PingData.pinged = false;
+                    break;
+
                 case "spawn creep":
                     var creepSpawnInfo = JsonUtility.FromJson<CreepSpawnInfo>(response);
                     //if (AllManager._instance.sceneUpdater == null) break;
@@ -198,16 +224,20 @@ public class SocketCommunication
                     {
                         AllManager.Instance().playerManager.SpawnPlayer(all.data[i].spawn_pos, all.data[i].player_id, all.data[i].gun_id);
                     }
-                    UIManager._instance.uiGameplay.OnSetUp(AllManager._instance.playerManager.GetMaxHealthFromLevel(),AllManager._instance.playerManager.expRequire);
+                    AllManager.Instance().isPause = false;
+                    SendData<EventName> dataDoneSpawn = new SendData<EventName>(new EventName("spawn done"));
+                    Send(JsonUtility.ToJson(dataDoneSpawn));
 
+                    UIManager._instance.uiGameplay.OnSetUp(AllManager._instance.playerManager.GetMaxHealthFromLevel(), AllManager._instance.playerManager.expRequire);
                     UIManager._instance.uiGameplay.gameObject.SetActive(true);
                     UIManager._instance._fjoystick.gameObject.SetActive(true);
-                    
                     break;
 
-                case "update players state":
-                    PlayersState playersState = JsonUtility.FromJson<PlayersState>(response);
-                    AllManager.Instance().playerManager.UpdatePlayersState(playersState);
+                case "update game state":
+                    GameState gameState = JsonUtility.FromJson<GameState>(response);
+                    //Debug.Log(response);
+                    Debug.Log(response);
+                    AllManager.Instance().UpdateGameState(gameState);
                     break;
 
                 case "player out":
@@ -220,37 +250,42 @@ public class SocketCommunication
                     AllManager.Instance().creepManager.SendCreepToDeadBySharedId(creepDestroyInfo.creep_id);
                     break;
 
-                case "pause":
-                    //pause
-                    AllManager.Instance().isPause = true;
-                    UIManager._instance.PauseGame();
-                    break;
+                //case "revive":
+                //    ReviveEvent revive = JsonUtility.FromJson<ReviveEvent>(response);
+                //    AllManager.Instance().playerManager.OnRevive(revive.revive_player_id);
+                //    break;
 
-                case "resume":
-                    //resume the game
-                    AllManager.Instance().isPause = false;
-                    UIManager._instance.ResumeGame();
-                    break;
-
-                case "time to resume":
-                    TimeToResume time = JsonUtility.FromJson<TimeToResume>(response);
-                    //do render time left until resume
-                    Debug.Log(time.time);
-                    break;
                 case "game end":
-                    AllManager.Instance().StartCoroutine(Wait());
+                    //AllManager.Instance().StartCoroutine(Wait());
+                    GameEnd end = JsonUtility.FromJson<GameEnd>(response);
                     
+                    foreach(var sc in end.result)
+                    {
+                        Debug.Log($"Player id: {sc.player_id}, score: {sc.enemy_kill}");
+                    }
+                    UIManager._instance.uiDefeat.OnSetUp(end);
+                    //call function to show result
                     break;
 
             }
-
-            Debug.Log(response);
+            if (buffer.Count > 4) continue;
+            // Debug.Log(response);
             //remove processed data from buffer
-            buffer.RemoveRange(0, 4 + dataLength);
             //Debug.Log(response);
             yield return null;
         }
     }
+
+    private bool CheckSum(byte[] buffer, byte sum)
+    {
+        int check = 0;
+        foreach(byte b in buffer)
+        {
+            check = (check + b) % 256;
+        }
+        return (byte)check == sum;
+    }
+
     public IEnumerator Wait()
     {
         AllManager.Instance().isPause = true;
@@ -265,16 +300,33 @@ public class SocketCommunication
     //    await udpClient.SendAsync(messageBytes, messageBytes.Length, address, port);
     //}
 
+    private byte CalSum(byte[] bytes)
+    {
+        int sum = 0;
+        foreach(byte b in bytes)
+        {
+            sum = (sum + b) % 256;
+        }
+
+        return (byte)sum;
+    }
+
     public async void Send(string msg)
     {
         var messageBytes = Encoding.UTF8.GetBytes(msg);
         var messageLength = messageBytes.Length;
+
         byte[] lengthField = new byte[4];
         Buffer.BlockCopy(BitConverter.GetBytes(messageLength), 0, lengthField, 0, 4);
         Array.Reverse(lengthField);
-        byte[] sendData = new byte[4 + messageBytes.Length];
+
+        byte sum = CalSum(messageBytes);
+
+        byte[] sendData = new byte[4 + messageBytes.Length + 1];
         Buffer.BlockCopy(lengthField, 0, sendData, 0, 4);
-        Buffer.BlockCopy(messageBytes, 0, sendData, 4, messageBytes.Length);
+        Buffer.BlockCopy(messageBytes, 0, sendData, 4, messageLength);
+        sendData[4 + messageLength] = sum;
+
         await socket.SendAsync(sendData, SocketFlags.None);
     }
 
@@ -282,5 +334,20 @@ public class SocketCommunication
     {
         socket.Disconnect(false);
         socket.Close();
+    }
+
+    public IEnumerator Ping()
+    {
+        while (true)
+        {
+            if(Player_ID.SessionId != null && !PingData.pinged)
+            {
+                SendData<PingEvent> data = new SendData<PingEvent>(new PingEvent());
+                Send(JsonUtility.ToJson(data));
+                PingData.stopwatch.Restart();
+                PingData.pinged  = true;
+            }
+            yield return new WaitForSeconds(1);
+        }
     }
 }
