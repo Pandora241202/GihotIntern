@@ -6,6 +6,7 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     public UIPause uiPause;
+    public UIDefeat uiDefeat;
     public UIGamePlay uiGameplay;
     public UIOnlineLobby uiOnlineLobby;
     public UIMainMenu uiMainMenu;
@@ -32,6 +33,7 @@ public class UIManager : MonoBehaviour
         uiMainMenu.OnSetUp();
         uiChoseGun.OnSetUp();
         uiLogin.OnSetUp();
+        uiDefeat.gameObject.SetActive(false);
         if (_instance == null)
         {
             _instance = this;

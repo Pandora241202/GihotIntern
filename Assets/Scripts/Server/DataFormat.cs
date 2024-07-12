@@ -190,6 +190,7 @@ public class PlayerState
 [Serializable]
 public class PlayersState
 {
+    public long time;
     public PlayerState[] states;
 }
 
@@ -256,6 +257,24 @@ public class ReviveEvent
     {
         this.revive_player_id = id;
     }
+}
+
+[Serializable]
+public class GameEnd
+{
+    public Score[] result;
+}
+
+[Serializable]
+public class Score
+{
+    public string player_id;
+    public int enemy_kill;
+}
+[Serializable]
+public class PingEvent
+{
+    public string event_name = "ping";
 }
 
 [Serializable]

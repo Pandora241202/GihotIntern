@@ -322,16 +322,17 @@ public class PlayerManager
         if (lifeSteal <= AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].lifeSteal)
         {
             Debug.Log("Hut dc 1 mau nha may em yeu");
-            AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health++;
+            //AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health++;
+            //if(  AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health>GetMaxHealthFromLevel())
         }
     }
     public void ApplyLevelUpConfig(LevelUpConfig levelUpConfig)
     {
-        //foreach (var player in dictPlayers.Values)
-        //{
-        //    player.health += levelUpConfig.healthIncrease;
-        //    // player.SetSpeedBoost(levelUpConfig.speedIncrease);
-        //    player.SetDamageBoost(levelUpConfig.damageIncrease);
-        //}
+        // foreach (var player in dictPlayers.Values)
+        // {
+        //     player.health += levelUpConfig.healthIncrease;
+        //     player.SetSpeedBoost(levelUpConfig.speedIncrease);
+        //     player.SetDamageBoost(levelUpConfig.damageIncrease);
+        // }
     }
 }

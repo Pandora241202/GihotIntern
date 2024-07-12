@@ -8,6 +8,12 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
+class PingData
+{
+    public static System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+    public static bool pinged = false;
+}
+
 public class SocketCommunication
 {
     private static SocketCommunication instance;
@@ -42,6 +48,8 @@ public class SocketCommunication
         //bufferProcessing.IsBackground = true;
         //bufferProcessing.Start();
         AllManager.Instance().StartCoroutine(ProcessBuffer());
+
+        AllManager.Instance().StartCoroutine(Ping());
     }
     private IEnumerator StartSocketReading()
     {
@@ -139,6 +147,13 @@ public class SocketCommunication
                     }
                     UIManager._instance.uiOnlineLobby.OnGuessJoin();
                     break;
+
+                case "pong":
+                    //Debug.Log($"Ping: {PingData.stopwatch.ElapsedMilliseconds} ms");
+                    UIManager._instance.uiGameplay.UpdatePingText(PingData.stopwatch.ElapsedMilliseconds);
+                    PingData.pinged = false;
+                    break;
+
                 case "spawn creep":
                     var creepSpawnInfo = JsonUtility.FromJson<CreepSpawnInfo>(response);
                     //if (AllManager._instance.sceneUpdater == null) break;
@@ -221,6 +236,7 @@ public class SocketCommunication
                 case "update game state":
                     GameState gameState = JsonUtility.FromJson<GameState>(response);
                     //Debug.Log(response);
+                    Debug.Log(response);
                     AllManager.Instance().UpdateGameState(gameState);
                     break;
 
@@ -240,8 +256,15 @@ public class SocketCommunication
                 //    break;
 
                 case "game end":
-                    AllManager.Instance().StartCoroutine(Wait());
+                    //AllManager.Instance().StartCoroutine(Wait());
+                    GameEnd end = JsonUtility.FromJson<GameEnd>(response);
                     
+                    foreach(var sc in end.result)
+                    {
+                        Debug.Log($"Player id: {sc.player_id}, score: {sc.enemy_kill}");
+                    }
+                    UIManager._instance.uiDefeat.OnSetUp(end);
+                    //call function to show result
                     break;
 
             }
@@ -311,5 +334,20 @@ public class SocketCommunication
     {
         socket.Disconnect(false);
         socket.Close();
+    }
+
+    public IEnumerator Ping()
+    {
+        while (true)
+        {
+            if(Player_ID.SessionId != null && !PingData.pinged)
+            {
+                SendData<PingEvent> data = new SendData<PingEvent>(new PingEvent());
+                Send(JsonUtility.ToJson(data));
+                PingData.stopwatch.Restart();
+                PingData.pinged  = true;
+            }
+            yield return new WaitForSeconds(1);
+        }
     }
 }
