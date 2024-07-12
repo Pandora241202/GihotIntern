@@ -268,7 +268,7 @@ public class SocketCommunication
                     break;
 
             }
-
+            if (buffer.Count > 4) continue;
             // Debug.Log(response);
             //remove processed data from buffer
             //Debug.Log(response);
