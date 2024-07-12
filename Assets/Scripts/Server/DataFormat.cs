@@ -277,6 +277,7 @@ public class PingEvent
     public string event_name = "ping";
 }
 
+[Serializable]
 public class ResumeInfo
 {
     public bool isResume;
