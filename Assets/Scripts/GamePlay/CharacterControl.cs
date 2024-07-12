@@ -194,7 +194,7 @@ public class CharacterControl : MonoBehaviour
 
         if (id != Player_ID.MyPlayerID) return;
         
-        if (frame % 3 == 0 && !charAnim.GetBool("isDead"))
+        if (frame % 3 == 0)
         {
             float horizontal = joystick.Horizontal;
             float vertical = joystick.Vertical;
