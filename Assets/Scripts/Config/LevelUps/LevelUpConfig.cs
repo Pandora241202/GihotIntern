@@ -55,27 +55,31 @@ public class LevelUpConfig : ScriptableObject
 
     public virtual void ApplyBaseStat(string buff = "")
     {
+        var player = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID];
         switch (buff)
         {
             case "health":
                 var healthIncrements = getHealthIncrements()[Random.Range(0, getHealthIncrements().Length)];
                 Debug.Log("Level up: Health increased by " + healthIncrements);
                 healthIncrease += healthIncrements;
+                player.health += healthIncrease;
                 break;
             case "speed":
                 var speedIncrements = getSpeedIncrements()[Random.Range(0, getSpeedIncrements().Length)];
                 Debug.Log("Level up: Speed increased by " + speedIncrements);
                 speedIncrease += speedIncrements;
+                player.speed *= 1 + speedIncrease;
                 break;
             case "damage":
                 var damageIncrements = getDamageIncrements()[Random.Range(0, getDamageIncrements().Length)];
-            Debug.Log("Level up: Damage increased by " + damageIncrements);
+                Debug.Log("Level up: Damage increased by " + damageIncrements);
                 damageIncrease += damageIncrements;
+                player.SetDamageBoost(damageIncrease);
                 break;
             case "crit":
                 var critRateIncrements = getCritRateIncrements()[Random.Range(0, getCritRateIncrements().Length)];
                 var critDamageIncrements = getCritDamageIncrements()[Random.Range(0, getCritDamageIncrements().Length)];
-            Debug.Log("Level up: Crit rate increased by " + critRateIncrements + " and Crit damage increased by " + critDamageIncrements);
+                Debug.Log("Level up: Crit rate increased by " + critRateIncrements + " and Crit damage increased by " + critDamageIncrements);
                 critRateIncrease += critRateIncrements;
                 critDamageIncrease += critDamageIncrements;
                 break;
@@ -83,6 +87,7 @@ public class LevelUpConfig : ScriptableObject
                 var lifeStealIncrements = getLifeStealIncrements()[Random.Range(0, getLifeStealIncrements().Length)];
                 Debug.Log("Level up: Life steal increased by " + lifeStealIncrements);
                 lifeStealIncrease += lifeStealIncrements;
+                player.lifeSteal += lifeStealIncrease;
                 break;
             default:
                 Debug.Log("No base buff applied");
@@ -94,8 +99,9 @@ public class LevelUpConfig : ScriptableObject
         Debug.Log("Applying additional options");
         switch (buff)
         {
-            case "AOE Meteor Strike":
+            case "AOE Meteor":
                 Debug.Log("AOE Meteor Strike called");
+                AOEMeteorStrikeLevelUp();
                 break;
             case "SkillCD":
                 Debug.Log("SkillCD called");
@@ -133,7 +139,7 @@ public class LevelUpConfig : ScriptableObject
     }
 
     // Time Warp Level Up: PERMANENTLY decrease the speed of all creeps by a small amount
-    public virtual void TimeWarpLevelUp(float warpAmount = 0) // Note: debuff -> decrease speed -> warpAmount is a negative number;
+    public virtual void TimeWarpLevelUp(float warpAmount = 0) // Note: debuff -> decrease speed -> warpAmount is a negative number
     {
         Debug.Log("Time Warp Amount: "  + warpAmount);
         foreach (var creep in AllManager.Instance().creepManager.GetCreepActiveDict())

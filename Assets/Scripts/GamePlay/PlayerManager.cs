@@ -159,7 +159,6 @@ public class PlayerManager
 
                 LevelUpConfig levelUpConfig = allLevelUpConfig.allLevelUpConfigList[Mathf.Min(level - 1, allLevelUpConfig.allLevelUpConfigList.Count - 1)];
                 levelUpConfig.ApplyChoice();
-                ApplyLevelUpConfig(levelUpConfig);
             }
         }
             
@@ -323,13 +322,5 @@ public class PlayerManager
             //if(  AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health>GetMaxHealthFromLevel())
         }
     }
-    public void ApplyLevelUpConfig(LevelUpConfig levelUpConfig)
-    {
-        // foreach (var player in dictPlayers.Values)
-        // {
-        //     player.health += levelUpConfig.healthIncrease;
-        //     player.SetSpeedBoost(levelUpConfig.speedIncrease);
-        //     player.SetDamageBoost(levelUpConfig.damageIncrease);
-        // }
-    }
+
 }
