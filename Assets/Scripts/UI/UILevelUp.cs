@@ -23,6 +23,7 @@ public class UILevelUp : MonoBehaviour
         LevelUpConfig levelUpConfig = allLevelUpConfig.allLevelUpConfigList[0];
         
         levelUpConfig.ApplyBaseStat(lsItemLevel[index].txtName.text);
+        this.gameObject.SetActive(false);
         //TODO sent Chosed Tung
     }
 }
