@@ -1,4 +1,6 @@
+using JetBrains.Annotations;
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 [Serializable]
 public class SendData<T>
@@ -148,9 +150,10 @@ public class Room
 [System.Serializable]
 public class CreepSpawnInfo
 {
-    public int creepTypeInt;
-    [field: SerializeField] public Vector3[] spawnPos;
+    public int type_int;
+    [field: SerializeField] public Vector3 spawn_pos;
     public float time;
+    public int shared_id;
 }
 
 [Serializable]
@@ -213,14 +216,44 @@ public class PlayersPosition
 }
 
 [Serializable]
+public class PowerUpSpawnInfo
+{
+    public int type_int;
+    [field: SerializeField] public Vector3 spawn_pos;
+    public int shared_id;
+
+    public PowerUpSpawnInfo(AllDropItemConfig.PowerUpsType type, Vector3 spawn_pos)
+    {
+        this.type_int = (int) type;
+        this.spawn_pos = spawn_pos;
+    }
+}
+
+[Serializable]
+public class PowerUpPickInfo
+{
+    public string event_name = "power up pick";
+    public string player_id;
+    public int shared_id;
+
+    public PowerUpPickInfo(string player_id, int shared_id)
+    {
+        this.player_id = player_id;
+        this.shared_id = shared_id;
+    }
+}
+
+[Serializable]
 public class CreepDestroyInfo
 {
     public string event_name = "creep destroy";
-    public int creep_id;
+    public int shared_id;
+    public PowerUpSpawnInfo power_up_spawn_info;
 
-    public CreepDestroyInfo(int  creep_id)
+    public CreepDestroyInfo(int shared_id, PowerUpSpawnInfo power_up_spawn_info)
     {
-        this.creep_id = creep_id;
+        this.shared_id = shared_id;
+        this.power_up_spawn_info = power_up_spawn_info;
     }
 }
 
@@ -290,6 +323,9 @@ public class GameStateData
     public PlayersState player_states;
     public bool isPause;
     public ResumeInfo resume;
+    public CreepSpawnInfo[] creep_spawn_infos;
+    public CreepDestroyInfo[] creep_destroy_infos;
+    public PowerUpPickInfo[] power_up_pick_infos;
 }
 
 [Serializable]

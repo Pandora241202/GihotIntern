@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 7831461633702732931}
   m_Layer: 0
   m_Name: TimeWarp
-  m_TagString: Untagged
+  m_TagString: PowerUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

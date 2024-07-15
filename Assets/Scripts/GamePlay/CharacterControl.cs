@@ -254,11 +254,11 @@ public class CharacterControl : MonoBehaviour
         if (targetObj != curCreepTarget)
         {
             CreepManager creepManager = AllManager.Instance().creepManager;
-            creepManager.MarkTargetCreepById(targetObj.GetInstanceID());
-            if (curCreepTarget != null)
-            {
-                creepManager.UnmarkTargetCreepById(curCreepTarget.GetInstanceID());
-            }
+            //creepManager.MarkTargetCreepById(targetObj.GetInstanceID());
+            //if (curCreepTarget != null)
+            //{
+            //    creepManager.UnmarkTargetCreepById(curCreepTarget.GetInstanceID());
+            //}
 
             curCreepTarget = targetObj;
         }

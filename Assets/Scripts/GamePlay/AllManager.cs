@@ -145,5 +145,9 @@ public class AllManager : MonoBehaviour
         }
 
         playerManager.UpdatePlayersState(state.player_states);
+
+        creepManager.UpdateCreepsState(state.creep_spawn_infos, state.creep_destroy_infos);
+
+        powerUpManager.UpdatePowerUpsState(state.power_up_pick_infos);
     }
 }

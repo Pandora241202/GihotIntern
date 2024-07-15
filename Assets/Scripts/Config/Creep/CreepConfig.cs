@@ -61,12 +61,6 @@ public class CreepConfig : ScriptableObject
     public virtual void OnDead(Creep creep) 
     {
         AllManager.Instance().creepManager.AddToDeactivateList(creep);
-        //AllManager.Instance().powerUpManager.SpawnPowerUp(creep.creepTrans.position, DropItemTypes[0]);
-        AllDropItemConfig.PowerUpsType? droppedPowerUp = DetermineDrop();
-        if (droppedPowerUp.HasValue)
-        {
-            AllManager.Instance().powerUpManager.SpawnPowerUp(creep.creepTrans.position, droppedPowerUp.Value);
-        }
     }
 
     float DistanceBetween(Vector3 pos1, Vector3 pos2)
@@ -96,7 +90,8 @@ public class CreepConfig : ScriptableObject
 
         return (playerIdToTarget, minDis);
     }
-    private AllDropItemConfig.PowerUpsType? DetermineDrop()
+
+    public AllDropItemConfig.PowerUpsType? DetermineDrop()
     {
         float totalDropChance = 1;
         float roll = Random.Range(0, totalDropChance);
