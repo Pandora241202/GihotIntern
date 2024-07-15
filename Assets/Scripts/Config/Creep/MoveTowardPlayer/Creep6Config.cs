@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Creep6Config", menuName = "Config/CreepConfig/MoveTowardPlayer/Creep6")]

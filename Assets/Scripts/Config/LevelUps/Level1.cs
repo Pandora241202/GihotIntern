@@ -16,20 +16,20 @@ public class Level1 : LevelUpConfig
     }
     public override void ApplyAdditional(string buff = "")
     {
-        Debug.Log("ApplyAdditional level1");
+        //Debug.Log("ApplyAdditional level1");
         // base.ApplyAdditional(buff);
         switch (buff)
         {
             case "Test1":
-                Debug.Log("Test1 applied");
+                //Debug.Log("Test1 applied");
                 // Apply Test1 effect here
                 break;
             case "Test2":
-                Debug.Log("Test2 applied");
+               // Debug.Log("Test2 applied");
                 // Apply Test2 effect here
                 break;
             default:
-                Debug.Log("No buff applied");
+                //Debug.Log("No buff applied");
                 break;
         }
     }

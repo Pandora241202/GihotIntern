@@ -21,10 +21,18 @@ public class Dispatcher : MonoBehaviour
         return _instance;
     }
 
+    public void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+            //DontDestroyOnLoad(gameObje);
+        }
+    }
+
     private void Start()
     {
-        _instance = FindObjectOfType<Dispatcher>();
-        DontDestroyOnLoad( _instance );
+
     }
 
     private void Update()
