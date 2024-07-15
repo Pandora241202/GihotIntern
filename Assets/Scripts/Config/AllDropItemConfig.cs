@@ -16,7 +16,6 @@ public class AllDropItemConfig : ScriptableObject
         CritRateBuff,
         CritDMGBuff,
         SkillCD,
-        // AOEMeteorStrike,
         EXPOrb,
         Bomb,
         Invincibility,

@@ -154,15 +154,6 @@ public class SocketCommunication
                     PingData.pinged = false;
                     break;
 
-                case "spawn creep":
-                    var creepSpawnInfo = JsonUtility.FromJson<CreepSpawnInfo>(response);
-                    //if (AllManager._instance.sceneUpdater == null) break;
-                    foreach (Vector3 pos in creepSpawnInfo.spawnPos)
-                    {
-                        AllManager._instance.creepManager.ActivateCreep(pos, (CreepManager.CreepType)creepSpawnInfo.creepTypeInt, creepSpawnInfo.time);
-                    }
-
-                    break;
                 case "kick":
                     SimplePlayerInfo kickedPlayer = JsonUtility.FromJson<SimplePlayerInfo>(response);
 
@@ -235,7 +226,6 @@ public class SocketCommunication
 
                 case "update game state":
                     GameState gameState = JsonUtility.FromJson<GameState>(response);
-                    //Debug.Log(response);
                     Debug.Log(response);
                     AllManager.Instance().UpdateGameState(gameState);
                     break;
@@ -243,11 +233,6 @@ public class SocketCommunication
                 case "player out":
                     SimplePlayerInfo playerOut = JsonUtility.FromJson<SimplePlayerInfo>(response);
                     AllManager.Instance().playerManager.RemovePlayer(playerOut.player_id);
-                    break;
-
-                case "destroy creep":
-                    CreepDestroyInfo creepDestroyInfo = JsonUtility.FromJson<CreepDestroyInfo>(response);
-                    AllManager.Instance().creepManager.SendCreepToDeadBySharedId(creepDestroyInfo.creep_id);
                     break;
 
                 //case "revive":
