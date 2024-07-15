@@ -148,4 +148,22 @@ public class LevelUpConfig : ScriptableObject
         }
     }
 
+    // AOEMeteorStrikeLevelUp: deal damage to every creep inside player's radius.
+    public virtual void AOEMeteorStrikeLevelUp(int damage = 0, float radius = 0)
+    {
+        Debug.Log("AOE Meteor Damage Amount: "  + damage);
+        Debug.Log("radius of meteor: " + radius);
+        Dictionary<int, Creep> activeCreeps = AllManager.Instance().creepManager.GetCreepActiveDict();
+        var player = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID];
+        var playerPosition = player.playerTrans;
+        foreach (var creep in activeCreeps)
+        {
+            var distance = Vector3.Distance(playerPosition.position, creep.Value.creepTrans.position);
+            if (distance <= radius)
+            {
+                creep.Value.ProcessDmg(damage, Player_ID.MyPlayerID);
+                Debug.Log("Creep hit by meteor");
+            }
+        }
+    }
 }
