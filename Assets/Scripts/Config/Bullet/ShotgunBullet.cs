@@ -5,8 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Config/BulletConfig/ShotgunBullet")]
 public class ShotgunBullet : BulletConfig
 {
-    public override void Fire(Vector3 posSpawn, Vector3 target, int dmg, BulletManager bulletManager, string tagName, bool needDelayActive = false, float delayActiveTime = 0, string playerId = null)
+    public override void Fire(Vector3 posSpawn, Vector3 target, float dmg, string tagName, bool needDelayActive = false, float delayActiveTime = 0, string playerId = null)
     {
+        BulletManager bulletManager = AllManager.Instance().bulletManager;
         Vector3 direction = (target - posSpawn).normalized;
         float spreadAngle = 10f;
         int initBulletCount = 3;

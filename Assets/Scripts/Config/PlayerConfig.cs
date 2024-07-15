@@ -3,12 +3,35 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerConfig", menuName = "Config/PlayerConfig")]
 public class PlayerConfig : ScriptableObject
 {
-    public SkillType skillType;
+    [SerializeField] SkillType skillType;
 
-    public float speed;
+    [SerializeField] float speed;
 
-    public GameObject levelUpEffect;
+    [SerializeField] float baseMaxHealth;
+
+    [SerializeField] float lifeSteal;
+
+    [SerializeField] float baseSpeed;
+
+    [SerializeField] GameObject levelUpEffect;
+
+    [SerializeField] LayerMask creepLayerMask;
+
+    public SkillType SkillType => skillType;
+
+    public float Speed => speed;
+
+    public float BaseMaxHealth => baseMaxHealth;
+
+    public float LifeSteal => lifeSteal;
+
+    public float BaseSpeed => baseSpeed;
+
+    public GameObject LevelUpEffect => levelUpEffect;
+
+    public LayerMask CreepLayerMask => creepLayerMask;
 }
+
 public enum SkillType
 {
     Tank,
