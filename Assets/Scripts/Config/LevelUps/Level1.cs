@@ -11,17 +11,20 @@ public class Level1 : LevelUpConfig
     public override float[] getCritDamageIncrements() { return new float[] { 0.04f, 0.8f}; }
     public override float[] getLifeStealIncrements() { return new float[] { 0.01f }; }
 
+    
     public Level1()
     {
-        additionalOptions.Add("Test2");
+        additionalOptions.Add("Time Warp");
     }
     public override void ApplyNonBaseStat(string buff = "")
     {
+        additionalOptions.Add("Time Warp");
         Debug.Log("Apply level 1 ");
         switch (buff)
         {
-            case "Test2":
-                Debug.Log("Test2 applied");
+            case "Time Warp":
+                Debug.Log("Level 1: Time Warp");
+                TimeWarpLevelUp(-1f);
                 break;
             default:
                 Debug.Log("No buff applied");

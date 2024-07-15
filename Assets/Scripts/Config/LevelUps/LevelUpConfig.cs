@@ -103,7 +103,7 @@ public class LevelUpConfig : ScriptableObject
             case "Health Regen":
                 Debug.Log("Health Regen called");
                 break;
-            case "Time Warp":
+            case "Time Warp": 
                 Debug.Log("Time Warp called");
                 TimeWarpLevelUp();
                 break;
@@ -130,6 +130,16 @@ public class LevelUpConfig : ScriptableObject
         var chosen = FinalChoice();
         ApplyBaseStat(chosen);
         ApplyNonBaseStat(chosen);
+    }
+
+    // Time Warp Level Up: PERMANENTLY decrease the speed of all creeps by a small amount
+    public virtual void TimeWarpLevelUp(float warpAmount = 0) // Note: debuff -> decrease speed -> warpAmount is a negative number;
+    {
+        Debug.Log("Time Warp Amount: "  + warpAmount);
+        foreach (var creep in AllManager.Instance().creepManager.GetCreepActiveDict())
+        {
+            creep.Value.speed *= 1 + warpAmount;
+        }
     }
 
 }
