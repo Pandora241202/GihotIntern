@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LevelUpConfig : ScriptableObject
 {
-    //every player start at level ONE ()
+    //every player start at level ONE (1)
     public int level;
     // all of the increase value below are general for ALL level. 
     // each level may have other specific increase value.
@@ -13,6 +13,7 @@ public class LevelUpConfig : ScriptableObject
     public float damageIncrease;
     public float critRateIncrease;
     public float critDamageIncrease;
+    public float lifeStealIncrease;
     public List<string> additionalOptions = new List<string>();
 
     // a list of some random weighted level up increments
@@ -21,11 +22,12 @@ public class LevelUpConfig : ScriptableObject
     public virtual float[] getDamageIncrements() { return new float[] { }; }
     public virtual float[] getCritRateIncrements() { return new float[] { }; }
     public virtual float[] getCritDamageIncrements() { return new float[] { }; }
+    public virtual float[] getLifeStealIncrements() { return new float[] { }; }
     List<string> finalOptions = new List<string>();
     public virtual void RandomLevelUpChoice()
     {
         finalOptions.Clear(); // Clear for each level
-        List<string> defaultOptions = new List<string> { "health", "speed", "damage", "crit" };
+        List<string> defaultOptions = new List<string> { "health", "speed", "damage", "crit", "lifeSteal" };
         defaultOptions.AddRange(additionalOptions);
 
         while (finalOptions.Count < 3)
@@ -38,28 +40,38 @@ public class LevelUpConfig : ScriptableObject
         }
     }
 
-    public virtual void ApplyDefault(string buff = "")
+    public virtual void ApplyBaseStat(string buff = "")
     {
         foreach (string option in finalOptions)
         {
             switch (option)
             {
                 case "health":
-                Debug.Log("Level up: Health increased by " + getHealthIncrements()[Random.Range(0, getHealthIncrements().Length)]);
-                    healthIncrease += getHealthIncrements()[Random.Range(0, getHealthIncrements().Length)];
+                    var healthIncrements = getHealthIncrements()[Random.Range(0, getHealthIncrements().Length)];
+                Debug.Log("Level up: Health increased by " + healthIncrements);
+                    healthIncrease += healthIncrements;
                     break;
                 case "speed":
-                Debug.Log("Level up: Speed increased by " + getSpeedIncrements()[Random.Range(0, getSpeedIncrements().Length)]);
-                    speedIncrease += getSpeedIncrements()[Random.Range(0, getSpeedIncrements().Length)];
+                    var speedIncrements = getSpeedIncrements()[Random.Range(0, getSpeedIncrements().Length)];
+                    Debug.Log("Level up: Speed increased by " + speedIncrements);
+                    speedIncrease += speedIncrements;
                     break;
                 case "damage":
-                Debug.Log("Level up: Damage increased by " + getDamageIncrements()[Random.Range(0, getDamageIncrements().Length)]);
-                    damageIncrease += getDamageIncrements()[Random.Range(0, getDamageIncrements().Length)];
+                    var damageIncrements = getDamageIncrements()[Random.Range(0, getDamageIncrements().Length)];
+                Debug.Log("Level up: Damage increased by " + damageIncrements);
+                    damageIncrease += damageIncrements;
                     break;
                 case "crit":
-                Debug.Log("Level up: Crit rate increased by " + getCritRateIncrements()[Random.Range(0, getCritRateIncrements().Length)] + " and Crit damage increased by " + getCritDamageIncrements()[Random.Range(0, getCritDamageIncrements().Length)]);
-                    critRateIncrease += getCritRateIncrements()[Random.Range(0, getCritRateIncrements().Length)];
-                    critDamageIncrease += getCritDamageIncrements()[Random.Range(0, getCritDamageIncrements().Length)];
+                    var critRateIncrements = getCritRateIncrements()[Random.Range(0, getCritRateIncrements().Length)];
+                    var critDamageIncrements = getCritDamageIncrements()[Random.Range(0, getCritDamageIncrements().Length)];
+                Debug.Log("Level up: Crit rate increased by " + critRateIncrements + " and Crit damage increased by " + critDamageIncrements);
+                    critRateIncrease += critRateIncrements;
+                    critDamageIncrease += critDamageIncrements;
+                    break;
+                case "lifeSteal":
+                    var lifeStealIncrements = getLifeStealIncrements()[Random.Range(0, getLifeStealIncrements().Length)];
+                    Debug.Log("Level up: Life steal increased by " + lifeStealIncrements);
+                    lifeStealIncrease += lifeStealIncrements;
                     break;
                 default:
                     Debug.Log("No buff applied");
@@ -67,11 +79,11 @@ public class LevelUpConfig : ScriptableObject
             }
         }
     }
-    public virtual void ApplyAdditional(string buff = "")
+    public virtual void ApplyNonBaseStat(string buff = "")
     {
         Debug.Log("Applying additional options");
     }
-    //TODO: implement this for each level up UI (player choose) @Quoc
+    //TODO: implement this for each level up UI (player choose upgrade) @Quoc
     public virtual string FinalChoice()
     {
         Debug.Log("final options list are: " + string.Join(", ", finalOptions.ToArray()));
@@ -83,8 +95,8 @@ public class LevelUpConfig : ScriptableObject
     {
         RandomLevelUpChoice();
         var chosen = FinalChoice();
-        ApplyDefault(chosen);
-        ApplyAdditional(chosen);
+        ApplyBaseStat(chosen);
+        ApplyNonBaseStat(chosen);
     }
 
 }
