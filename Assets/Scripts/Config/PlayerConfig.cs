@@ -5,8 +5,6 @@ public class PlayerConfig : ScriptableObject
 {
     [SerializeField] SkillType skillType;
 
-    [SerializeField] float speed;
-
     [SerializeField] float baseMaxHealth;
 
     [SerializeField] float lifeSteal;
@@ -18,8 +16,6 @@ public class PlayerConfig : ScriptableObject
     [SerializeField] LayerMask creepLayerMask;
 
     public SkillType SkillType => skillType;
-
-    public float Speed => speed;
 
     public float BaseMaxHealth => baseMaxHealth;
 

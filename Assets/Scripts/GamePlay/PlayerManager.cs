@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public class Player
 {
@@ -111,8 +112,31 @@ public class Player
 
     public float GetDmg()
     {
+        float critRate = GetCritRate();
+
         GunType gunType = gunConfig.lsGunType[gunId];
-        return AllManager.Instance().playerManager.GetDmgFromLevel(gunType.baseDamage, gunType.bulletMultiplier) * (dmgBoostAmount + 1);
+        float dmg = AllManager.Instance().playerManager.GetDmgFromLevel(gunType.baseDamage, gunType.bulletMultiplier) * (dmgBoostAmount + 1);
+
+        if (critRate >= 1 || Random.Range(0f, 1f) <= critRate) 
+        {
+            return dmg * (1 + GetCritDmg());
+        }
+  
+        return dmg;
+    }
+
+    public float GetCritRate()
+    {
+        GunType gunType = gunConfig.lsGunType[gunId];
+        int level = AllManager.Instance().playerManager.level;
+        return gunType.baseCritRateMultiplier + (level - 1) * 0.033f;
+    }
+
+    public float GetCritDmg()
+    {
+        GunType gunType = gunConfig.lsGunType[gunId];
+        int level = AllManager.Instance().playerManager.level;
+        return gunType.baseCritDMGMultiplier + (level - 1) * 0.066f;
     }
 
     public void ProcessDmg(float dmg)
@@ -269,9 +293,8 @@ public class PlayerManager
 
         UIManager._instance._fjoystick.input = Vector2.zero;
         UIManager._instance._fjoystick.background.gameObject.SetActive(false);
-
-
     }
+
     public int GetMaxHealthFromLevel()
     {
         return Constants.PlayerBaseMaxHealth + (level - 1) * 3;

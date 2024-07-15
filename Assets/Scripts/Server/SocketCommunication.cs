@@ -12,7 +12,7 @@ public class PingData
 {
     public static System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
     public static long sum = 0;
-    public static int pingCount = 0;
+    public static int pingCount = 1;
     public static bool pinged = false;
 }
 
@@ -25,7 +25,7 @@ public class SocketCommunication
         return instance;
     }
     Socket socket;
-    public string address = "192.168.6.165";
+    public string address = "127.0.0.1";
     public int port = 9999;
     private static List<byte> buffer = new List<byte>();
 
