@@ -226,7 +226,7 @@ public class SocketCommunication
 
                 case "update game state":
                     GameState gameState = JsonUtility.FromJson<GameState>(response);
-                    Debug.Log(response);
+                    //Debug.Log(response);
                     AllManager.Instance().UpdateGameState(gameState);
                     break;
 

@@ -156,9 +156,16 @@ public class PlayerManager
                 Player player = pair.Value;
                 player.health = GetMaxHealthFromLevel();
                 player.levelUpEffect = GameObject.Instantiate(player.playerConfig.levelUpEffect, player.playerTrans.position, Quaternion.identity);
-
+                
+                //TODO Hung
                 LevelUpConfig levelUpConfig = allLevelUpConfig.allLevelUpConfigList[Mathf.Min(level - 1, allLevelUpConfig.allLevelUpConfigList.Count - 1)];
-                levelUpConfig.ApplyChoice();
+                levelUpConfig.OpenMenu();
+                Debug.Log("final options real: " + string.Join(", ", levelUpConfig.finalOptions.ToArray()));
+                
+                SendData<PauseEvent> data = new SendData<PauseEvent>(new PauseEvent());
+                SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
+                
+                UIManager._instance.uiLevelUp.OnSetUp(levelUpConfig.finalOptions);
             }
         }
             

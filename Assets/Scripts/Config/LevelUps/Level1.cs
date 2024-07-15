@@ -4,12 +4,12 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Config/LevelUpConfig/Level1")]
 public class Level1 : LevelUpConfig
 {
-    public override int[] getHealthIncrements() { return new int[] { 1, 2 }; }
-    public override float[] getSpeedIncrements() { return new float[] { 0.05f, 0.1f }; }
-    public override float[] getDamageIncrements() { return new float[] { 1f }; }
-    public override float[] getCritRateIncrements() { return new float[] { 0.02f, 0.04f}; }
-    public override float[] getCritDamageIncrements() { return new float[] { 0.04f, 0.8f}; }
-    public override float[] getLifeStealIncrements() { return new float[] { 0.01f }; }
+    // public override int[] getHealthIncrements() { return new int[] { 1, 2 }; }
+    // public override float[] getSpeedIncrements() { return new float[] { 0.05f, 0.1f }; }
+    // public override float[] getDamageIncrements() { return new float[] { 1f }; }
+    // public override float[] getCritRateIncrements() { return new float[] { 0.02f, 0.04f}; }
+    // public override float[] getCritDamageIncrements() { return new float[] { 0.04f, 0.8f}; }
+    // public override float[] getLifeStealIncrements() { return new float[] { 0.01f }; }
 
     
     public Level1()
