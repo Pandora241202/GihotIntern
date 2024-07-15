@@ -8,7 +8,7 @@ public class Creep
     public CreepManager.CreepType type;
     public int sharedId;
 
-    public int hp;
+    public float hp;
     public float speed;
     public int dmg;
 
@@ -69,7 +69,7 @@ public class Creep
         config.OnDead(this);
     }
 
-    public void ProcessDmg(int dmg, string bulletOwnerId)
+    public void ProcessDmg(float dmg, string bulletOwnerId)
     {
         hp -= dmg;
         animator.SetTrigger("isTakeDmg");
