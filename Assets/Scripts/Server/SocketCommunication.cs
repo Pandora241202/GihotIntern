@@ -6,11 +6,13 @@ using System.Threading;
 using System.Text;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
-class PingData
+
+public class PingData
 {
     public static System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+    public static long sum = 0;
+    public static int pingCount = 0;
     public static bool pinged = false;
 }
 
@@ -23,11 +25,9 @@ public class SocketCommunication
         return instance;
     }
     Socket socket;
-    public string address = "127.0.0.1";
+    public string address = "192.168.6.165";
     public int port = 9999;
-    Thread receiveData;
-    public string player_id;
-    public List<byte> buffer = new List<byte>();
+    private static List<byte> buffer = new List<byte>();
 
     public SocketCommunication()
     {
@@ -39,17 +39,20 @@ public class SocketCommunication
         socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
         await socket.ConnectAsync(address, port);
 
-        //Thread readSocket = new Thread(SocketReading);
+        //Thread readSocket = new Thread(SocketReadingThread);
         //readSocket.IsBackground = true;
         //readSocket.Start();
         AllManager.Instance().StartCoroutine(StartSocketReading());
 
-        //Thread bufferProcessing = new Thread(ProcessBuffer);
+        //Thread bufferProcessing = new Thread(ProcessBufferThread);
         //bufferProcessing.IsBackground = true;
         //bufferProcessing.Start();
         AllManager.Instance().StartCoroutine(ProcessBuffer());
 
-        AllManager.Instance().StartCoroutine(Ping());
+        Thread ping = new Thread(PingThread);
+        ping.IsBackground = true;
+        ping.Start();
+        //AllManager.Instance().StartCoroutine(Ping());
     }
     private IEnumerator StartSocketReading()
     {
@@ -69,7 +72,155 @@ public class SocketCommunication
         }
         byte[] buf = new byte[socket.Available];
         await socket.ReceiveAsync(buf, SocketFlags.None);
-        buffer.AddRange(buf);
+        lock(buffer)
+        {
+            buffer.AddRange(buf);
+            Debug.Log("buffer after read socket: " +  buffer.Count + "/buf len: " + buf.Length);
+        }
+    }
+
+    //socket read thread
+    private async void SocketReadingThread()
+    {
+        while (true)
+        {
+            if (socket.Available == 0)
+            {
+                continue;
+            }
+            byte[] buf = new byte[socket.Available];
+            await socket.ReceiveAsync(buf, SocketFlags.None);
+            lock (buffer)
+            {
+                buffer.AddRange(buf);
+                //Debug.Log("buffer after read socket: " + buffer.Count + "/buf len: " + buf.Length);
+            }
+        }
+    }
+
+    //process buffer thread
+    private void ProcessBufferThread()
+    {
+        while (true)
+        {
+            if (buffer.Count < 4)
+            {
+                continue;
+            }
+
+            //read first 4 bytes for data length
+            int dataLength;
+            lock (buffer)
+            {
+                byte[] lengthField = buffer.Take(4).ToArray();
+                dataLength = BitConverter.ToInt32(lengthField, 0);
+            }
+
+            while (buffer.Count < dataLength + 5)
+            {
+                continue;
+            }
+    
+;           //data
+            string response;
+            byte sum;
+            byte[] dataField;
+            lock (buffer)
+            {
+                dataField = buffer.Skip(4).Take(dataLength).ToArray();
+                response = Encoding.UTF8.GetString(dataField);
+                sum = buffer[dataLength + 4];
+                //Debug.Log(response + "/data len: " + dataLength + "/buffer len: " + buffer.Count);
+                buffer.RemoveRange(0, 4 + dataLength + 1);
+                //Debug.Log("buffer after remove: "+buffer.Count);
+            }
+           
+
+            if (!CheckSum(dataField, sum))
+            {
+                continue;
+            }
+
+
+            //Debug.Log(response);
+            
+            EventName _event = JsonUtility.FromJson<EventName>(response);
+
+            switch (_event.event_name)
+            {
+                case "provide session id":
+                    Dispatcher.EnqueueToMainThread(() => { HandleSessionId(response); });
+                    break;
+
+                case "provide id":
+                    //set player id in first connect
+                    Dispatcher.EnqueueToMainThread(() => { HandleProvideId(response); });
+                    break;
+
+                case "rooms":
+                    //get available rooms
+                    Dispatcher.EnqueueToMainThread(() => { HandleRooms(response); });
+                    break;
+
+                case "new player join":
+                    //other player join room
+                    Dispatcher.EnqueueToMainThread(() =>{ HandleNewPlayerJoin(response); });
+                    break;
+
+                case "joined":
+                    //join a room
+                    Dispatcher.EnqueueToMainThread(() => { HandleJoin(response); });
+                    break;
+
+                case "pong":
+                    //Debug.Log($"Ping: {PingData.stopwatch.ElapsedMilliseconds} ms");
+                    PingData.stopwatch.Stop();
+                    Dispatcher.EnqueueToMainThread(() => { HandlePing(response); });                      
+                    break;
+
+                case "kick":
+                    Dispatcher.EnqueueToMainThread(() => { HandleKick(response); });
+                    break;
+
+                case "disband":
+                case "kicked":
+                    Dispatcher.EnqueueToMainThread(() => { HandleKicked(response); });
+                    break;
+
+                case "player leave":
+                    Dispatcher.EnqueueToMainThread(() => { HandlePlayerLeave(response); });
+
+                    break;
+                case "all player ready":
+                    Dispatcher.EnqueueToMainThread(() => { HandleAllPlayerReady(response); });
+                    break;
+
+                case "not all player ready":
+                    Dispatcher.EnqueueToMainThread(() => { HandleNotAllPlayerReady(response); });
+                    break;
+
+                case "start":
+                    Dispatcher.EnqueueToMainThread(() => { HandleStart(response); });
+                    break;
+
+                case "spawn player":
+                    Dispatcher.EnqueueToMainThread(() => { HandleSpawnPlayer(response); });
+                    break;
+
+                case "update game state":
+                    Dispatcher.EnqueueToMainThread(() => { HandleUpdateGameState(response); });
+                    break;
+
+                case "player out":
+                    Dispatcher.EnqueueToMainThread(() => { HandlePlayerOut(response); });
+                    break;
+
+                case "game end":
+                    Dispatcher.EnqueueToMainThread(() => { HandleGameEnd(response); });
+                    break;
+
+            }
+        }
     }
 
     private IEnumerator ProcessBuffer()
@@ -112,144 +263,73 @@ public class SocketCommunication
             switch (_event.event_name)
             {
                 case "provide session id":
-                    First_Connect fData = JsonUtility.FromJson<First_Connect>(response);
-                    Player_ID.SessionId = fData.id;
+                    HandleSessionId(response);
                     break;
+
                 case "provide id":
                     //set player id in first connect
-                    First_Connect data = JsonUtility.FromJson<First_Connect>(response);
-                    Player_ID.MyPlayerID = data.id;
-
-                    AllManager.Instance().playerManager.AddPlayer(data.player_name, data.id, data.gunId, AllManager.Instance().playerConfig);
-                    UIManager._instance.OnLogin();
+                    HandleProvideId(response);
                     break;
+
                 case "rooms":
                     //get available rooms
-                    Rooms rooms = JsonUtility.FromJson<Rooms>(response);
-                    UIManager._instance.uiOnlineLobby.InitListRoom(rooms.rooms);
+                    HandleRooms(response);
                     break;
+
                 case "new player join":
                     //other player join room
-                    SimplePlayerInfo playerInfo = JsonUtility.FromJson<SimplePlayerInfo>(response);
-
-                    AllManager.Instance().playerManager.AddPlayer(playerInfo.player_name, playerInfo.player_id, playerInfo.gun_id, AllManager.Instance().playerConfig);
-                    UIManager._instance.uiMainMenu.HostChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
-                    //UIManager._instance.uiMainMenu.JoinCall(0);
-
+                    HandleNewPlayerJoin(response);
                     break;
+
                 case "joined":
                     //join a room
-                    SimplePlayerInfoList playerIn4List = JsonUtility.FromJson<SimplePlayerInfoList>(response);
-                    for (int i = 0; i < playerIn4List.players.Length; i++)
-                    {
-                        if (playerIn4List.players[i].player_id == Player_ID.MyPlayerID) continue;
-                        AllManager.Instance().playerManager.AddPlayer(playerIn4List.players[i].player_name, playerIn4List.players[i].player_id, playerIn4List.players[i].gun_id, AllManager.Instance().playerConfig);
-                    }
-                    UIManager._instance.uiOnlineLobby.OnGuessJoin();
+                    HandleJoin(response);
                     break;
 
                 case "pong":
                     //Debug.Log($"Ping: {PingData.stopwatch.ElapsedMilliseconds} ms");
-                    UIManager._instance.uiGameplay.UpdatePingText(PingData.stopwatch.ElapsedMilliseconds);
-                    PingData.pinged = false;
+                    HandlePing(response);
                     break;
 
                 case "kick":
-                    SimplePlayerInfo kickedPlayer = JsonUtility.FromJson<SimplePlayerInfo>(response);
-
-                    AllManager.Instance().playerManager.RemovePlayer(kickedPlayer.player_id);
-
-                    if (Player_ID.MyPlayerID == kickedPlayer.host_id)
-                    {
-                        UIManager._instance.uiMainMenu.HostChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
-                    }
-                    else
-                    {
-                        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
-                    }
-
-
+                    HandleKick(response);
                     break;
+
                 case "disband":
                 case "kicked":
-
-                    Player me = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID];
-                    AllManager.Instance().playerManager.dictPlayers.Clear();
-                    AllManager.Instance().playerManager.dictPlayers.Add(me.id, me);
-                    UIManager._instance.uiMainMenu.BackShowMain();
-
+                    HandleKicked(response);
                     break;
-                case "player leave":
-                    SimplePlayerInfo leave_player = JsonUtility.FromJson<SimplePlayerInfo>(response);
 
-                    AllManager.Instance().playerManager.RemovePlayer(leave_player.player_id);
-                    if (Player_ID.MyPlayerID == leave_player.host_id)
-                    {
-                        UIManager._instance.uiMainMenu.HostChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
-                    }
-                    else
-                    {
-                        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
-                    }
+                case "player leave":
+                    HandlePlayerLeave(response);
 
                     break;
                 case "all player ready":
-
-                    UIManager._instance.uiMainMenu.btnStart.interactable = true;
-
+                    HandleAllPlayerReady(response);
                     break;
+
                 case "not all player ready":
-
-                    UIManager._instance.uiMainMenu.btnStart.interactable = false;
-
+                    HandleNotAllPlayerReady(response);
                     break;
+
                 case "start":
-
-                    AllManager.Instance().LoadSceneAsync("level1");
-
+                    HandleStart(response);
                     break;
+
                 case "spawn player":
-                    AllPlayerSpanwPos all = JsonUtility.FromJson<AllPlayerSpanwPos>(response);
-
-                    for (int i = 0; i < all.data.Length; i++)
-                    {
-                        AllManager.Instance().playerManager.SpawnPlayer(all.data[i].spawn_pos, all.data[i].player_id, all.data[i].gun_id);
-                    }
-                    AllManager.Instance().isPause = false;
-                    SendData<EventName> dataDoneSpawn = new SendData<EventName>(new EventName("spawn done"));
-                    Send(JsonUtility.ToJson(dataDoneSpawn));
-
-                    UIManager._instance.uiGameplay.OnSetUp(AllManager._instance.playerManager.GetMaxHealthFromLevel(), AllManager._instance.playerManager.expRequire);
-                    UIManager._instance.uiGameplay.gameObject.SetActive(true);
-                    UIManager._instance._fjoystick.gameObject.SetActive(true);
+                    HandleSpawnPlayer(response);
                     break;
 
                 case "update game state":
-                    GameState gameState = JsonUtility.FromJson<GameState>(response);
-                    Debug.Log(response);
-                    AllManager.Instance().UpdateGameState(gameState);
+                    HandleUpdateGameState(response);
                     break;
 
                 case "player out":
-                    SimplePlayerInfo playerOut = JsonUtility.FromJson<SimplePlayerInfo>(response);
-                    AllManager.Instance().playerManager.RemovePlayer(playerOut.player_id);
+                    HandlePlayerOut(response);
                     break;
 
-                //case "revive":
-                //    ReviveEvent revive = JsonUtility.FromJson<ReviveEvent>(response);
-                //    AllManager.Instance().playerManager.OnRevive(revive.revive_player_id);
-                //    break;
-
                 case "game end":
-                    //AllManager.Instance().StartCoroutine(Wait());
-                    GameEnd end = JsonUtility.FromJson<GameEnd>(response);
-                    
-                    foreach(var sc in end.result)
-                    {
-                        Debug.Log($"Player id: {sc.player_id}, score: {sc.enemy_kill}");
-                    }
-                    UIManager._instance.uiDefeat.OnSetUp(end);
-                    //call function to show result
+                    HandleGameEnd(response);
                     break;
 
             }
@@ -332,5 +412,162 @@ public class SocketCommunication
             }
             yield return new WaitForSeconds(1);
         }
+    }
+
+    private void PingThread()
+    {
+        while (true)
+        {
+            if (Player_ID.SessionId != null && !PingData.pinged)
+            {
+                SendData<PingEvent> data = new SendData<PingEvent>(new PingEvent());
+                Send(JsonUtility.ToJson(data));
+                PingData.stopwatch.Restart();
+                PingData.pinged = true;
+            }
+            Thread.Sleep(100);
+        }
+    }
+
+    private void HandleSessionId(string response)
+    {
+        First_Connect fData = JsonUtility.FromJson<First_Connect>(response);
+        Player_ID.SessionId = fData.id;
+    }
+
+    private void HandleProvideId(string response)
+    {
+        First_Connect data = JsonUtility.FromJson<First_Connect>(response);
+        Player_ID.MyPlayerID = data.id;
+
+        AllManager.Instance().playerManager.AddPlayer(data.player_name, data.id, data.gunId, AllManager.Instance().playerConfig);
+        UIManager._instance.OnLogin();
+    }
+
+    private void HandleRooms(string response)
+    {
+        Rooms rooms = JsonUtility.FromJson<Rooms>(response);
+        UIManager._instance.uiOnlineLobby.InitListRoom(rooms.rooms);
+    }
+
+    private void HandleNewPlayerJoin(string response)
+    {
+        SimplePlayerInfo playerInfo = JsonUtility.FromJson<SimplePlayerInfo>(response);
+        AllManager.Instance().playerManager.AddPlayer(playerInfo.player_name, playerInfo.player_id, playerInfo.gun_id, AllManager.Instance().playerConfig);
+        UIManager._instance.uiMainMenu.HostChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
+    }
+
+    private void HandleJoin(string response)
+    {
+        SimplePlayerInfoList playerIn4List = JsonUtility.FromJson<SimplePlayerInfoList>(response);
+        for (int i = 0; i < playerIn4List.players.Length; i++)
+        {
+            if (playerIn4List.players[i].player_id == Player_ID.MyPlayerID) continue;
+            AllManager.Instance().playerManager.AddPlayer(playerIn4List.players[i].player_name, playerIn4List.players[i].player_id, playerIn4List.players[i].gun_id, AllManager.Instance().playerConfig);
+        }
+        UIManager._instance.uiOnlineLobby.OnGuessJoin();
+    }
+
+    private void HandlePing(string response)
+    {
+        PingData.sum += PingData.stopwatch.ElapsedMilliseconds;
+        PingData.pingCount += 2;
+        PingData.pinged = false;
+    }
+
+    private void HandleKick(string response)
+    {
+        SimplePlayerInfo kickedPlayer = JsonUtility.FromJson<SimplePlayerInfo>(response);
+        AllManager.Instance().playerManager.RemovePlayer(kickedPlayer.player_id);
+
+        if (Player_ID.MyPlayerID == kickedPlayer.host_id)
+        {
+            UIManager._instance.uiMainMenu.HostChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
+        }
+        else
+        {
+            UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
+        }
+    }
+
+    private void HandleKicked(string response)
+    {
+        Player me = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID];
+        AllManager.Instance().playerManager.dictPlayers.Clear();
+        AllManager.Instance().playerManager.dictPlayers.Add(me.id, me);
+        UIManager._instance.uiMainMenu.BackShowMain();
+    }
+
+    private void HandlePlayerLeave(string response)
+    {
+        SimplePlayerInfo leave_player = JsonUtility.FromJson<SimplePlayerInfo>(response);
+
+        AllManager.Instance().playerManager.RemovePlayer(leave_player.player_id);
+        if (Player_ID.MyPlayerID == leave_player.host_id)
+        {
+            UIManager._instance.uiMainMenu.HostChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
+        }
+        else
+        {
+            UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
+        }
+    }
+
+    private void HandleAllPlayerReady(string response)
+    {
+        UIManager._instance.uiMainMenu.btnStart.interactable = true;
+    }
+
+    private void HandleNotAllPlayerReady(string response)
+    {
+        UIManager._instance.uiMainMenu.btnStart.interactable = false;
+    }
+
+    private void HandleStart(string response)
+    {
+        AllManager.Instance().LoadSceneAsync("level1");
+    }
+
+    private void HandleSpawnPlayer(string response)
+    {
+        AllPlayerSpanwPos all = JsonUtility.FromJson<AllPlayerSpanwPos>(response);
+
+        for (int i = 0; i < all.data.Length; i++)
+        {
+            AllManager.Instance().playerManager.SpawnPlayer(all.data[i].spawn_pos, all.data[i].player_id, all.data[i].gun_id);
+        }
+
+        AllManager.Instance().isPause = false;
+        SendData<EventName> dataDoneSpawn = new SendData<EventName>(new EventName("spawn done"));
+        Send(JsonUtility.ToJson(dataDoneSpawn));
+
+        UIManager._instance.uiGameplay.OnSetUp(AllManager._instance.playerManager.GetMaxHealthFromLevel(), AllManager._instance.playerManager.expRequire);
+        UIManager._instance.uiGameplay.gameObject.SetActive(true);
+        UIManager._instance._fjoystick.gameObject.SetActive(true);
+    }
+
+    private void HandleUpdateGameState(string response)
+    {
+        GameState gameState = JsonUtility.FromJson<GameState>(response);
+        //Debug.Log(response);
+        AllManager.Instance().UpdateGameState(gameState);
+    }
+
+    private void HandlePlayerOut(string response)
+    {
+        SimplePlayerInfo playerOut = JsonUtility.FromJson<SimplePlayerInfo>(response);
+        AllManager.Instance().playerManager.RemovePlayer(playerOut.player_id);
+    }
+
+    private void HandleGameEnd(string response)
+    {
+        GameEnd end = JsonUtility.FromJson<GameEnd>(response);
+
+        //foreach (var sc in end.result)
+        //{
+        //    Debug.Log($"Player id: {sc.player_id}, score: {sc.enemy_kill}");
+        //}
+        UIManager._instance.uiDefeat.OnSetUp(end);
+
     }
 }

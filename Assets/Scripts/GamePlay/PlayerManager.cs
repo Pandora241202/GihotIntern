@@ -1,10 +1,7 @@
 ﻿using Cinemachine;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using Unity.VisualScripting;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class Player
 {

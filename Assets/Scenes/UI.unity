@@ -1522,6 +1522,7 @@ GameObject:
   - component: {fileID: 1170851539}
   - component: {fileID: 1170851543}
   - component: {fileID: 5888400484667401862}
+  - component: {fileID: 5888400484667401863}
   m_Layer: 5
   m_Name: UIManager
   m_TagString: Untagged
@@ -3631,6 +3632,18 @@ MonoBehaviour:
   sceneUpdater: {fileID: 0}
   isPause: 0
   isHost: 0
+--- !u!114 &5888400484667401863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1170851538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef8526dddb722d145989c38852a6b001, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7655869532498624332
 PrefabInstance:
   m_ObjectHideFlags: 0
