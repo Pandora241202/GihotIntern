@@ -18,6 +18,6 @@ MonoBehaviour:
   damageIncrease: 0
   critRateIncrease: 0
   critDamageIncrease: 0
-  additionalOptions:
-  - Test1
-  - Test2
+  lifeStealIncrease: 0
+  warpAmount: 0
+  additionalOptions: []

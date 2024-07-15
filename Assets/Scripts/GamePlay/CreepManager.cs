@@ -300,6 +300,7 @@ public class CreepManager
 
         if (creepDestroyInfos != null)
         {
+            Debug.Log("creepDestroyInfos: " + creepDestroyInfos.ToString());
             foreach (CreepDestroyInfo creepDestroyInfo in creepDestroyInfos)
             {
                 SendCreepToDeadBySharedId(creepDestroyInfo.shared_id);
