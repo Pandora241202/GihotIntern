@@ -11,12 +11,14 @@ public class AllManager : MonoBehaviour
     [SerializeField] public AllCreepConfig allCreepConfig;
     [SerializeField] public AllDropItemConfig allDropItemConfig;
     [SerializeField] public PlayerConfig playerConfig;
+    [SerializeField] public AllGameEventConfig allGameEventConfig;
     [SerializeField] GameObject characterPrefab;
     [SerializeField] LevelUpConfig levelUpConfig;
     public SceneUpdater sceneUpdater;
     public BulletManager bulletManager;
     public CreepManager creepManager;
     public PowerUpManager powerUpManager;
+    public GameEventManager gameEventManager;
     public bool isPause = false;
     public bool isHost=false;
     public bool isLevelUp = false;
@@ -78,6 +80,7 @@ public class AllManager : MonoBehaviour
             creepManager = sceneUpdater.creepManager;
             bulletManager = sceneUpdater.bulletManager;
             powerUpManager = sceneUpdater.powerUpManager;
+            gameEventManager = sceneUpdater.gameEventManager;
             SendData<EventName> ev = new SendData<EventName>(new EventName("done loading"));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
         }
