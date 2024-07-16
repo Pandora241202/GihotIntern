@@ -72,7 +72,9 @@ public class LevelUpConfig : ScriptableObject
             case "health":
                 levelUpDict[buff]++; // Note: increase level first, else first level = 0 -> 1 * 0 = 0
                 var healthBoost = levelUpDict[buff];
-                player.health += 1 * healthBoost;
+                player.ChangeHealth(1  * healthBoost);
+                //to do: + max health
+
                 break;
             case "speed":
                 levelUpDict[buff]++;

@@ -276,8 +276,8 @@ public class PlayerManager
             foreach (var pair in  dictPlayers)
             {
                 Player player = pair.Value;
-                player.health = GetMaxHealthFromLevel();
-                player.levelUpEffect = GameObject.Instantiate(player.playerConfig.levelUpEffect, player.playerTrans.position, Quaternion.identity);
+                player.ChangeHealth(GetMaxHealthFromLevel() - player.GetHealth());
+                player.levelUpEffect = GameObject.Instantiate(player.config.LevelUpEffect, player.playerTrans.position, Quaternion.identity);
                
                 Debug.Log("final options real: " + string.Join(", ", levelUpConfig.finalOptions.ToArray()));
                
