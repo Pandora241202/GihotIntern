@@ -19,15 +19,17 @@ MonoBehaviour:
   exp: 30
   dropItemConfigs:
   - powerUpType: 0
-    dropChance: 0.1
-  - powerUpType: 12
-    dropChance: 0.2
+    dropChance: 0.05
   - powerUpType: 1
+    dropChance: 0.05
+  - powerUpType: 2
+    dropChance: 0.05
+  - powerUpType: 3
     dropChance: 0.2
   - powerUpType: 4
-    dropChance: 0.2
-  - powerUpType: 11
-    dropChance: 0.2
+    dropChance: 0
+  - powerUpType: 5
+    dropChance: 0
   startMoveAwayDistance: 5
   healing: {fileID: 9017484664307500583, guid: 016eb712ee010394aa2dd710d9003fc6, type: 3}
   skillCD: 10
