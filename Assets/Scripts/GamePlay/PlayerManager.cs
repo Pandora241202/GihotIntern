@@ -453,11 +453,10 @@ public class PlayerManager
     public void ProcessLifeSteal()
     {
         int lifeSteal = Random.Range(0, 100);
-        if (lifeSteal <= AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].lifeSteal)
+        if (lifeSteal <= dictPlayers[Player_ID.MyPlayerID].lifeSteal)
         {
             Debug.Log("Hut dc 1 mau nha may em yeu");
-            //AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health++;
-            //if(  AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health>GetMaxHealthFromLevel())
+            dictPlayers[Player_ID.MyPlayerID].ChangeHealth(1);
         }
     }
 
