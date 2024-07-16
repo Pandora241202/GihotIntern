@@ -5,8 +5,10 @@ using UnityEngine;
 public class UILevelUp : MonoBehaviour
 {
     [SerializeField] private List<ItemLevelUp> lsItemLevel;
+    [SerializeField] private GameObject goBlock;
     public void OnSetUp(List<string> lsLevelUp)
     {
+        goBlock.SetActive(false);
         int i = 0;
         this.gameObject.SetActive(true);
         foreach (var buff in lsItemLevel)
@@ -28,9 +30,7 @@ public class UILevelUp : MonoBehaviour
         
         SendData<ChooseLevelUpEvent> data = new SendData<ChooseLevelUpEvent>(new ChooseLevelUpEvent());
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
-        // foreach (var button in lsItemLevel)
-        // {
-        //     button.
-        // }
+        
+        goBlock.SetActive(true);
     }
 }
