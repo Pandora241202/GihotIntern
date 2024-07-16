@@ -60,6 +60,8 @@ public class CharacterControl : MonoBehaviour
     {
         //Debug.Log("collide with: " + collision_plane_normal_dict.Count + " obj");
         //characterController.Move(velocity); 
+        if (AllManager.Instance().isPause) return;
+
         if (isRevive)
         {
             timeRevive -= Time.deltaTime;
@@ -255,7 +257,7 @@ public class CharacterControl : MonoBehaviour
             AllManager.Instance().playerManager.ProcessCollisionEnemyBullet(id, other.gameObject.GetInstanceID());
             EnableInvincibility(1f);
         }
-        if (other.gameObject.CompareTag("MapElement"))
+        else if (other.gameObject.CompareTag("MapElement"))
         {
             Debug.Log("Collide with map element");
             int id = other.gameObject.GetInstanceID();
