@@ -12,8 +12,9 @@ public class BulletInfo
     public bool needDelayActive;
     public float delayActiveTime;
     public string playerId;
+    public float timeToLive;
 
-    public BulletInfo(Transform obj, Vector3 targetDirection, float damage, float bulletSpeed = 5f, bool needDelayActive = false, float delayActiveTime = 0, string playerId = null)
+    public BulletInfo(Transform obj, Vector3 targetDirection, float damage, float timeToLive, float bulletSpeed = 5f, bool needDelayActive = false, float delayActiveTime = 0, string playerId = null)
     {
         this.bulletObj = obj;
         this.direction = targetDirection.normalized;
@@ -23,6 +24,7 @@ public class BulletInfo
         this.delayActiveTime = delayActiveTime;
         this.damage = damage;
         this.playerId = playerId;
+        this.timeToLive = timeToLive;
         if (needDelayActive)
         {
             bulletObj.gameObject.SetActive(false);
@@ -46,12 +48,26 @@ public class BulletInfo
                 needDelayActive = false;
                 timer = 0;
             }
-            else
-            {
-                timer += Time.deltaTime;
-            }
         }
+
         bulletObj.position += direction * speed * Time.deltaTime;
+
+        // Destroy bullet when out of map range or life time >= time to live
+        // With time to live
+        if (timer >= timeToLive)
+        {
+            isNeedDestroy = true;
+            timer = 0;
+        } else
+        {
+            timer += Time.deltaTime;
+        }
+
+        // With map range
+        if (bulletObj.position.x < Constants.MapMinX || bulletObj.position.x > Constants.MapMaxX || bulletObj.position.y < Constants.MapMinY || bulletObj.position.z < Constants.MapMinZ  || bulletObj.position.z > Constants.MapMaxZ)
+        {
+            isNeedDestroy = true;
+        }
     }
 }
 public class BulletManager
