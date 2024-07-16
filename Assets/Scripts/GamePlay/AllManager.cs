@@ -33,6 +33,7 @@ public class AllManager : MonoBehaviour
     private void Start()
     {
         playerManager = new PlayerManager(characterPrefab, levelUpConfig);
+        StartCoroutine(UpdatePing());
     }
     private void Update()
     {
@@ -161,5 +162,17 @@ public class AllManager : MonoBehaviour
         creepManager.UpdateCreepsState(state.creep_spawn_infos, state.creep_destroy_infos);
 
         powerUpManager.UpdatePowerUpsState(state.power_up_pick_infos);
+    }
+
+    public IEnumerator UpdatePing()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(2);
+            Debug.Log(PingData.sum + "/" + PingData.pingCount);
+            UIManager._instance.uiGameplay.UpdatePingText(PingData.sum / PingData.pingCount);
+            PingData.sum = 0;
+            PingData.pingCount = 0;
+        }
     }
 }

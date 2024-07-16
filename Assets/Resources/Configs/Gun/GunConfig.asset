@@ -21,6 +21,8 @@ MonoBehaviour:
     FireRange: 10
     gunPrefab: {fileID: 6774843256803546431, guid: 5dfd1a7d1a70bcf42b3d55b163ee81e5, type: 3}
     bulletPrefab: {fileID: 7654813223398360339, guid: e0c898925ffc25544bc467fa2b80f472, type: 3}
+    baseCritRateMultiplier: 0.4
+    baseCritDMGMultiplier: 0.7
   - numberOfBullet: 1
     Firerate: 8
     baseDamage: 1
@@ -29,6 +31,8 @@ MonoBehaviour:
     FireRange: 7
     gunPrefab: {fileID: 2978130384556725872, guid: a01db512617565340865b82d5d717d71, type: 3}
     bulletPrefab: {fileID: 4236135470487450587, guid: 0e3b3c18d7237524e896c8ef281fe297, type: 3}
+    baseCritRateMultiplier: 0.2
+    baseCritDMGMultiplier: 0.2
   - numberOfBullet: 3
     Firerate: 2
     baseDamage: 8
@@ -37,3 +41,5 @@ MonoBehaviour:
     FireRange: 4
     gunPrefab: {fileID: 8901172656677072605, guid: a3b03fcc4b415f54c842abb0cb668aeb, type: 3}
     bulletPrefab: {fileID: 5369569127531060987, guid: 9ac1daa066569e1458306619695bf306, type: 3}
+    baseCritRateMultiplier: 0.6
+    baseCritDMGMultiplier: 1.2

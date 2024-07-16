@@ -5,18 +5,14 @@ using UnityEngine;
 
 public class CharacterControl : MonoBehaviour
 {
-    public float speed;
     public Transform gunTransform;
 
-    [SerializeField] private GameObject prefabBullet;
     public GameObject goChar;
-    [SerializeField] public int gunId;
+    //[SerializeField] public int gunId;
     [SerializeField] LayerMask creepLayerMask;
     private FloatingJoystick joystick;
-    GameObject curCreepTarget = null;
     public string id;
     int frame = 0;
-    float lastFireTime = 0f;
     public Animator charAnim;
     public Vector3 input_velocity = Vector3.zero;
     Vector3 final_velocity = Vector3.zero;
@@ -59,14 +55,6 @@ public class CharacterControl : MonoBehaviour
         isRevive = false;
         timeRevive = 1f;
     }
-    public void SetGunAndBullet()
-    {
-        GunType gunType = AllManager.Instance().bulletManager.gunConfig.lsGunType[gunId];
-        prefabBullet = gunType.bulletPrefab;
-        GameObject currentGunPrefab = gunType.gunPrefab;
-        GameObject gun = Instantiate(currentGunPrefab, transform.position, Quaternion.identity);
-        gun.transform.SetParent(transform.Find("Gun"));
-    }
 
     private void Update()
     {
@@ -80,6 +68,7 @@ public class CharacterControl : MonoBehaviour
                 Debug.Log("Revived");
             }
         }
+
         GameObject levelUpEffect = AllManager.Instance().playerManager.dictPlayers[id].levelUpEffect;
 
         if (levelUpEffect != null)
@@ -122,6 +111,8 @@ public class CharacterControl : MonoBehaviour
 
         //if (Vector3.Angle(velocity, lerpDirection) > 70) return;
 
+        float speed = AllManager.Instance().playerManager.dictPlayers[id].GetSpeed();
+
         if ((lerpPosition - transform.position).magnitude <= speed * Time.fixedDeltaTime)
         {
             lerp = false;
@@ -153,7 +144,9 @@ public class CharacterControl : MonoBehaviour
         }
 
         normal = Vector3.zero;
-            
+
+        float speed = AllManager.Instance().playerManager.dictPlayers[id].GetSpeed();
+
         if (collision)
         {
             for (int i = 0; i < collision_plane_normal_dict.Count; i++)
@@ -219,77 +212,20 @@ public class CharacterControl : MonoBehaviour
     }
 
 
-    GameObject GetTagetObj()
-    {
-        GunType gunType = AllManager.Instance().gunConfig.lsGunType[gunId];
-
-        Collider[] creepColliders = Physics.OverlapSphere(transform.position, gunType.FireRange, creepLayerMask);
-
-        GameObject targetObj = null;
-        float closestDistance = Mathf.Infinity;
-
-        foreach (Collider creepCollider in creepColliders)
-        {
-            float distance = Vector3.Distance(transform.position, creepCollider.transform.position);
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                targetObj = creepCollider.gameObject;
-            }
-        }
-
-        //Debug.Log("find target" + targetObj?.GetInstanceID().ToString());
-        return targetObj;
-    }
-
-    public void Shoot()
-    {
-        GameObject targetObj = GetTagetObj();
-
-        if (targetObj == null)
-        {
-            return;
-        }
-
-        if (targetObj != curCreepTarget)
-        {
-            CreepManager creepManager = AllManager.Instance().creepManager;
-            //creepManager.MarkTargetCreepById(targetObj.GetInstanceID());
-            //if (curCreepTarget != null)
-            //{
-            //    creepManager.UnmarkTargetCreepById(curCreepTarget.GetInstanceID());
-            //}
-
-            curCreepTarget = targetObj;
-        }
-
-        Vector3 directionToTarget = (targetObj.transform.position - gunTransform.position).normalized;
-        Quaternion lookRotation = Quaternion.LookRotation(directionToTarget);
-        gunTransform.rotation = lookRotation;
-        int playerDmg = AllManager.Instance().playerManager.GetPlayerDmg(id);
-        lastFireTime = AllManager.Instance().bulletManager
-            .SpawnBullet(gunTransform.position, curCreepTarget, gunId, lastFireTime, "PlayerBullet", playerDmg, id);
-        //Life Steal
-        AllManager._instance.playerManager.ProcessLifeSteal();
-
-        //float angle = Vector3.Angle(gunTransform.forward, directionToTarget);
-        //if (angle < 10f)
-        //{
-        //    AllManager.Instance().bulletManager.SpawnBullet(gunTransform.position, curCreepTarget, gunId);
-        //}
-        
-    }
+    
     public void EnableInvincibility(float duration)
     {
         StartCoroutine(InvincibilityRoutine(duration));
         Debug.Log("Cant touch me");
     }
+
     private IEnumerator InvincibilityRoutine(float duration)
     {
         isInvincible = true;
         yield return new WaitForSeconds(duration);
         isInvincible = false;
     }
+
     Dictionary<int, Vector3> collision_plane_normal_dict = new Dictionary<int, Vector3>();
     private void OnTriggerEnter(Collider other)
     {

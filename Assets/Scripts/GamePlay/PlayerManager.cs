@@ -1,10 +1,7 @@
 ﻿using Cinemachine;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using Unity.VisualScripting;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class Player
 {
@@ -13,40 +10,43 @@ public class Player
     public string id;
     public int gunId;
     public GunConfig gunConfig;
-    public PlayerConfig playerConfig;
+    public PlayerConfig config;
     public GameObject levelUpEffect;
-    //Player stat 
-    public int health;
+    public float lastFireTime = 0f;
     public float lifeSteal;
-    public float speed;
-    public bool isDead;
-    public float dmgBoostAmount;
-    public float speedBoostAmount;
 
+    // Player stat 
+    private float health;
+    private float dmgBoostAmount;
+    private float speedBoostAmount;
+
+    // Player state
     private Dictionary<AllDropItemConfig.PowerUpsType, float> activePowerUps;
-    
+    private GameObject curCreepTarget = null;
+    public bool isDead;
+
     public Player(string name, string id, int gunId, PlayerConfig config)
     {
         this.name = name;
         this.id = id;
         this.gunId = gunId;
-        this.playerConfig = config;
-        this.health = Constants.PlayerBaseMaxHealth;
-        this.lifeSteal = Constants.LifeSteal;
-        this.speed = Constants.PlayerBaseSpeed;
+        this.config = config;
+        health = config.BaseMaxHealth;
+        lifeSteal = config.BaseMaxHealth;
         isDead = false;
         levelUpEffect = null;
         activePowerUps = new Dictionary<AllDropItemConfig.PowerUpsType, float>();
+        gunConfig = AllManager.Instance().gunConfig;
     }
 
     public void Onstart()
     {
-        this.health = Constants.PlayerBaseMaxHealth;
-        this.lifeSteal = Constants.LifeSteal;
-        this.speed = Constants.PlayerBaseSpeed;
+        this.health = config.BaseMaxHealth;
+        this.lifeSteal = config.BaseMaxHealth;
         activePowerUps.Clear();
         isDead = false;
     }
+
     public void AddPowerUp(AllDropItemConfig.PowerUpsType powerUpsType, float duration)
     {
         if (activePowerUps.ContainsKey(powerUpsType))
@@ -60,6 +60,7 @@ public class Player
             Debug.Log($"Activating power-up: {powerUpsType}");
         }
     }
+
     public void UpdatePowerUps()
     {
         List<AllDropItemConfig.PowerUpsType> expiredPowerUps = new List<AllDropItemConfig.PowerUpsType>();
@@ -89,11 +90,55 @@ public class Player
 
     public void SetSpeedBoost(float boostAmount)
     {
-        this.speed = Constants.PlayerBaseSpeed * (1+boostAmount);
-        playerTrans.gameObject.GetComponent<CharacterControl>().speed = this.speed;
-        
+        this.speedBoostAmount = boostAmount;
     }
-    public void ProcessDmg(int dmg)
+
+    public float GetHealth()
+    {
+        return this.health;
+    }
+
+    public float GetSpeed()
+    {
+        return AllManager.Instance().playerManager.GetSpeedFromLevel(config.BaseSpeed) * (1 + this.speedBoostAmount);
+    }
+
+    public void ChangeHealth(float healthChangeAmount)
+    {
+        health += healthChangeAmount;
+        UIManager._instance.uiGameplay.UpdateHealthSlider(health);
+    }
+
+    public float GetDmg()
+    {
+        float critRate = GetCritRate();
+
+        GunType gunType = gunConfig.lsGunType[gunId];
+        float dmg = AllManager.Instance().playerManager.GetDmgFromLevel(gunType.baseDamage, gunType.bulletMultiplier) * (dmgBoostAmount + 1);
+
+        if (critRate >= 1 || Random.Range(0f, 1f) <= critRate) 
+        {
+            return dmg * (1 + GetCritDmg());
+        }
+  
+        return dmg;
+    }
+
+    public float GetCritRate()
+    {
+        GunType gunType = gunConfig.lsGunType[gunId];
+        int level = AllManager.Instance().playerManager.level;
+        return gunType.baseCritRateMultiplier + (level - 1) * 0.033f;
+    }
+
+    public float GetCritDmg()
+    {
+        GunType gunType = gunConfig.lsGunType[gunId];
+        int level = AllManager.Instance().playerManager.level;
+        return gunType.baseCritDMGMultiplier + (level - 1) * 0.066f;
+    }
+
+    public void ProcessDmg(float dmg)
     {
         if(id == Player_ID.MyPlayerID)
         {
@@ -101,11 +146,78 @@ public class Player
             if (health <= 0)
             {
                 health = 0;
-                //died
                 isDead = true;
             }
             UIManager._instance.uiGameplay.UpdateHealthSlider(health);
         }
+    }
+
+    GameObject GetTagetObj()
+    {
+        GunType gunType = gunConfig.lsGunType[gunId];
+
+        Collider[] creepColliders = Physics.OverlapSphere(playerTrans.position, gunType.FireRange, config.CreepLayerMask);
+
+        GameObject targetObj = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (Collider creepCollider in creepColliders)
+        {
+            float distance = Vector3.Distance(playerTrans.position, creepCollider.transform.position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                targetObj = creepCollider.gameObject;
+            }
+        }
+
+        return targetObj;
+    }
+
+    public void Shoot()
+    {
+        GameObject targetObj = GetTagetObj();
+
+        if (targetObj == null)
+        {
+            return;
+        }
+
+        if (targetObj != curCreepTarget)
+        {
+            curCreepTarget = targetObj;
+        }
+
+        Transform gunTransform = playerTrans.Find("Gun");
+        Vector3 directionToTarget = (targetObj.transform.position - gunTransform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(directionToTarget);
+        gunTransform.rotation = lookRotation;
+
+        float playerDmg = GetDmg();
+
+        GunType gunType = gunConfig.lsGunType[gunId];
+
+        if (Time.time >= lastFireTime + 1f / gunType.Firerate)
+        {
+            gunType.bulletConfig.Fire(gunTransform.position, curCreepTarget.transform.position, playerDmg, "PlayerBullet", playerId: id);
+            lastFireTime = Time.time;
+        }
+        
+        //Life Steal
+        AllManager._instance.playerManager.ProcessLifeSteal();
+
+        //float angle = Vector3.Angle(gunTransform.forward, directionToTarget);
+        //if (angle < 10f)
+        //{
+        //    AllManager.Instance().bulletManager.SpawnBullet(gunTransform.position, curCreepTarget, gunId);
+        //}
+    }
+
+    public void SetGunAndBullet()
+    {
+        GunType gunType = gunConfig.lsGunType[gunId];
+        GameObject gun = GameObject.Instantiate(gunType.gunPrefab, playerTrans.position, Quaternion.identity);
+        gun.transform.SetParent(playerTrans.Find("Gun"));
     }
 }
 
@@ -124,6 +236,7 @@ public class PlayerManager
     public int expRequire = Constants.PlayerBaseExp;
     public float expBoostTime = 0;
     public float expBoostAmount; // Since all player share a single EXP bar, we use the variable here instead of in each player's class
+    
     public void MyUpdate()
     {
         // foreach (var player in dictPlayers.Values)
@@ -138,7 +251,9 @@ public class PlayerManager
             }
         // }
     }
+
     public void LateUpdate(){}
+    
     public void ProcessExpGain(int expGain)
     {
         expGain = (int)(expGain * (1 + expBoostAmount));
@@ -168,7 +283,6 @@ public class PlayerManager
                
             }
         }
-            
     }
 
     public void FreshStart()
@@ -183,25 +297,21 @@ public class PlayerManager
 
         UIManager._instance._fjoystick.input = Vector2.zero;
         UIManager._instance._fjoystick.background.gameObject.SetActive(false);
-
-
     }
+
     public int GetMaxHealthFromLevel()
     {
         return Constants.PlayerBaseMaxHealth + (level - 1) * 3;
     }
 
-    public int GetBaseSpeedFromLevel()
+    public float GetSpeedFromLevel(float baseSpeed)
     {
-        return Constants.PlayerBaseSpeed + (level - 1) / 2;
+        return baseSpeed + (level - 1) / 2;
     }
 
-    public int GetPlayerDmg(string playerId)
+    public float GetDmgFromLevel(float baseDmg, int bulletMultiplier)
     {
-        Player player = dictPlayers[playerId];
-        GunType gunType = AllManager.Instance().gunConfig.lsGunType[player.gunId];
-        float boostMultiplier = player.dmgBoostAmount;
-        return (int)(gunType.baseDamage + (level - 1) * boostMultiplier * gunType.bulletMultiplier);
+        return baseDmg + (level - 1) * bulletMultiplier;
     }
 
     public void SpawnPlayer(Vector3 position, string id, int gun_id)
@@ -209,12 +319,14 @@ public class PlayerManager
         Player player = this.dictPlayers[id];
         player.playerTrans = GameObject.Instantiate(characterPrefab, position, Quaternion.identity).transform;
         player.playerTrans.gameObject.GetComponent<CharacterControl>().id = id;
-        player.playerTrans.gameObject.GetComponent<CharacterControl>().gunId = gun_id;
-        player.playerTrans.gameObject.GetComponent<CharacterControl>().speed = player.speed;
-        //Debug.Log("Player: " + player.name + " gun: " + gun_id);
-        player.playerTrans.gameObject.GetComponent<CharacterControl>().SetGunAndBullet();
+        player.gunId = gun_id;
+        
+        player.SetGunAndBullet();
+        
         if (id == Player_ID.MyPlayerID)
+        {
             player.playerTrans.Find("CM vcam1").gameObject.GetComponent<CinemachineVirtualCamera>().Priority = 11;
+        }   
     }
 
     public void RemovePlayer(string id)
@@ -252,13 +364,14 @@ public class PlayerManager
         {
             state = playersState.states[i];
             player = dictPlayers[state.player_id];
+            float speed = player.GetSpeed();
             player.isDead = state.isDead;
             CharacterControl c_Controller = player.playerTrans.gameObject.GetComponent<CharacterControl>();
             c_Controller.input_velocity = state.velocity;
             //c_Controller.goChar.transform.rotation = state.rotation;
             if (!c_Controller.isColliding && c_Controller.id != Player_ID.MyPlayerID)
             {
-                if ((player.playerTrans.position - state.position).magnitude <= Time.fixedDeltaTime * c_Controller.speed)
+                if ((player.playerTrans.position - state.position).magnitude <= Time.fixedDeltaTime * speed)
                 {
                     c_Controller.lerp = false;
                     c_Controller.transform.position = state.position;
@@ -273,7 +386,7 @@ public class PlayerManager
             }
 
             c_Controller.correctPositionTime = 0;
-            if (state.isFire) c_Controller.Shoot();
+            if (state.isFire) player.Shoot();
             if (state.isDead && !c_Controller.goCircleRes.activeSelf) OnDead(player.id);
             //if (player.id == state.player_id) Debug.Log(state.isDead + "/" + player.isDead);
             else if (!state.isDead && c_Controller.goCircleRes.activeSelf) OnRevive(player.id);
@@ -307,8 +420,7 @@ public class PlayerManager
         c_Controller.charAnim.SetBool("isDead", false);
         if (id == Player_ID.MyPlayerID)
         {
-            player.health = (int)(GetMaxHealthFromLevel() * 0.3f);
-            UIManager._instance.uiGameplay.UpdateHealthSlider(player.health);
+            player.ChangeHealth(GetMaxHealthFromLevel() * 0.3f);
         } 
     }
 

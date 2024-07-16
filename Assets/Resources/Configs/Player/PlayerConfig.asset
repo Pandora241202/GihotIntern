@@ -13,5 +13,10 @@ MonoBehaviour:
   m_Name: PlayerConfig
   m_EditorClassIdentifier: 
   skillType: 0
-  speed: 0
+  baseMaxHealth: 10
+  lifeSteal: 0.03
+  baseSpeed: 7
   levelUpEffect: {fileID: 7155335147208632822, guid: ecca538a7e0c62a4f844d11614b9a870, type: 3}
+  creepLayerMask:
+    serializedVersion: 2
+    m_Bits: 128

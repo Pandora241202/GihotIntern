@@ -1812,6 +1812,7 @@ GameObject:
   - component: {fileID: 1170851539}
   - component: {fileID: 1170851543}
   - component: {fileID: 5888400484667401862}
+  - component: {fileID: 5888400484667401863}
   m_Layer: 5
   m_Name: UIManager
   m_TagString: Untagged

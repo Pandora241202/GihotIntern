@@ -18,7 +18,7 @@ public class Creep2Config : NotMovingCreepConfig
         if (creep.timer >= fireRate)
         {
             creep.animator.SetTrigger("isAttack");
-            bulletConfig.Fire(creep.creepTrans.position + new Vector3(0,1.5f,0), dictPlayers[playerId].playerTrans.position + new Vector3(0, 1.5f, 0), creep.dmg, AllManager.Instance().bulletManager, "EnemyBullet", true, 0.5f);
+            bulletConfig.Fire(creep.creepTrans.position + new Vector3(0,1.5f,0), dictPlayers[playerId].playerTrans.position + new Vector3(0, 1.5f, 0), creep.dmg, "EnemyBullet", true, 0.5f);
             creep.timer = 0;
         }
         else
