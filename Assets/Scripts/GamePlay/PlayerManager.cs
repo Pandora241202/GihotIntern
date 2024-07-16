@@ -150,19 +150,22 @@ public class PlayerManager
             level++;
             UIManager._instance.uiGameplay.LevelUpdateSlider(expRequire);
             exp = 0;
+            
+            SendData<LevelUpEvent> data = new SendData<LevelUpEvent>(new LevelUpEvent());
+            SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
+            
+            UIManager._instance.uiLevelUp.OnSetUp(levelUpConfig.finalOptions);
+            
+            levelUpConfig.OpenMenu();
+            
             foreach (var pair in  dictPlayers)
             {
                 Player player = pair.Value;
                 player.health = GetMaxHealthFromLevel();
                 player.levelUpEffect = GameObject.Instantiate(player.playerConfig.levelUpEffect, player.playerTrans.position, Quaternion.identity);
-                levelUpConfig.OpenMenu();
+               
                 Debug.Log("final options real: " + string.Join(", ", levelUpConfig.finalOptions.ToArray()));
-                
-                SendData<LevelUpEvent> data = new SendData<LevelUpEvent>(new LevelUpEvent());
-                SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
-                
-                
-                UIManager._instance.uiLevelUp.OnSetUp(levelUpConfig.finalOptions);
+               
             }
         }
             
