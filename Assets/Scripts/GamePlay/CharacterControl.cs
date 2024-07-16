@@ -12,11 +12,11 @@ public class CharacterControl : MonoBehaviour
     [SerializeField] LayerMask creepLayerMask;
     private FloatingJoystick joystick;
     public string id;
-    int frame = 0;
+    private int frame = 0;
     public Animator charAnim;
     public Vector3 input_velocity = Vector3.zero;
     Vector3 final_velocity = Vector3.zero;
-    bool collision = false;
+    private bool collision = false;
     Vector3 normal = Vector3.zero;
     public float correctPositionTime = 0;
     public bool isColliding = false;

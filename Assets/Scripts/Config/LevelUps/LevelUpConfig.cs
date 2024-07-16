@@ -66,7 +66,7 @@ public class LevelUpConfig : ScriptableObject
     {
         var player = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID];
         // int level;
-        Debug.Log(buff);
+       // Debug.Log(buff);
         switch (buff)
         {
             case "health":
@@ -81,6 +81,7 @@ public class LevelUpConfig : ScriptableObject
                 var speedBoost = levelUpDict[buff];
                 player.SetSpeedBoost(speedBoost);
                 break;
+
             case "damage":
                 levelUpDict[buff]++;
                 var damageBoost = levelUpDict[buff];

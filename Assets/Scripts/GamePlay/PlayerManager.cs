@@ -39,6 +39,11 @@ public class Player
         gunConfig = AllManager.Instance().gunConfig;
     }
 
+    public float GetSpeedBoost()
+    {
+        return speedBoostAmount;
+    }
+
     public void Onstart()
     {
         this.health = config.BaseMaxHealth;
@@ -106,6 +111,7 @@ public class Player
     public void ChangeHealth(float healthChangeAmount)
     {
         health += healthChangeAmount;
+        health = Mathf.Min(health, AllManager.Instance().playerManager.GetMaxHealthFromLevel());
         UIManager._instance.uiGameplay.UpdateHealthSlider(health);
     }
 
@@ -364,6 +370,8 @@ public class PlayerManager
         {
             state = playersState.states[i];
             player = dictPlayers[state.player_id];
+            float speedBoost = state.speedBoost;
+            player.SetSpeedBoost(speedBoost);
             float speed = player.GetSpeed();
             player.isDead = state.isDead;
             CharacterControl c_Controller = player.playerTrans.gameObject.GetComponent<CharacterControl>();
@@ -371,7 +379,7 @@ public class PlayerManager
             //c_Controller.goChar.transform.rotation = state.rotation;
             if (!c_Controller.isColliding && c_Controller.id != Player_ID.MyPlayerID)
             {
-                if ((player.playerTrans.position - state.position).magnitude <= Time.fixedDeltaTime * speed)
+                if ((player.playerTrans.position - state.position).magnitude <= Time.fixedDeltaTime * speed) 
                 {
                     c_Controller.lerp = false;
                     c_Controller.transform.position = state.position;
