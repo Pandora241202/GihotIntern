@@ -10,6 +10,11 @@ public static class Constants
     public const int ScalingMultiplierExp = 15;
     public const int ExpIncrement = 135;
     public const int PlayerBaseMaxHealth = 10;
-    public const int PlayerBaseSpeed = 7;
-    public const float LifeSteal = 3/100;
+
+    // Map constants
+    public const float MapMaxX = 140.5f;
+    public const float MapMinX = -63;
+    public const float MapMaxZ = 77;
+    public const float MapMinZ = -153;
+    public const float MapMinY = 0;
 }

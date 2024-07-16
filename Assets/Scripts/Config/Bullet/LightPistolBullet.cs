@@ -13,7 +13,7 @@ public class LightPistolBullet : BulletConfig
         obj.tag = tagName;
         // obj.transform.rotation = Quaternion.LookRotation(direction) * Quaternion.Euler(90, 0, 0);
         obj.transform.Translate(direction*0.5f);
-        BulletInfo newBullet = new BulletInfo(obj.transform, direction, dmg, speed, needDelayActive, delayActiveTime, playerId);
+        BulletInfo newBullet = new BulletInfo(obj.transform, direction, dmg, bulletTimeToLive, speed, needDelayActive, delayActiveTime, playerId);
         bulletManager.bulletInfoList.Add(newBullet);
         bulletManager.bulletInfoDict.Add(obj.GetInstanceID(), newBullet);
     }
