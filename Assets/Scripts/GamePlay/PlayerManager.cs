@@ -19,6 +19,7 @@ public class Player
     private float health;
     private float dmgBoostAmount;
     private float speedBoostAmount;
+    private float speedBoostByLevelUp;
 
     // Player state
     private Dictionary<AllDropItemConfig.PowerUpsType, float> activePowerUps;
@@ -50,6 +51,11 @@ public class Player
         this.lifeSteal = config.BaseMaxHealth;
         activePowerUps.Clear();
         isDead = false;
+    }
+
+    public float GetSpeedBoostByLevelUp()
+    {
+        return speedBoostByLevelUp;
     }
 
     public void AddPowerUp(AllDropItemConfig.PowerUpsType powerUpsType, float duration)
@@ -98,6 +104,11 @@ public class Player
         this.speedBoostAmount = boostAmount;
     }
 
+    public void SetSpeedBoostByLevelUp(float boost)
+    {
+        this.speedBoostByLevelUp = boost;
+    }
+
     public float GetHealth()
     {
         return this.health;
@@ -105,7 +116,7 @@ public class Player
 
     public float GetSpeed()
     {
-        return AllManager.Instance().playerManager.GetSpeedFromLevel(config.BaseSpeed) * (1 + this.speedBoostAmount);
+        return AllManager.Instance().playerManager.GetSpeedFromLevel(config.BaseSpeed) * (1 + this.speedBoostAmount) * (1 + this.speedBoostByLevelUp) ;
     }
 
     public void ChangeHealth(float healthChangeAmount)
@@ -274,10 +285,10 @@ public class PlayerManager
             
             SendData<LevelUpEvent> data = new SendData<LevelUpEvent>(new LevelUpEvent());
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
-            
+            levelUpConfig.OpenMenu();
             UIManager._instance.uiLevelUp.OnSetUp(levelUpConfig.finalOptions);
             
-            levelUpConfig.OpenMenu();
+            
             
             foreach (var pair in  dictPlayers)
             {
@@ -371,7 +382,7 @@ public class PlayerManager
             state = playersState.states[i];
             player = dictPlayers[state.player_id];
             float speedBoost = state.speedBoost;
-            player.SetSpeedBoost(speedBoost);
+            if(player.id != Player_ID.MyPlayerID) player.SetSpeedBoostByLevelUp(speedBoost);
             float speed = player.GetSpeed();
             player.isDead = state.isDead;
             CharacterControl c_Controller = player.playerTrans.gameObject.GetComponent<CharacterControl>();

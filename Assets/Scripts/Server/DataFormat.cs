@@ -187,7 +187,7 @@ public class PlayerState
         this.rotation = rotation;
         this.isDead = player.isDead;
         this.isFire = isFire;
-        speedBoost = player.GetSpeedBoost();
+        speedBoost = player.GetSpeedBoostByLevelUp();
     }
 }
 [Serializable]

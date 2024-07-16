@@ -79,7 +79,7 @@ public class LevelUpConfig : ScriptableObject
             case "speed":
                 levelUpDict[buff]++;
                 var speedBoost = levelUpDict[buff];
-                player.SetSpeedBoost(speedBoost);
+                player.SetSpeedBoostByLevelUp(speedBoost);
                 break;
 
             case "damage":
