@@ -25,5 +25,8 @@ public class UILevelUp : MonoBehaviour
         levelUpConfig.ApplyBaseStat(lsItemLevel[index].txtName.text);
         this.gameObject.SetActive(false);
         //TODO sent Chosed Tung
+        
+        SendData<ChooseLevelUpEvent> data = new SendData<ChooseLevelUpEvent>(new ChooseLevelUpEvent());
+        SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
     }
 }

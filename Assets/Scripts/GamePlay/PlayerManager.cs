@@ -112,7 +112,7 @@ public class Player
 public class PlayerManager
 {
     public Dictionary<string, Player> dictPlayers = new Dictionary<string, Player>();
-    GameObject characterPrefab;
+    private GameObject characterPrefab;
     public LevelUpConfig levelUpConfig;
     public PlayerManager(GameObject characterPrefab, LevelUpConfig levelUpConfig)
     {
@@ -158,7 +158,7 @@ public class PlayerManager
                 levelUpConfig.OpenMenu();
                 Debug.Log("final options real: " + string.Join(", ", levelUpConfig.finalOptions.ToArray()));
                 
-                SendData<PauseEvent> data = new SendData<PauseEvent>(new PauseEvent());
+                SendData<LevelUpEvent> data = new SendData<LevelUpEvent>(new LevelUpEvent());
                 SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
                 
                 
