@@ -13,11 +13,9 @@ MonoBehaviour:
   m_Name: ShotgunBullet
   m_EditorClassIdentifier: 
   bulletName: ShotgunBullet
-  damage: 8
   speed: 8
   bulletTimeToLive: 2
   bulletBaseCR: 0.6
   bulletBaseCD: 1.2
   destroyOnContact: 1
-  bulletMultiplier: 6
   bulletPrefab: {fileID: 5369569127531060987, guid: 9ac1daa066569e1458306619695bf306, type: 3}
