@@ -12,13 +12,14 @@ public class AllManager : MonoBehaviour
     [SerializeField] public AllDropItemConfig allDropItemConfig;
     [SerializeField] public PlayerConfig playerConfig;
     [SerializeField] GameObject characterPrefab;
-    [SerializeField] AllLevelUpConfig AllLevelUpConfig;
+    [SerializeField] LevelUpConfig levelUpConfig;
     public SceneUpdater sceneUpdater;
     public BulletManager bulletManager;
     public CreepManager creepManager;
     public PowerUpManager powerUpManager;
     public bool isPause = false;
     public bool isHost=false;
+    public bool isLevelUp = false;
     public static AllManager Instance()
     {
         return _instance;
@@ -31,7 +32,7 @@ public class AllManager : MonoBehaviour
     }
     private void Start()
     {
-        playerManager = new PlayerManager(characterPrefab, AllLevelUpConfig);
+        playerManager = new PlayerManager(characterPrefab, levelUpConfig);
         StartCoroutine(UpdatePing());
     }
     private void Update()
@@ -138,11 +139,22 @@ public class AllManager : MonoBehaviour
             Debug.Log(state.resume.time);
         }
 
-        if(isPause != state.isPause)
+        if(isPause != state.isPause&&!state.isLevelUp)
         {
             isPause = state.isPause;
             if (isPause) UIManager._instance.PauseGame();
             else UIManager._instance.ResumeGame();
+        }
+
+        if (isLevelUp != state.isLevelUp)
+        {
+            isLevelUp = state.isLevelUp;
+            if (isLevelUp) isPause = true;
+            else
+            {
+                isPause = false;
+                UIManager._instance.uiLevelUp.gameObject.SetActive(false);
+            }
         }
 
         playerManager.UpdatePlayersState(state.player_states);

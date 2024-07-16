@@ -83,6 +83,7 @@ public class Creep
                 powerUpSpawnInfo = new PowerUpSpawnInfo((AllDropItemConfig.PowerUpsType) droppedPowerUp, creepTrans.position);
             }
 
+            if (this.sharedId == -1) return;
             // Send to server creep destroy
             SendData<CreepDestroyInfo> data = new SendData<CreepDestroyInfo>(new CreepDestroyInfo(this.sharedId, powerUpSpawnInfo));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
@@ -300,6 +301,7 @@ public class CreepManager
 
         if (creepDestroyInfos != null)
         {
+            Debug.Log("creepDestroyInfos: " + creepDestroyInfos.ToString());
             foreach (CreepDestroyInfo creepDestroyInfo in creepDestroyInfos)
             {
                 SendCreepToDeadBySharedId(creepDestroyInfo.shared_id);

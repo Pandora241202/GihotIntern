@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     public UIMainMenu uiMainMenu;
     public UILogin uiLogin;
     public UIChoseGun uiChoseGun;
+    public UILevelUp uiLevelUp;
     public FixedJoystick _joystick;
     public FloatingJoystick _fjoystick;
     public static UIManager _instance { get; private set; }
@@ -33,6 +34,7 @@ public class UIManager : MonoBehaviour
         uiMainMenu.OnSetUp();
         uiChoseGun.OnSetUp();
         uiLogin.OnSetUp();
+        
         uiDefeat.gameObject.SetActive(false);
         if (_instance == null)
         {

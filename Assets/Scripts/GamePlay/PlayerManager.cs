@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static Cinemachine.DocumentationSortingAttribute;
 
 public class Player
 {
@@ -20,6 +19,7 @@ public class Player
     private float health;
     private float dmgBoostAmount;
     private float speedBoostAmount;
+    private float speedBoostByLevelUp;
 
     // Player state
     private Dictionary<AllDropItemConfig.PowerUpsType, float> activePowerUps;
@@ -40,12 +40,22 @@ public class Player
         gunConfig = AllManager.Instance().gunConfig;
     }
 
+    public float GetSpeedBoost()
+    {
+        return speedBoostAmount;
+    }
+
     public void Onstart()
     {
         this.health = config.BaseMaxHealth;
         this.lifeSteal = config.BaseMaxHealth;
         activePowerUps.Clear();
         isDead = false;
+    }
+
+    public float GetSpeedBoostByLevelUp()
+    {
+        return speedBoostByLevelUp;
     }
 
     public void AddPowerUp(AllDropItemConfig.PowerUpsType powerUpsType, float duration)
@@ -94,6 +104,11 @@ public class Player
         this.speedBoostAmount = boostAmount;
     }
 
+    public void SetSpeedBoostByLevelUp(float boost)
+    {
+        this.speedBoostByLevelUp = boost;
+    }
+
     public float GetHealth()
     {
         return this.health;
@@ -101,12 +116,13 @@ public class Player
 
     public float GetSpeed()
     {
-        return AllManager.Instance().playerManager.GetSpeedFromLevel(config.BaseSpeed) * (1 + this.speedBoostAmount);
+        return AllManager.Instance().playerManager.GetSpeedFromLevel(config.BaseSpeed) * (1 + this.speedBoostAmount) * (1 + this.speedBoostByLevelUp) ;
     }
 
     public void ChangeHealth(float healthChangeAmount)
     {
         health += healthChangeAmount;
+        health = Mathf.Min(health, AllManager.Instance().playerManager.GetMaxHealthFromLevel());
         UIManager._instance.uiGameplay.UpdateHealthSlider(health);
     }
 
@@ -225,12 +241,12 @@ public class Player
 public class PlayerManager
 {
     public Dictionary<string, Player> dictPlayers = new Dictionary<string, Player>();
-    GameObject characterPrefab;
-    public AllLevelUpConfig allLevelUpConfig;
-    public PlayerManager(GameObject characterPrefab, AllLevelUpConfig levelUpConfig)
+    private GameObject characterPrefab;
+    public LevelUpConfig levelUpConfig;
+    public PlayerManager(GameObject characterPrefab, LevelUpConfig levelUpConfig)
     {
         this.characterPrefab = characterPrefab;
-        this.allLevelUpConfig = levelUpConfig;
+        this.levelUpConfig = levelUpConfig;
     }
     public int exp = 0;
     public int level = Constants.PlayerBaseLevel;
@@ -240,8 +256,8 @@ public class PlayerManager
     
     public void MyUpdate()
     {
-        foreach (var player in dictPlayers.Values)
-        {
+        // foreach (var player in dictPlayers.Values)
+        // {
             if (expBoostTime > 0){
                 expBoostTime -= Time.deltaTime;
                 if (expBoostTime < 0)
@@ -250,7 +266,7 @@ public class PlayerManager
                     expBoostAmount = 1f;
                 }
             }
-        }
+        // }
     }
 
     public void LateUpdate(){}
@@ -267,16 +283,21 @@ public class PlayerManager
             UIManager._instance.uiGameplay.LevelUpdateSlider(expRequire);
             exp = 0;
             
+            SendData<LevelUpEvent> data = new SendData<LevelUpEvent>(new LevelUpEvent());
+            SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
+            levelUpConfig.OpenMenu();
+            UIManager._instance.uiLevelUp.OnSetUp(levelUpConfig.finalOptions);
+            
+            
+            
             foreach (var pair in  dictPlayers)
             {
                 Player player = pair.Value;
-
                 player.ChangeHealth(GetMaxHealthFromLevel() - player.GetHealth());
                 player.levelUpEffect = GameObject.Instantiate(player.config.LevelUpEffect, player.playerTrans.position, Quaternion.identity);
-
-                LevelUpConfig levelUpConfig = allLevelUpConfig.allLevelUpConfigList[Mathf.Min(level - 1, allLevelUpConfig.allLevelUpConfigList.Count - 1)];
-                levelUpConfig.ApplyChoice();
-                ApplyLevelUpConfig(levelUpConfig);
+               
+                Debug.Log("final options real: " + string.Join(", ", levelUpConfig.finalOptions.ToArray()));
+               
             }
         }
     }
@@ -360,6 +381,8 @@ public class PlayerManager
         {
             state = playersState.states[i];
             player = dictPlayers[state.player_id];
+            float speedBoost = state.speedBoost;
+            if(player.id != Player_ID.MyPlayerID) player.SetSpeedBoostByLevelUp(speedBoost);
             float speed = player.GetSpeed();
             player.isDead = state.isDead;
             CharacterControl c_Controller = player.playerTrans.gameObject.GetComponent<CharacterControl>();
@@ -367,7 +390,7 @@ public class PlayerManager
             //c_Controller.goChar.transform.rotation = state.rotation;
             if (!c_Controller.isColliding && c_Controller.id != Player_ID.MyPlayerID)
             {
-                if ((player.playerTrans.position - state.position).magnitude <= Time.fixedDeltaTime * speed)
+                if ((player.playerTrans.position - state.position).magnitude <= Time.fixedDeltaTime * speed) 
                 {
                     c_Controller.lerp = false;
                     c_Controller.transform.position = state.position;
@@ -430,21 +453,11 @@ public class PlayerManager
     public void ProcessLifeSteal()
     {
         int lifeSteal = Random.Range(0, 100);
-        if (lifeSteal <= AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].lifeSteal)
+        if (lifeSteal <= dictPlayers[Player_ID.MyPlayerID].lifeSteal)
         {
             Debug.Log("Hut dc 1 mau nha may em yeu");
-            //AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health++;
-            //if(  AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health>GetMaxHealthFromLevel())
+            dictPlayers[Player_ID.MyPlayerID].ChangeHealth(1);
         }
     }
 
-    public void ApplyLevelUpConfig(LevelUpConfig levelUpConfig)
-    {
-        // foreach (var player in dictPlayers.Values)
-        // {
-        //     player.health += levelUpConfig.healthIncrease;
-        //     player.SetSpeedBoost(levelUpConfig.speedIncrease);
-        //     player.SetDamageBoost(levelUpConfig.damageIncrease);
-        // }
-    }
 }

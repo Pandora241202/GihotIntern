@@ -95,6 +95,7 @@ public class CreepConfig : ScriptableObject
         float totalDropChance = 1;
         float roll = Random.Range(0, totalDropChance);
         float cumulative = 0f;
+        // Debug.Log("Roll: " + roll);
         //Debug.Log("Roll: " + roll);
         foreach (var config in dropItemConfigs)
         {
@@ -105,7 +106,6 @@ public class CreepConfig : ScriptableObject
                 return config.powerUpType;
             }
         }
-
         return null;
     }
 }

@@ -12,11 +12,11 @@ public class CharacterControl : MonoBehaviour
     [SerializeField] LayerMask creepLayerMask;
     private FloatingJoystick joystick;
     public string id;
-    int frame = 0;
+    private int frame = 0;
     public Animator charAnim;
     public Vector3 input_velocity = Vector3.zero;
     Vector3 final_velocity = Vector3.zero;
-    bool collision = false;
+    private bool collision = false;
     Vector3 normal = Vector3.zero;
     public float correctPositionTime = 0;
     public bool isColliding = false;
@@ -60,6 +60,8 @@ public class CharacterControl : MonoBehaviour
     {
         //Debug.Log("collide with: " + collision_plane_normal_dict.Count + " obj");
         //characterController.Move(velocity); 
+        if (AllManager.Instance().isPause) return;
+
         if (isRevive)
         {
             timeRevive -= Time.deltaTime;
@@ -255,7 +257,7 @@ public class CharacterControl : MonoBehaviour
             AllManager.Instance().playerManager.ProcessCollisionEnemyBullet(id, other.gameObject.GetInstanceID());
             EnableInvincibility(1f);
         }
-        if (other.gameObject.CompareTag("MapElement"))
+        else if (other.gameObject.CompareTag("MapElement"))
         {
             Debug.Log("Collide with map element");
             int id = other.gameObject.GetInstanceID();

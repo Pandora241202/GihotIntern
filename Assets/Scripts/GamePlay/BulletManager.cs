@@ -100,15 +100,15 @@ public class BulletManager
             bulletInfoList[i].Move();
         }
 
-        Transform bullet;
-        for (int i = 0; i < bulletInfoList.Count; i++)
-        {
-            bullet = bulletInfoList[i].bulletObj;
-            if (bullet.position.x >= 100 || bullet.position.x <= -100 || bullet.position.z >= 100 || bullet.position.z <= -100)
-            {
-                bulletInfoList[i].isNeedDestroy = true;
-            }
-        }
+        // Transform bullet;
+        // for (int i = 0; i < bulletInfoList.Count; i++)
+        // {
+        //     bullet = bulletInfoList[i].bulletObj;
+        //     if (bullet.position.x >= 100 || bullet.position.x <= -100 || bullet.position.z >= 100 || bullet.position.z <= -100)
+        //     {
+        //         bulletInfoList[i].isNeedDestroy = true;
+        //     }
+        // }
     }
 
     public void LateUpdate()

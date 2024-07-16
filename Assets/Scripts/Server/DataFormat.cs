@@ -179,6 +179,7 @@ public class PlayerState
     [field: SerializeField] public Vector3 velocity;
     [field: SerializeField] public Quaternion rotation;
     public bool isFire;
+    public float speedBoost;
     public PlayerState(Vector3 position, Vector3 velocity, Quaternion rotation, Player player, bool isFire)
     {
         this.position = position;
@@ -186,6 +187,7 @@ public class PlayerState
         this.rotation = rotation;
         this.isDead = player.isDead;
         this.isFire = isFire;
+        speedBoost = player.GetSpeedBoostByLevelUp();
     }
 }
 [Serializable]
@@ -272,6 +274,16 @@ public class PauseEvent
 {
     public string event_name = "pause";
 }
+[Serializable]
+public class LevelUpEvent
+{
+    public string event_name = "level up";
+}
+[Serializable]
+public class ChooseLevelUpEvent
+{
+    public string event_name = "choose level up";
+}
 
 [Serializable]
 public class ResumeEvent
@@ -320,6 +332,7 @@ public class GameStateData
 {
     public PlayersState player_states;
     public bool isPause;
+    public bool isLevelUp;
     public ResumeInfo resume;
     public CreepSpawnInfo[] creep_spawn_infos;
     public CreepDestroyInfo[] creep_destroy_infos;

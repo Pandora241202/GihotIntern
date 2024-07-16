@@ -614,7 +614,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.67243624, b: 1, a: 1}
+  m_Color: {r: 0, g: 0.38823533, b: 0.59607846, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -643,6 +643,7 @@ GameObject:
   - component: {fileID: 6091166490378981259}
   - component: {fileID: 6383425761013349535}
   - component: {fileID: 3605103785586869782}
+  - component: {fileID: 3237725724528773992}
   m_Layer: 5
   m_Name: ItemLevelUp
   m_TagString: Untagged
@@ -756,6 +757,26 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3237725724528773992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6824351953427991005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ffff221dc41032498202bb20a6ad4b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lsSpriteIcon:
+  - {fileID: 21300000, guid: ee40d72ece864764f9d17d015aedb524, type: 3}
+  - {fileID: 21300000, guid: 6960c6bd5088317429f7e0e033bee813, type: 3}
+  - {fileID: 21300000, guid: 61dab0b6e506c6a43b12d9fde15b2393, type: 3}
+  - {fileID: 21300000, guid: 37de44bcb59b8174497def1957cc490b, type: 3}
+  - {fileID: 21300000, guid: bb67b03c2969d104caba950c446f8c8d, type: 3}
+  txtName: {fileID: 6207162520716109499}
+  imgIcon: {fileID: 4827994448628986061}
 --- !u!1 &7033545228620497463
 GameObject:
   m_ObjectHideFlags: 0
