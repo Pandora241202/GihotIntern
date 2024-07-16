@@ -10,17 +10,12 @@ public class AllDropItemConfig : ScriptableObject
         DmgBoost,
         SpeedBoost,
         EXPGainBoost,
-        HealthRegen,
         HealthPack,
-        LifeSteal,
-        CritRateBuff,
-        CritDMGBuff,
-        SkillCD,
-        EXPOrb,
-        Bomb,
+        // EXPOrb,
+        // Bomb,
         Invincibility,
         TimeWarp,
-        PoisonAura
+        // PoisonAura
     }   
     [System.Serializable]
     public class PowerUpAttributes
