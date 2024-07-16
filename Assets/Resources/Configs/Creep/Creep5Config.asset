@@ -19,13 +19,15 @@ MonoBehaviour:
   exp: 100
   dropItemConfigs:
   - powerUpType: 0
-    dropChance: 0.1
-  - powerUpType: 12
-    dropChance: 0.2
+    dropChance: 0.05
   - powerUpType: 1
-    dropChance: 0.2
+    dropChance: 0.05
+  - powerUpType: 2
+    dropChance: 0.03
+  - powerUpType: 3
+    dropChance: 0.1
   - powerUpType: 4
-    dropChance: 0.2
-  - powerUpType: 11
-    dropChance: 0.2
+    dropChance: 0
+  - powerUpType: 5
+    dropChance: 0.03
   explosion: {fileID: 1535640691960112, guid: b345030ffc29a664cad1d2a6e384a252, type: 3}
