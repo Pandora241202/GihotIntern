@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "Config/LevelUpConfig")]
+
 // NOTE: all Level Up buff are PERMANENT (unlike pick-up buff, which is NOT permanent (has a duration))
 public class LevelUpConfig : ScriptableObject
 {
@@ -9,19 +11,13 @@ public class LevelUpConfig : ScriptableObject
     public int level;
     // all of the increase value below are general for ALL level. 
     // each level may have other specific increase value.
-    public int healthIncrease;
-    public float speedIncrease;
-    public float damageIncrease;
-    public float critRateIncrease;
-    public float critDamageIncrease;
-    public float lifeStealIncrease;
+    // public int healthIncrease;
+    // public float speedIncrease;
+    // public float damageIncrease;
+    // public float critRateIncrease;
+    // public float critDamageIncrease;
+    // public float lifeStealIncrease;
     // a list of some random weighted level up increments
-    // public virtual int[] getHealthIncrements() { return new int[] { }; }
-    // public virtual float[] getSpeedIncrements() { return new float[] { }; }
-    // public virtual float[] getDamageIncrements() { return new float[] { }; }
-    // public virtual float[] getCritRateIncrements() { return new float[] { }; }
-    // public virtual float[] getCritDamageIncrements() { return new float[] { }; }
-    // public virtual float[] getLifeStealIncrements() { return new float[] { }; }
 
     // a list of variable for non base stat upgrade
     public float warpAmount;
@@ -30,12 +26,11 @@ public class LevelUpConfig : ScriptableObject
     public List<string> finalOptions = new List<string>();
 
     public Dictionary<string,int> levelUpDict = new Dictionary<string,int>()
-        {{"health",0},{"speed",0},{"damage",0},{"crit",0},{"lifesteal",0}};
-    public List<string> defaultOptions = new List<string> { "health", "speed", "damage", "crit", "lifesteal" };
+        {{"health",0},{"speed",0},{"damage",0},{"crit",0},{"lifeSteal",0}};
+    public List<string> defaultOptions = new List<string> { "health", "speed", "damage", "crit", "lifeSteal" };
     private bool isLoadedDict = false;
     public void OnSetUpLevelUpDict()
     {
-      
         foreach (var choice in defaultOptions)
         {
             levelUpDict.Add(choice,0);
@@ -70,34 +65,37 @@ public class LevelUpConfig : ScriptableObject
     public virtual void ApplyBaseStat(string buff = "")
     {
         var player = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID];
-        int level;
+        // int level;
         Debug.Log(buff);
         switch (buff)
         {
             case "health":
-                level = levelUpDict[buff];
-                player.health += 1 * this.level;
+                levelUpDict[buff]++; // Note: increase level first, else first level = 0 -> 1 * 0 = 0
+                var healthBoost = levelUpDict[buff];
+                player.health += 1 * healthBoost;
                 break;
             case "speed":
-                level = levelUpDict[buff];
-                player.speed += 1 * this.level;
+                levelUpDict[buff]++;
+                var speedBoost = levelUpDict[buff];
+                player.SetSpeedBoost(speedBoost);
                 break;
             case "damage":
-                // var damageIncrements = getDamageIncrements()[Random.Range(0, getDamageIncrements().Length)];
-                // Debug.Log("Level up: Damage increased by " + damageIncrements);
-                
-                // damageIncrease += damageIncrements;
-                // player.SetDamageBoost(damageIncrease);
+                levelUpDict[buff]++;
+                var damageBoost = levelUpDict[buff];
+                Debug.Log("Level up: Damage increased by " + damageBoost);
+                player.SetDamageBoost(damageBoost);
                 break;
             case "crit":
-                level = levelUpDict[buff];
-                
+            //TODO: Rebase then add this later @Hung
+                levelUpDict[buff]++;
+                // level = levelUpDict[buff];
                 // critRateIncrease += critRateIncrements;
                 // critDamageIncrease += critDamageIncrements;
                 break;
-            case "lifesteal":
-                level = levelUpDict[buff];
-                player.lifeSteal += 1 * this.level;
+            case "lifeSteal":
+                levelUpDict[buff]++;
+                var lifeStealBuff = levelUpDict[buff];
+                player.lifeSteal += 0.01f * lifeStealBuff;
                 break;
             default:
                 Debug.Log("No base buff applied");
@@ -109,9 +107,10 @@ public class LevelUpConfig : ScriptableObject
         Debug.Log("Applying additional options");
         switch (buff)
         {
+            //TODO: apply non base stat later
             case "AOE Meteor":
                 Debug.Log("AOE Meteor Strike called");
-                //AOEMeteorStrikeLevelUp();
+                // AOEMeteorStrikeLevelUp();
                 break;
             case "SkillCD":
                 Debug.Log("SkillCD called");
@@ -121,7 +120,7 @@ public class LevelUpConfig : ScriptableObject
                 break;
             case "Time Warp": 
                 Debug.Log("Time Warp called");
-                TimeWarpLevelUp();
+                // TimeWarpLevelUp();
                 break;
             case "Poison Aura":
                 Debug.Log("Poison Aura called");

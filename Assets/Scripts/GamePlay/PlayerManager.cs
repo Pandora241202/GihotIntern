@@ -113,11 +113,11 @@ public class PlayerManager
 {
     public Dictionary<string, Player> dictPlayers = new Dictionary<string, Player>();
     GameObject characterPrefab;
-    public AllLevelUpConfig allLevelUpConfig;
-    public PlayerManager(GameObject characterPrefab, AllLevelUpConfig levelUpConfig)
+    public LevelUpConfig levelUpConfig;
+    public PlayerManager(GameObject characterPrefab, LevelUpConfig levelUpConfig)
     {
         this.characterPrefab = characterPrefab;
-        this.allLevelUpConfig = levelUpConfig;
+        this.levelUpConfig = levelUpConfig;
     }
     public int exp = 0;
     public int level = Constants.PlayerBaseLevel;
@@ -126,8 +126,8 @@ public class PlayerManager
     public float expBoostAmount; // Since all player share a single EXP bar, we use the variable here instead of in each player's class
     public void MyUpdate()
     {
-        foreach (var player in dictPlayers.Values)
-        {
+        // foreach (var player in dictPlayers.Values)
+        // {
             if (expBoostTime > 0){
                 expBoostTime -= Time.deltaTime;
                 if (expBoostTime < 0)
@@ -136,13 +136,12 @@ public class PlayerManager
                     expBoostAmount = 1f;
                 }
             }
-        }
+        // }
     }
     public void LateUpdate(){}
     public void ProcessExpGain(int expGain)
     {
         expGain = (int)(expGain * (1 + expBoostAmount));
-        //Debug.Log(expGain);
         exp += expGain;
         UIManager._instance.uiGameplay.UpdateLevelSlider(exp);
         if (exp >= expRequire)
@@ -156,14 +155,12 @@ public class PlayerManager
                 Player player = pair.Value;
                 player.health = GetMaxHealthFromLevel();
                 player.levelUpEffect = GameObject.Instantiate(player.playerConfig.levelUpEffect, player.playerTrans.position, Quaternion.identity);
-                
-                //TODO Hung
-                LevelUpConfig levelUpConfig = allLevelUpConfig.allLevelUpConfigList[Mathf.Min(level - 1, allLevelUpConfig.allLevelUpConfigList.Count - 1)];
                 levelUpConfig.OpenMenu();
                 Debug.Log("final options real: " + string.Join(", ", levelUpConfig.finalOptions.ToArray()));
                 
                 SendData<PauseEvent> data = new SendData<PauseEvent>(new PauseEvent());
                 SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
+                
                 
                 UIManager._instance.uiLevelUp.OnSetUp(levelUpConfig.finalOptions);
             }

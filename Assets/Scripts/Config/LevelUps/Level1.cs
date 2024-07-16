@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(menuName = "Config/LevelUpConfig/Level1")]
+// [CreateAssetMenu(menuName = "Config/LevelUpConfig/Level1")]
 public class Level1 : LevelUpConfig
 {
     // public override int[] getHealthIncrements() { return new int[] { 1, 2 }; }
@@ -12,28 +12,28 @@ public class Level1 : LevelUpConfig
     // public override float[] getLifeStealIncrements() { return new float[] { 0.01f }; }
 
     
-    public Level1()
-    {
-        additionalOptions.Add("AOE Meteor");
-    }
-    public override void ApplyNonBaseStat(string buff = "")
-    {
-        additionalOptions.Add("AOE Meteor");
-        Debug.Log("Apply level 1 ");
-        switch (buff)
-        {
-            case "Time Warp":
-                Debug.Log("Level 1: Time Warp");
-                TimeWarpLevelUp(-1f);
-                break;
-            case "AOE Meteor":
-                Debug.Log("Level 1: AOE Meteor");
-                AOEMeteorStrikeLevelUp(9999, 9999);
-                break;
-            default:
-                Debug.Log("No buff applied");
-                break;
-        }
-    }
+    // public Level1()
+    // {
+    //     additionalOptions.Add("AOE Meteor");
+    // }
+    // public override void ApplyNonBaseStat(string buff = "")
+    // {
+    //     additionalOptions.Add("AOE Meteor");
+    //     Debug.Log("Apply level 1 ");
+    //     switch (buff)
+    //     {
+    //         case "Time Warp":
+    //             Debug.Log("Level 1: Time Warp");
+    //             TimeWarpLevelUp(-1f);
+    //             break;
+    //         case "AOE Meteor":
+    //             Debug.Log("Level 1: AOE Meteor");
+    //             AOEMeteorStrikeLevelUp(9999, 9999);
+    //             break;
+    //         default:
+    //             Debug.Log("No buff applied");
+    //             break;
+    //     }
+    // }
 }
 

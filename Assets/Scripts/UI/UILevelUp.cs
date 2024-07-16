@@ -19,8 +19,8 @@ public class UILevelUp : MonoBehaviour
     public void OnItemLevelUp_Clicked(int index)
     {
         //TODO Hung
-        AllLevelUpConfig allLevelUpConfig = AllManager.Instance().playerManager.allLevelUpConfig;
-        LevelUpConfig levelUpConfig = allLevelUpConfig.allLevelUpConfigList[0];
+        // AllLevelUpConfig allLevelUpConfig = AllManager.Instance().playerManager.allLevelUpConfig;
+        LevelUpConfig levelUpConfig = AllManager.Instance().playerManager.levelUpConfig;
         
         levelUpConfig.ApplyBaseStat(lsItemLevel[index].txtName.text);
         this.gameObject.SetActive(false);

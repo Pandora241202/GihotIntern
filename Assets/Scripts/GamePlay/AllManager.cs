@@ -12,7 +12,7 @@ public class AllManager : MonoBehaviour
     [SerializeField] public AllDropItemConfig allDropItemConfig;
     [SerializeField] public PlayerConfig playerConfig;
     [SerializeField] GameObject characterPrefab;
-    [SerializeField] AllLevelUpConfig AllLevelUpConfig;
+    [SerializeField] LevelUpConfig levelUpConfig;
     public SceneUpdater sceneUpdater;
     public BulletManager bulletManager;
     public CreepManager creepManager;
@@ -31,7 +31,7 @@ public class AllManager : MonoBehaviour
     }
     private void Start()
     {
-        playerManager = new PlayerManager(characterPrefab, AllLevelUpConfig);
+        playerManager = new PlayerManager(characterPrefab, levelUpConfig);
     }
     private void Update()
     {
