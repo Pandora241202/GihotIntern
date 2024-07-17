@@ -54,11 +54,14 @@ public class AllManager : MonoBehaviour
     private IEnumerator LoadScene(string sceneName, string mode)
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
-
+        UIManager._instance.uiLoading.gameObject.SetActive(true);
+        UIManager._instance.uiLoading.OnSetUp();
         while (!asyncLoad.isDone)
         {
+            UIManager._instance.uiLoading.OnProgress(asyncLoad.progress);
             yield return null;
         }
+        UIManager._instance.uiLoading.gameObject.SetActive(false);
         OnSceneLoaded(sceneName, mode);
         Debug.Log("Scene loaded!");
 
