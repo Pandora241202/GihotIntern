@@ -1024,6 +1024,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ffff221dc41032498202bb20a6ad4b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &572709080 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6054719340595675081, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
+  m_PrefabInstance: {fileID: 813882249427752655}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &647822052 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 647822052, guid: 90bba5782d5f3854a977d47f5c2066f7, type: 3}
@@ -4028,6 +4039,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3927596743833049719, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
+      propertyPath: txtTimeEvent
+      value: 
+      objectReference: {fileID: 572709080}
     - target: {fileID: 5094929053485534286, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1

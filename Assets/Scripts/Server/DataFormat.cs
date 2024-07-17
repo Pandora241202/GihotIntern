@@ -336,6 +336,8 @@ public class GameEventData
 {
     public int id;
     public float timeToEnd;
+    public bool endState;
+    public bool end;
     public ShareAttrEventData share;
     public ChainEventData chain;
     public LimitedVisionEventData limited;
@@ -356,7 +358,18 @@ public class ShareAttrEventData
     public float curHP;
     public float maxHP;
 }
-
+[Serializable]
+public class ShareAttrEventDamaged
+{
+    public int id = 2;
+    public string event_name = "game event";
+    public int damage;
+    
+    public ShareAttrEventDamaged(int dmg)
+    {
+        this.damage = dmg;
+    }
+}
 [Serializable]
 public class ChainEventData 
 {

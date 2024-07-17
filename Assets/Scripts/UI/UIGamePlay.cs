@@ -11,6 +11,7 @@ public class UIGamePlay : MonoBehaviour
     public TextMeshProUGUI txtLevel;
     [SerializeField] private Button btnPause;
     [SerializeField] private TextMeshProUGUI txtPing;
+    public TextMeshProUGUI txtTimeEvent;
     public void OnSetUp(float maxHealth, float maxExp)
     {
         sliderHealth.maxValue = maxHealth;
@@ -18,6 +19,8 @@ public class UIGamePlay : MonoBehaviour
         sliderLevel.maxValue = maxExp; 
         sliderLevel.value = 0;
         txtPing.text = "0ms";
+        txtTimeEvent.text = "0s";
+        txtTimeEvent.gameObject.SetActive(false);
         txtLevel.text = Constants.PlayerBaseLevel.ToString();
     }
 
@@ -30,8 +33,9 @@ public class UIGamePlay : MonoBehaviour
     public void UpdateHealthSlider(float currentHealth)
     {
         sliderHealth.value = currentHealth;
+        sliderHealth.maxValue = AllManager._instance.playerManager.GetMaxHealthFromLevel();
     }
-
+    
     public void UpdatePingText(long ping)
     {
         if (ping < 50) txtPing.color = Color.green;
@@ -52,5 +56,11 @@ public class UIGamePlay : MonoBehaviour
         sliderLevel.value = 0;
         sliderHealth.maxValue = AllManager._instance.playerManager.GetMaxHealthFromLevel();
         sliderHealth.value = sliderHealth.maxValue;
+    }
+
+    public void ChangeSliderEvent(int maxHP)
+    {
+        sliderHealth.maxValue = maxHP;
+        sliderHealth.value=maxHP;
     }
 }

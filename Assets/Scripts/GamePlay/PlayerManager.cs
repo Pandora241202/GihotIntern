@@ -14,6 +14,8 @@ public class Player
     public GameObject levelUpEffect;
     public float lastFireTime = 0f;
     public float lifeSteal;
+    public int dmgRecieved = 0;
+    public int hpGain = 0;
 
     // Player stat 
     private float health;
@@ -40,6 +42,10 @@ public class Player
         gunConfig = AllManager.Instance().gunConfig;
     }
 
+    public void SetHealth(float hp)
+    {
+        this.health = hp;
+    }
     public float GetSpeedBoost()
     {
         return speedBoostAmount;
@@ -121,6 +127,7 @@ public class Player
 
     public void ChangeHealth(float healthChangeAmount)
     {
+        hpGain =(int)healthChangeAmount;
         health += healthChangeAmount;
         health = Mathf.Min(health, AllManager.Instance().playerManager.GetMaxHealthFromLevel());
         UIManager._instance.uiGameplay.UpdateHealthSlider(health);
@@ -159,6 +166,7 @@ public class Player
     {
         if(id == Player_ID.MyPlayerID)
         {
+            dmgRecieved = (int)dmg;
             health -= dmg;
             if (health <= 0)
             {
@@ -167,6 +175,7 @@ public class Player
             }
             UIManager._instance.uiGameplay.UpdateHealthSlider(health);
         }
+        
     }
 
     GameObject GetTagetObj()

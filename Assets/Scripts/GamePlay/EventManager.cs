@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameEvent
@@ -39,6 +40,7 @@ public class GameEventManager
         RaidBoss
     }
 
+
     public GameEventManager(AllGameEventConfig allGameEventConfig)
     {
         gameEventConfigs = allGameEventConfig.GameEventConfigs;
@@ -65,15 +67,14 @@ public class GameEventManager
         GameEvent gameEvent = gameEventDict[sharedId];
         gameEvent.End();
     }
-
     public void UpdateEventState(EventsInfo info)
     {
         //process info
-        Debug.Log(info.timeToNextEvent);
+        //Debug.Log(info.timeToNextEvent);
         foreach(var ev in info.event_info)
         {
             GameEventType id = (GameEventType)ev.id;
-            Debug.Log(id + "/" + ev.id);
+            //Debug.Log(id + "/" + ev.id);
             switch(id)
             {
                 case GameEventType.Chain:
@@ -81,8 +82,41 @@ public class GameEventManager
                 case GameEventType.LimitedVision:
                     break;
                 case GameEventType.SharedAttributes:
-                    ShareAttrEventData sharedAttrData = ev.share_attr;
-                    Debug.Log(sharedAttrData.curHP + " / " +  sharedAttrData.maxHP);
+                    ShareAttrEventData sharedAttrData = ev.share;
+                    
+                    if (ev.end)
+                    {
+                        if (ev.endState)
+                        {
+                            gameEventDict[(int)id].End();
+                        }
+                        else
+                        {
+                            AllManager._instance.playerManager.dictPlayers[Player_ID.MyPlayerID].isDead = true;
+                        }
+
+                        gameEventDict.Remove((int)id);
+                        return;
+                    }
+                    //Debug.Log(sharedAttrData.curHP + " / " + sharedAttrData.maxHP+" TIME END: "+ev.timeToEnd);
+                    if (gameEventDict.ContainsKey((int)id))
+                    {
+                        UIManager._instance.uiGameplay.txtTimeEvent.text = ev.timeToEnd.ToString()+"s";
+                        GameEvent curEvent = gameEventDict[(int)id];
+                        
+                        AllManager._instance.playerManager.dictPlayers[Player_ID.MyPlayerID].SetHealth(sharedAttrData.curHP);
+                        
+                        UIManager._instance.uiGameplay.UpdateHealthSlider(sharedAttrData.curHP);
+                        Debug.Log(sharedAttrData.curHP);
+                        
+                    }
+                    else
+                    {
+                        UIManager._instance.uiGameplay.txtTimeEvent.gameObject.SetActive(true);
+                        
+                        gameEventDict.Add((int)id,new GameEvent( gameEventConfigs[2]));
+                        UIManager._instance.uiGameplay.ChangeSliderEvent((int)sharedAttrData.maxHP);
+                    }
                     break;
                 case GameEventType.QuickTimeEvent:
                     break;
