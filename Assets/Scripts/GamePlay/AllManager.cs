@@ -177,10 +177,10 @@ public class AllManager : MonoBehaviour
         while(true)
         {
             yield return new WaitForSeconds(2);
-            Debug.Log(PingData.sum + "/" + PingData.pingCount);
+            //Debug.Log(PingData.sum + "/" + PingData.pingCount);
             UIManager._instance.uiGameplay.UpdatePingText(PingData.sum / PingData.pingCount);
             PingData.sum = 0;
-            PingData.pingCount = 0;
+            PingData.pingCount = 1;
         }
     }
 }
