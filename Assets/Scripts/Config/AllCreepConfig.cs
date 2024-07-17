@@ -1,5 +1,4 @@
-﻿using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "AllCreepConfig", menuName = "Config/CreepConfig/AllCreep")]
 public class AllCreepConfig : ScriptableObject

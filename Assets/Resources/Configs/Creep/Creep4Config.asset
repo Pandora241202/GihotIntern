@@ -19,8 +19,16 @@ MonoBehaviour:
   exp: 30
   dropItemConfigs:
   - powerUpType: 0
-    dropChance: 0
-  - powerUpType: 12
-    dropChance: 1
+    dropChance: 0.05
+  - powerUpType: 1
+    dropChance: 0.05
+  - powerUpType: 2
+    dropChance: 0.03
+  - powerUpType: 3
+    dropChance: 0.05
+  - powerUpType: 4
+    dropChance: 0.03
+  - powerUpType: 5
+    dropChance: 0.03
   startIncreaseSpeedDis: 5
   speedMultiplayer: 1.5

@@ -13,17 +13,15 @@ MonoBehaviour:
   m_Name: AllDropItemConfig
   m_EditorClassIdentifier: 
   powerUpAttributesList:
-  - type: 4
+  - type: 3
     powerUpConfig: {fileID: 11400000, guid: 6ffe9ae6551b4fb4982d3646693b615b, type: 2}
   - type: 0
     powerUpConfig: {fileID: 11400000, guid: 9901cfe60ebcfdd44ad0432a9f240397, type: 2}
-  - type: 5
-    powerUpConfig: {fileID: 11400000, guid: 4f039ba126e7b9243a5a33b41c25d1e9, type: 2}
   - type: 1
     powerUpConfig: {fileID: 11400000, guid: 91deeee73afd34c4f9847e04f13c8f72, type: 2}
   - type: 2
     powerUpConfig: {fileID: 11400000, guid: f33b5eda0c64ca74ebcd7bb5e0f325a1, type: 2}
-  - type: 11
+  - type: 4
     powerUpConfig: {fileID: 11400000, guid: 02cdc23a45b07d24db301c3bd8dceb52, type: 2}
-  - type: 12
+  - type: 5
     powerUpConfig: {fileID: 11400000, guid: 79aba36a522f6fc4b9beedbbcf69e73c, type: 2}

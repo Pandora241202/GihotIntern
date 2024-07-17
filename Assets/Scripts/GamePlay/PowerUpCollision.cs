@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PowerUpCollision : MonoBehaviour
 {
-    public AllDropItemConfig.PowerUpsType powerUpType;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -13,8 +12,7 @@ public class PowerUpCollision : MonoBehaviour
             if (powerUpManager != null)
             {
                 string playerId = other.GetComponent<CharacterControl>().id;
-                powerUpManager.ApplyPowerUp(playerId, powerUpType);
-                Destroy(gameObject); 
+                powerUpManager.ProcessCollisionPlayer(gameObject.GetInstanceID(), playerId);
             }
         }
     }

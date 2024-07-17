@@ -9,8 +9,6 @@ public class HealthPack : PowerUpsConfig
     {
         Debug.Log("HealthPack activated");
         int healAmount=(int)(AllManager.Instance().playerManager.GetMaxHealthFromLevel()*this.boostAmount);
-        AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health += healAmount;
-        UIManager._instance.uiGameplay.sliderHealth.value =
-            AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].health;
+        AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].ChangeHealth(healAmount);
     }
 }

@@ -6,12 +6,16 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     public UIPause uiPause;
+    public UIDefeat uiDefeat;
     public UIGamePlay uiGameplay;
     public UIOnlineLobby uiOnlineLobby;
     public UIMainMenu uiMainMenu;
     public UILogin uiLogin;
     public UIChoseGun uiChoseGun;
+
     public UILoading uiLoading;
+
+    public UILevelUp uiLevelUp;
     public FixedJoystick _joystick;
     public FloatingJoystick _fjoystick;
     public static UIManager _instance { get; private set; }
@@ -33,7 +37,11 @@ public class UIManager : MonoBehaviour
         uiMainMenu.OnSetUp();
         uiChoseGun.OnSetUp();
         uiLogin.OnSetUp();
+
         uiLoading.OnSetUp();
+
+        
+        uiDefeat.gameObject.SetActive(false);
         if (_instance == null)
         {
             _instance = this;

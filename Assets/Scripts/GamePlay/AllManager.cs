@@ -11,14 +11,17 @@ public class AllManager : MonoBehaviour
     [SerializeField] public AllCreepConfig allCreepConfig;
     [SerializeField] public AllDropItemConfig allDropItemConfig;
     [SerializeField] public PlayerConfig playerConfig;
+    [SerializeField] public AllGameEventConfig allGameEventConfig;
     [SerializeField] GameObject characterPrefab;
-    [SerializeField] AllLevelUpConfig AllLevelUpConfig;
+    [SerializeField] LevelUpConfig levelUpConfig;
     public SceneUpdater sceneUpdater;
     public BulletManager bulletManager;
     public CreepManager creepManager;
     public PowerUpManager powerUpManager;
+    public GameEventManager gameEventManager;
     public bool isPause = false;
     public bool isHost=false;
+    public bool isLevelUp = false;
     public static AllManager Instance()
     {
         return _instance;
@@ -31,7 +34,8 @@ public class AllManager : MonoBehaviour
     }
     private void Start()
     {
-        playerManager = new PlayerManager(characterPrefab, AllLevelUpConfig);
+        playerManager = new PlayerManager(characterPrefab, levelUpConfig);
+        StartCoroutine(UpdatePing());
     }
     private void Update()
     {
@@ -79,6 +83,7 @@ public class AllManager : MonoBehaviour
             creepManager = sceneUpdater.creepManager;
             bulletManager = sceneUpdater.bulletManager;
             powerUpManager = sceneUpdater.powerUpManager;
+            gameEventManager = sceneUpdater.gameEventManager;
             SendData<EventName> ev = new SendData<EventName>(new EventName("done loading"));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
         }
@@ -119,8 +124,10 @@ public class AllManager : MonoBehaviour
         SocketCommunication.GetInstance().Close();
     }
     
-    public void GameEnd()
+    public IEnumerator GameEnd()
     {
+        isPause = true;
+        yield return new WaitForEndOfFrame();
         foreach(var player in playerManager.dictPlayers)
         {
             GameObject.Destroy(player.Value.playerTrans.gameObject);
@@ -128,4 +135,50 @@ public class AllManager : MonoBehaviour
        LoadSceneAsync("UI", "Room");
     }
     
+    public void UpdateGameState(GameState gameState)
+    {
+        GameStateData state = gameState.state;
+
+        if(state.resume.isResume)
+        {
+            //show resume coutdown
+            Debug.Log(state.resume.time);
+        }
+
+        if(isPause != state.isPause&&!state.isLevelUp)
+        {
+            isPause = state.isPause;
+            if (isPause) UIManager._instance.PauseGame();
+            else UIManager._instance.ResumeGame();
+        }
+
+        if (isLevelUp != state.isLevelUp)
+        {
+            isLevelUp = state.isLevelUp;
+            if (isLevelUp) isPause = true;
+            else
+            {
+                isPause = false;
+                UIManager._instance.uiLevelUp.gameObject.SetActive(false);
+            }
+        }
+
+        playerManager.UpdatePlayersState(state.player_states);
+
+        creepManager.UpdateCreepsState(state.creep_spawn_infos, state.creep_destroy_infos);
+
+        powerUpManager.UpdatePowerUpsState(state.power_up_pick_infos);
+    }
+
+    public IEnumerator UpdatePing()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(2);
+            Debug.Log(PingData.sum + "/" + PingData.pingCount);
+            UIManager._instance.uiGameplay.UpdatePingText(PingData.sum / PingData.pingCount);
+            PingData.sum = 0;
+            PingData.pingCount = 0;
+        }
+    }
 }

@@ -15,13 +15,21 @@ MonoBehaviour:
   creepPrefab: {fileID: 8689480311849083149, guid: b09c733c58ba9b841b653bd447794646, type: 3}
   baseHp: 150
   baseSpeed: 1
-  baseDmg: 100
+  baseDmg: 0
   exp: 30
   dropItemConfigs:
   - powerUpType: 0
+    dropChance: 0.05
+  - powerUpType: 1
+    dropChance: 0.05
+  - powerUpType: 2
+    dropChance: 0.05
+  - powerUpType: 3
+    dropChance: 0.2
+  - powerUpType: 4
     dropChance: 0
-  - powerUpType: 12
-    dropChance: 1
+  - powerUpType: 5
+    dropChance: 0
   startMoveAwayDistance: 5
   healing: {fileID: 9017484664307500583, guid: 016eb712ee010394aa2dd710d9003fc6, type: 3}
   skillCD: 10

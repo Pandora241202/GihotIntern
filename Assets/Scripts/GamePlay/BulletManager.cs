@@ -1,20 +1,20 @@
-using JetBrains.Annotations;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 public class BulletInfo
 {
     public Transform bulletObj;
     private float speed = 5f;
     public bool isNeedDestroy;
     private Vector3 direction;
-    public int damage;
+    public float damage;
     public float timer;
     public bool needDelayActive;
     public float delayActiveTime;
     public string playerId;
+    public float timeToLive;
 
-    public BulletInfo(Transform obj, Vector3 targetDirection, int damage, float bulletSpeed = 5f, bool needDelayActive = false, float delayActiveTime = 0, string playerId = null)
+    public BulletInfo(Transform obj, Vector3 targetDirection, float damage, float timeToLive, float bulletSpeed = 5f, bool needDelayActive = false, float delayActiveTime = 0, string playerId = null)
     {
         this.bulletObj = obj;
         this.direction = targetDirection.normalized;
@@ -24,6 +24,7 @@ public class BulletInfo
         this.delayActiveTime = delayActiveTime;
         this.damage = damage;
         this.playerId = playerId;
+        this.timeToLive = timeToLive;
         if (needDelayActive)
         {
             bulletObj.gameObject.SetActive(false);
@@ -47,12 +48,26 @@ public class BulletInfo
                 needDelayActive = false;
                 timer = 0;
             }
-            else
-            {
-                timer += Time.deltaTime;
-            }
         }
+
         bulletObj.position += direction * speed * Time.deltaTime;
+
+        // Destroy bullet when out of map range or life time >= time to live
+        // With time to live
+        if (timer >= timeToLive)
+        {
+            isNeedDestroy = true;
+            timer = 0;
+        } else
+        {
+            timer += Time.deltaTime;
+        }
+
+        // With map range
+        if (bulletObj.position.x < Constants.MapMinX || bulletObj.position.x > Constants.MapMaxX || bulletObj.position.y < Constants.MapMinY || bulletObj.position.z < Constants.MapMinZ  || bulletObj.position.z > Constants.MapMaxZ)
+        {
+            isNeedDestroy = true;
+        }
     }
 }
 public class BulletManager
@@ -60,8 +75,6 @@ public class BulletManager
     public List<BulletInfo> bulletInfoList = new List<BulletInfo>();
     public Dictionary<int, BulletInfo> bulletInfoDict = new Dictionary<int, BulletInfo>();
     public GunConfig gunConfig;
-    private float localFireRate;
-    private float lastFireTime = 0f;
     private int gunId = 0; //TODO: receive gunID from player
     public GameObject target;
 
@@ -87,15 +100,15 @@ public class BulletManager
             bulletInfoList[i].Move();
         }
 
-        Transform bullet;
-        for (int i = 0; i < bulletInfoList.Count; i++)
-        {
-            bullet = bulletInfoList[i].bulletObj;
-            if (bullet.position.x >= 100 || bullet.position.x <= -100 || bullet.position.z >= 100 || bullet.position.z <= -100)
-            {
-                bulletInfoList[i].isNeedDestroy = true;
-            }
-        }
+        // Transform bullet;
+        // for (int i = 0; i < bulletInfoList.Count; i++)
+        // {
+        //     bullet = bulletInfoList[i].bulletObj;
+        //     if (bullet.position.x >= 100 || bullet.position.x <= -100 || bullet.position.z >= 100 || bullet.position.z <= -100)
+        //     {
+        //         bulletInfoList[i].isNeedDestroy = true;
+        //     }
+        // }
     }
 
     public void LateUpdate()
@@ -119,17 +132,5 @@ public class BulletManager
         BulletInfo in4;
         if(bulletInfoDict.TryGetValue(id, out in4)) 
             in4.isNeedDestroy = true;
-    }
-
-    public float SpawnBullet(Vector3 posSpawn, GameObject target, int gunId, float lastFireTime, string tagName, int playerDmg, string playerId)
-    {
-        GunType gunType = gunConfig.lsGunType[gunId];
-        localFireRate = gunType.Firerate;
-        if (target && Time.time >= lastFireTime + 1f / localFireRate)
-        {
-            gunType.bulletConfig.Fire(posSpawn, target.transform.position, playerDmg, this, tagName, playerId: playerId);
-            return Time.time;
-        }
-        return lastFireTime;
     }
 }

@@ -148,9 +148,10 @@ public class Room
 [System.Serializable]
 public class CreepSpawnInfo
 {
-    public int creepTypeInt;
-    [field: SerializeField] public Vector3[] spawnPos;
+    public int type_int;
+    [field: SerializeField] public Vector3 spawn_pos;
     public float time;
+    public int shared_id;
 }
 
 [Serializable]
@@ -178,6 +179,7 @@ public class PlayerState
     [field: SerializeField] public Vector3 velocity;
     [field: SerializeField] public Quaternion rotation;
     public bool isFire;
+    public float speedBoost;
     public PlayerState(Vector3 position, Vector3 velocity, Quaternion rotation, Player player, bool isFire)
     {
         this.position = position;
@@ -185,11 +187,13 @@ public class PlayerState
         this.rotation = rotation;
         this.isDead = player.isDead;
         this.isFire = isFire;
+        speedBoost = player.GetSpeedBoostByLevelUp();
     }
 }
 [Serializable]
 public class PlayersState
 {
+    public long time;
     public PlayerState[] states;
 }
 
@@ -212,14 +216,44 @@ public class PlayersPosition
 }
 
 [Serializable]
+public class PowerUpSpawnInfo
+{
+    public int type_int;
+    [field: SerializeField] public Vector3 spawn_pos;
+    public int shared_id;
+
+    public PowerUpSpawnInfo(AllDropItemConfig.PowerUpsType type, Vector3 spawn_pos)
+    {
+        this.type_int = (int) type;
+        this.spawn_pos = spawn_pos;
+    }
+}
+
+[Serializable]
+public class PowerUpPickInfo
+{
+    public string event_name = "power up pick";
+    public string player_id;
+    public int shared_id;
+
+    public PowerUpPickInfo(string player_id, int shared_id)
+    {
+        this.player_id = player_id;
+        this.shared_id = shared_id;
+    }
+}
+
+[Serializable]
 public class CreepDestroyInfo
 {
     public string event_name = "creep destroy";
-    public int creep_id;
+    public int shared_id;
+    public PowerUpSpawnInfo power_up_spawn_info;
 
-    public CreepDestroyInfo(int  creep_id)
+    public CreepDestroyInfo(int shared_id, PowerUpSpawnInfo power_up_spawn_info)
     {
-        this.creep_id = creep_id;
+        this.shared_id = shared_id;
+        this.power_up_spawn_info = power_up_spawn_info;
     }
 }
 
@@ -240,17 +274,21 @@ public class PauseEvent
 {
     public string event_name = "pause";
 }
+[Serializable]
+public class LevelUpEvent
+{
+    public string event_name = "level up";
+}
+[Serializable]
+public class ChooseLevelUpEvent
+{
+    public string event_name = "choose level up";
+}
 
 [Serializable]
 public class ResumeEvent
 {
     public string event_name = "resume";
-}
-
-[Serializable]
-public class TimeToResume
-{
-    public int time;
 }
 
 [Serializable]
@@ -262,4 +300,47 @@ public class ReviveEvent
     {
         this.revive_player_id = id;
     }
+}
+
+[Serializable]
+public class GameEnd
+{
+    public Score[] result;
+}
+
+[Serializable]
+public class Score
+{
+    public string player_id;
+    public int enemy_kill;
+}
+[Serializable]
+public class PingEvent
+{
+    public string event_name = "ping";
+}
+
+[Serializable]
+public class ResumeInfo
+{
+    public bool isResume;
+    public float time;
+}
+
+[Serializable]
+public class GameStateData
+{
+    public PlayersState player_states;
+    public bool isPause;
+    public bool isLevelUp;
+    public ResumeInfo resume;
+    public CreepSpawnInfo[] creep_spawn_infos;
+    public CreepDestroyInfo[] creep_destroy_infos;
+    public PowerUpPickInfo[] power_up_pick_infos;
+}
+
+[Serializable]
+public class GameState
+{
+    public GameStateData state;
 }

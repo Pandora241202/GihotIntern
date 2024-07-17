@@ -10,6 +10,8 @@ TagManager:
   - EnemyBullet
   - MapElement
   - Creep
+  - Enemy
+  - PowerUp
   layers:
   - Default
   - TransparentFX
