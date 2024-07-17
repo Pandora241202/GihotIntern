@@ -168,6 +168,8 @@ public class AllManager : MonoBehaviour
         creepManager.UpdateCreepsState(state.creep_spawn_infos, state.creep_destroy_infos);
 
         powerUpManager.UpdatePowerUpsState(state.power_up_pick_infos);
+
+        gameEventManager.UpdateEventState(state.game_event);
     }
 
     public IEnumerator UpdatePing()
@@ -175,10 +177,10 @@ public class AllManager : MonoBehaviour
         while(true)
         {
             yield return new WaitForSeconds(2);
-            Debug.Log(PingData.sum + "/" + PingData.pingCount);
+            //Debug.Log(PingData.sum + "/" + PingData.pingCount);
             UIManager._instance.uiGameplay.UpdatePingText(PingData.sum / PingData.pingCount);
             PingData.sum = 0;
-            PingData.pingCount = 0;
+            PingData.pingCount = 1;
         }
     }
 }

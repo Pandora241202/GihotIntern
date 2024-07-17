@@ -180,6 +180,7 @@ public class PlayerState
     [field: SerializeField] public Quaternion rotation;
     public bool isFire;
     public float speedBoost;
+    public float maxHP;
     public PlayerState(Vector3 position, Vector3 velocity, Quaternion rotation, Player player, bool isFire)
     {
         this.position = position;
@@ -187,7 +188,9 @@ public class PlayerState
         this.rotation = rotation;
         this.isDead = player.isDead;
         this.isFire = isFire;
-        speedBoost = player.GetSpeedBoostByLevelUp();
+        this.speedBoost = player.GetSpeedBoostByLevelUp();
+        this.maxHP = AllManager.Instance().playerManager.GetMaxHealthFromLevel();
+
     }
 }
 [Serializable]
@@ -327,6 +330,56 @@ public class ResumeInfo
     public float time;
 }
 
+
+[Serializable]
+public class GameEventData
+{
+    public int id;
+    public float timeToEnd;
+    public ShareAttrEventData share;
+    public ChainEventData chain;
+    public LimitedVisionEventData limited;
+    public RaidBossEventData raid;
+    public QuickTimeEventData quick;
+}
+
+[Serializable]
+public class EventsInfo
+{
+    public GameEventData[] event_info;
+    public float timeToNextEvent;
+}
+
+[Serializable]
+public class ShareAttrEventData
+{
+    public float curHP;
+    public float maxHP;
+}
+
+[Serializable]
+public class ChainEventData 
+{
+    
+}
+
+[Serializable]
+public class LimitedVisionEventData 
+{
+
+}
+
+[Serializable]
+public class RaidBossEventData 
+{
+
+}
+
+public class QuickTimeEventData 
+{
+
+}
+
 [Serializable]
 public class GameStateData
 {
@@ -337,7 +390,9 @@ public class GameStateData
     public CreepSpawnInfo[] creep_spawn_infos;
     public CreepDestroyInfo[] creep_destroy_infos;
     public PowerUpPickInfo[] power_up_pick_infos;
+    public EventsInfo game_event;
 }
+
 
 [Serializable]
 public class GameState

@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using UnityEditor.Timeline.Actions;
 using UnityEngine;
-using static CreepManager;
 
 public class GameEvent
 {
@@ -66,5 +64,31 @@ public class GameEventManager
     {
         GameEvent gameEvent = gameEventDict[sharedId];
         gameEvent.End();
+    }
+
+    public void UpdateEventState(EventsInfo info)
+    {
+        //process info
+        Debug.Log(info.timeToNextEvent);
+        foreach(var ev in info.event_info)
+        {
+            GameEventType id = (GameEventType)ev.id;
+            Debug.Log(id + "/" + ev.id);
+            switch(id)
+            {
+                case GameEventType.Chain:
+                    break;
+                case GameEventType.LimitedVision:
+                    break;
+                case GameEventType.SharedAttributes:
+                    ShareAttrEventData sharedAttrData = ev.share_attr;
+                    Debug.Log(sharedAttrData.curHP + " / " +  sharedAttrData.maxHP);
+                    break;
+                case GameEventType.QuickTimeEvent:
+                    break;
+                case GameEventType.OnePermadeath:
+                    break;
+            }
+        }
     }
 }
