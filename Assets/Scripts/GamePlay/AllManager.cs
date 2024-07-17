@@ -168,6 +168,8 @@ public class AllManager : MonoBehaviour
         creepManager.UpdateCreepsState(state.creep_spawn_infos, state.creep_destroy_infos);
 
         powerUpManager.UpdatePowerUpsState(state.power_up_pick_infos);
+
+        gameEventManager.UpdateEventState(state.game_event);
     }
 
     public IEnumerator UpdatePing()

@@ -327,6 +327,27 @@ public class ResumeInfo
     public float time;
 }
 
+
+[Serializable]
+public class GameEventData
+{
+    public int id;
+    public float timeToEnd;
+}
+
+[Serializable]
+public class EventsInfo
+{
+    public GameEvent[] event_info;
+    public float timeToNextEvent;
+}
+
+[Serializable]
+public class ShareAttrEventData : GameEventData
+{
+
+}
+
 [Serializable]
 public class GameStateData
 {
@@ -337,7 +358,9 @@ public class GameStateData
     public CreepSpawnInfo[] creep_spawn_infos;
     public CreepDestroyInfo[] creep_destroy_infos;
     public PowerUpPickInfo[] power_up_pick_infos;
+    public EventsInfo game_event;
 }
+
 
 [Serializable]
 public class GameState

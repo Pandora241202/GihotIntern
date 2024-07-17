@@ -67,4 +67,9 @@ public class GameEventManager
         GameEvent gameEvent = gameEventDict[sharedId];
         gameEvent.End();
     }
+
+    public void UpdateEventState(EventsInfo info)
+    {
+        //process info
+    }
 }
