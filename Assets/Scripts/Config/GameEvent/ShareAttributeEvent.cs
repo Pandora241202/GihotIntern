@@ -10,9 +10,6 @@ public class ShareAttributeEvent : GameEventConfig
     {
         base.Activate(gameEvent, eventData);
 
-        gameEvent.id = eventData.id;
-        gameEvent.timeEnd = eventData.timeToEnd;
-
         gameEvent.maxHP = (int)eventData.share.maxHP;
         gameEvent.curHP = (int)eventData.share.curHP;
 

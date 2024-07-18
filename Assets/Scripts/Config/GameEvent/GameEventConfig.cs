@@ -7,6 +7,8 @@ public class GameEventConfig: ScriptableObject
 
     public virtual void Activate(GameEvent gameEvent, GameEventData eventData)
     {
+        gameEvent.id = eventData.id;
+        gameEvent.timeEnd = eventData.timeToEnd;
         UIManager._instance.uiGameplay.OnEventStart(gameEvent.id,(int)gameEvent.timeEnd);
     } // Assign all need attribute for event in here
 
