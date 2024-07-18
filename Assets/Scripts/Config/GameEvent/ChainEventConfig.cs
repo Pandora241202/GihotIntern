@@ -5,7 +5,7 @@ public class ChainEventConfig : GameEventConfig
 {
     [SerializeField] private Vector3 defaultAnchorPos;
 
-    public override void Activate(GameEvent gameEvent)
+    public override void Activate(GameEvent gameEvent, GameEventData eventData)
     {
         gameEvent.anchorPos = defaultAnchorPos;
     }
