@@ -4029,6 +4029,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3927596743833049719, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
+      propertyPath: itemEvent
+      value: 
+      objectReference: {fileID: 7602856736631165790, guid: a4986000a34879f4c81c5ca4f2ab2597, type: 3}
+    - target: {fileID: 3927596743833049719, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
       propertyPath: txtTimeEvent
       value: 
       objectReference: {fileID: 0}

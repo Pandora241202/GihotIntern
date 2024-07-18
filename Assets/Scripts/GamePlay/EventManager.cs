@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class GameEvent
@@ -8,11 +9,13 @@ public class GameEvent
     public Vector3 anchorPos;
     public int curHP;
     public int maxHP;
-    
+    public int id;
+    public float timeEnd;
     public GameEvent(GameEventConfig config)
     {
         this.config = config;
-        config.Activate(this); // Assign all need attribute for event in here
+        
+        //config.Activate(this); // Assign all need attribute for event in here
     }
 
     public void Apply()
@@ -29,7 +32,9 @@ public class GameEvent
 public class GameEventManager
 {
     private GameEventConfig[] gameEventConfigs;
-    private Dictionary<int, GameEvent> gameEventDict = new Dictionary<int, GameEvent>(); // key is the sharedId generate and manage by server
+
+    private Dictionary<int, GameEvent>
+        gameEventDict = new Dictionary<int, GameEvent>(); // key is the sharedId generate and manage by server
 
     public enum GameEventType
     {
@@ -49,14 +54,14 @@ public class GameEventManager
 
     public void ActivateEventByType(GameEventType type, int sharedId)
     {
-        GameEventConfig config = gameEventConfigs[(int) type];
+        GameEventConfig config = gameEventConfigs[(int)type];
         GameEvent gameEvent = new GameEvent(config);
         gameEventDict.Add(sharedId, gameEvent);
     }
 
     public void MyUpdate()
     {
-        foreach (var pair in gameEventDict) 
+        foreach (var pair in gameEventDict)
         {
             GameEvent gameEvent = pair.Value;
             gameEvent.Apply();
@@ -68,15 +73,23 @@ public class GameEventManager
         GameEvent gameEvent = gameEventDict[sharedId];
         gameEvent.End();
     }
+
     public void UpdateEventState(EventsInfo info)
     {
         //process info
         //Debug.Log(info.timeToNextEvent);
-        foreach(var ev in info.event_info)
+        if (info.timeToNextEvent<=2f)
         {
+            //todo
+        }
+        foreach (var ev in info.event_info)
+        {
+            
+
             GameEventType id = (GameEventType)ev.id;
+            GameEvent curEvent;
             //Debug.Log(id + "/" + ev.id);
-            switch(id)
+            switch (id)
             {
                 case GameEventType.Chain:
                     break;
@@ -84,7 +97,7 @@ public class GameEventManager
                     break;
                 case GameEventType.SharedAttributes:
                     ShareAttrEventData sharedAttrData = ev.share;
-                    
+
                     if (ev.end)
                     {
                         if (ev.endState)
@@ -102,26 +115,31 @@ public class GameEventManager
 
                     if (!gameEventDict.ContainsKey((int)id))
                     {
-                        //UIManager._instance.uiGameplay.txtTimeEvent.gameObject.SetActive(true);   
-                        UIManager._instance.uiGameplay.OnEventStart(1,2,(int)ev.timeToEnd);
-                        gameEventDict.Add((int)id,new GameEvent(gameEventConfigs[2]));
-                        gameEventDict[(int)id].maxHP = (int)sharedAttrData.maxHP;
+                        
+                        curEvent = new GameEvent(gameEventConfigs[2]);
+                        curEvent.id = 2;
+                        curEvent.timeEnd = ev.timeToEnd;
+                        gameEventDict.Add((int)id, curEvent);
+                        curEvent.maxHP = (int)sharedAttrData.maxHP;
+                        curEvent.curHP = (int)sharedAttrData.curHP;
+                        curEvent.config.Activate(curEvent);
+                        
                     }
-
-                   // UIManager._instance.uiGameplay.txtTimeEvent.text = (int)ev.timeToEnd + "s";
-                    foreach (var item in UIManager._instance.uiGameplay.lsGOEvent)
+                    else
                     {
-                        item.GetComponent<ItemEvent>().OnUpdateFill((int)ev.timeToEnd);
+                        curEvent = gameEventDict[(int)id];
+                        curEvent.curHP = (int)sharedAttrData.curHP;
+                        curEvent.timeEnd = ev.timeToEnd;
                     }
-                    GameEvent curEvent = gameEventDict[(int)id];
-                    curEvent.curHP = (int)sharedAttrData.curHP;
-
                     break;
                 case GameEventType.QuickTimeEvent:
                     break;
                 case GameEventType.OnePermadeath:
                     break;
+                
             }
+
+         
         }
     }
 }

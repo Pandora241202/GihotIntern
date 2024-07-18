@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+
 public class UIGamePlay : MonoBehaviour
 {
     public Slider sliderHealth;
@@ -14,12 +15,13 @@ public class UIGamePlay : MonoBehaviour
     public GameObject goEvent;
     public ItemEvent itemEvent;
     public GameObject goSpawnEvent;
-    public List<GameObject> lsGOEvent = new List<GameObject>();
+    public Dictionary<int,GameObject> lsGOEvent = new Dictionary<int, GameObject>();
+
     public void OnSetUp(float maxHealth, float maxExp)
     {
         sliderHealth.maxValue = maxHealth;
-        sliderHealth.value = maxHealth; 
-        sliderLevel.maxValue = maxExp; 
+        sliderHealth.value = maxHealth;
+        sliderLevel.maxValue = maxExp;
         sliderLevel.value = 0;
         txtPing.text = "0ms";
         // txtTimeEvent.text = "0s";
@@ -39,33 +41,30 @@ public class UIGamePlay : MonoBehaviour
         sliderHealth.value = currentHealth;
     }
 
-  public void OnEventStart(int count, int idEvent,int duration)
-  {
-      for (int i = 0; i < count; i++)
-      {
-          GameObject goItem = Instantiate(itemEvent.gameObject, goSpawnEvent.transform);
-          goItem.transform.position = goSpawnEvent.transform.position;
-          goItem.transform.localScale = new Vector3(.3f, .3f, .3f);
-          goItem.GetComponent<ItemEvent>().OnSetUp(duration);
-          
-          Vector3 targetPosition = goEvent.transform.position;
-          
-          goItem.transform.DOMove(targetPosition, 1f).SetEase(Ease.InOutBack).OnComplete(() =>
-          {
-              goItem.transform.SetParent(goEvent.transform);
-              goItem.transform.localScale = Vector3.one;
-              
-              lsGOEvent.Add(goItem);
-              
-          });
-      }
-  }
+    public void OnEventStart(int idEvent, int duration)
+    {
+        GameObject goItem = Instantiate(itemEvent.gameObject, goSpawnEvent.transform);
+        goItem.transform.position = goSpawnEvent.transform.position;
+        goItem.transform.localScale = new Vector3(.3f, .3f, .3f);
+        goItem.GetComponent<ItemEvent>().OnSetUp(duration);
+
+        Vector3 targetPosition = goEvent.transform.position;
+
+        goItem.transform.DOMove(targetPosition, 1f).SetEase(Ease.InOutBack).OnComplete(() =>
+        {
+            goItem.transform.SetParent(goEvent.transform);
+            goItem.transform.localScale = Vector3.one;
+
+            lsGOEvent.Add(idEvent,goItem);
+        });
+    }
 
 
     public void SetHealthSliderValue(float currentHealth)
     {
         sliderHealth.value = currentHealth;
     }
+
     public void UpdatePingText(long ping)
     {
         if (ping < 50) txtPing.color = Color.green;
@@ -76,7 +75,7 @@ public class UIGamePlay : MonoBehaviour
 
     public void UpdateLevelSlider(float expProgress)
     {
-        sliderLevel.value = expProgress; 
+        sliderLevel.value = expProgress;
     }
 
     public void LevelUpdateSlider(float expRequire)
