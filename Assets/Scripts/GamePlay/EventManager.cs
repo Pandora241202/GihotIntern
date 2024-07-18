@@ -69,11 +69,11 @@ public class GameEventManager
     public void UpdateEventState(EventsInfo info)
     {
         //process info
-        Debug.Log(info.timeToNextEvent);
+        // Debug.Log("Time to next event: " + info.timeToNextEvent);
         foreach(var ev in info.event_info)
         {
             GameEventType id = (GameEventType)ev.id;
-            Debug.Log(id + "/" + ev.id);
+            Debug.Log("Event is: " + id + "/" + ev.id);
             switch(id)
             {
                 case GameEventType.Chain:
@@ -81,10 +81,18 @@ public class GameEventManager
                 case GameEventType.LimitedVision:
                     break;
                 case GameEventType.SharedAttributes:
-                    ShareAttrEventData sharedAttrData = ev.share_attr;
+                    ShareAttrEventData sharedAttrData = ev.share;
+                    if (sharedAttrData != null) Debug.Log("Shared Attribute Data is not null");
                     Debug.Log(sharedAttrData.curHP + " / " +  sharedAttrData.maxHP);
                     break;
                 case GameEventType.QuickTimeEvent:
+                    Debug.Log("Quick Time Event quick: " + ev);
+                    QuickTimeEventData quickTimeData = ev.quick;
+                    Debug.Log("Current Event: " + quickTimeData.currentEvent);
+                    Debug.Log("Current Goal: " + quickTimeData.goal);
+                    Debug.Log("Current Starting Score: " + quickTimeData.startingScore);
+                    //_____________________________//
+                    Debug.Log("Enemies killed in the qte: " + quickTimeData.enemyKill);
                     break;
                 case GameEventType.OnePermadeath:
                     break;
