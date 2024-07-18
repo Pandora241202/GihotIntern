@@ -5,14 +5,15 @@ using UnityEngine.UI;
 public class ItemEvent : MonoBehaviour
 {
    [SerializeField] private Image imgProgress;
-
-   public void OnSetUp()
+   public float duration;
+   public void OnSetUp(int durationEv)
    {
       imgProgress.fillAmount = 0;
+      duration = durationEv;
    }
 
    public void OnUpdateFill(float fillA)
    {
-      imgProgress.fillAmount = fillA;
+      imgProgress.fillAmount = 1-fillA/duration;
    }
 }

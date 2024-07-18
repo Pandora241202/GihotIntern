@@ -8,6 +8,7 @@ public class GameEvent
     public Vector3 anchorPos;
     public int curHP;
     public int maxHP;
+    
     public GameEvent(GameEventConfig config)
     {
         this.config = config;
@@ -101,12 +102,17 @@ public class GameEventManager
 
                     if (!gameEventDict.ContainsKey((int)id))
                     {
-                        UIManager._instance.uiGameplay.txtTimeEvent.gameObject.SetActive(true);                     
+                        //UIManager._instance.uiGameplay.txtTimeEvent.gameObject.SetActive(true);   
+                        UIManager._instance.uiGameplay.OnEventStart(1,2,(int)ev.timeToEnd);
                         gameEventDict.Add((int)id,new GameEvent(gameEventConfigs[2]));
                         gameEventDict[(int)id].maxHP = (int)sharedAttrData.maxHP;
                     }
 
-                    UIManager._instance.uiGameplay.txtTimeEvent.text = (int)ev.timeToEnd + "s";
+                   // UIManager._instance.uiGameplay.txtTimeEvent.text = (int)ev.timeToEnd + "s";
+                    foreach (var item in UIManager._instance.uiGameplay.lsGOEvent)
+                    {
+                        item.GetComponent<ItemEvent>().OnUpdateFill((int)ev.timeToEnd);
+                    }
                     GameEvent curEvent = gameEventDict[(int)id];
                     curEvent.curHP = (int)sharedAttrData.curHP;
 

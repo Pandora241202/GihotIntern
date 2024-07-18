@@ -11,9 +11,10 @@ public class UIGamePlay : MonoBehaviour
     public TextMeshProUGUI txtLevel;
     [SerializeField] private Button btnPause;
     [SerializeField] private TextMeshProUGUI txtPing;
-    public TextMeshProUGUI txtTimeEvent;
     public GameObject goEvent;
-    public GameObject itemEvent;
+    public ItemEvent itemEvent;
+    public GameObject goSpawnEvent;
+    public List<GameObject> lsGOEvent = new List<GameObject>();
     public void OnSetUp(float maxHealth, float maxExp)
     {
         sliderHealth.maxValue = maxHealth;
@@ -21,8 +22,8 @@ public class UIGamePlay : MonoBehaviour
         sliderLevel.maxValue = maxExp; 
         sliderLevel.value = 0;
         txtPing.text = "0ms";
-        txtTimeEvent.text = "0s";
-        txtTimeEvent.gameObject.SetActive(false);
+        // txtTimeEvent.text = "0s";
+        // txtTimeEvent.gameObject.SetActive(false);
         txtLevel.text = Constants.PlayerBaseLevel.ToString();
     }
 
@@ -38,18 +39,28 @@ public class UIGamePlay : MonoBehaviour
         sliderHealth.value = currentHealth;
     }
 
-    public void OnEventStart(int count, int idEvent)
-    {
-        for (int i = 0; i < count; i++)
-        {
-            GameObject goItem = Instantiate(itemEvent);
-            goEvent.transform.position = goEvent.transform.position;
-            goEvent.transform.DOMove(goEvent.transform.position, 1f).OnComplete(() =>
-            {
-                goItem.transform.SetParent(goEvent.transform);
-            });
-        }
-    }
+  public void OnEventStart(int count, int idEvent,int duration)
+  {
+      for (int i = 0; i < count; i++)
+      {
+          GameObject goItem = Instantiate(itemEvent.gameObject, goSpawnEvent.transform);
+          goItem.transform.position = goSpawnEvent.transform.position;
+          goItem.transform.localScale = new Vector3(.3f, .3f, .3f);
+          goItem.GetComponent<ItemEvent>().OnSetUp(duration);
+          
+          Vector3 targetPosition = goEvent.transform.position;
+          
+          goItem.transform.DOMove(targetPosition, 1f).SetEase(Ease.InOutBack).OnComplete(() =>
+          {
+              goItem.transform.SetParent(goEvent.transform);
+              goItem.transform.localScale = Vector3.one;
+              
+              lsGOEvent.Add(goItem);
+              
+          });
+      }
+  }
+
 
     public void SetHealthSliderValue(float currentHealth)
     {
