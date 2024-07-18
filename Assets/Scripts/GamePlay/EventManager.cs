@@ -11,7 +11,7 @@ public class GameEvent
     public GameEvent(GameEventConfig config)
     {
         this.config = config;
-        config.Activate(this); // Assign all need attribute for event in here
+        //config.Activate(this); // Assign all need attribute for event in here
     }
 
     public void Apply()
@@ -74,8 +74,9 @@ public class GameEventManager
         foreach(var ev in info.event_info)
         {
             GameEventType id = (GameEventType)ev.id;
+            GameEvent curEvent;
             //Debug.Log(id + "/" + ev.id);
-            switch(id)
+            switch (id)
             {
                 case GameEventType.Chain:
                     break;
@@ -101,15 +102,21 @@ public class GameEventManager
 
                     if (!gameEventDict.ContainsKey((int)id))
                     {
-                        UIManager._instance.uiGameplay.txtTimeEvent.gameObject.SetActive(true);                     
-                        gameEventDict.Add((int)id,new GameEvent(gameEventConfigs[2]));
-                        gameEventDict[(int)id].maxHP = (int)sharedAttrData.maxHP;
+                        UIManager._instance.uiGameplay.txtTimeEvent.gameObject.SetActive(true);
+                        curEvent = new GameEvent(gameEventConfigs[2]);
+                        gameEventDict.Add((int)id, curEvent);
+                        curEvent.maxHP = (int)sharedAttrData.maxHP;
+                        curEvent.curHP = (int)sharedAttrData.curHP;
+                        curEvent.config.Activate(curEvent);
+
                     }
-
-                    UIManager._instance.uiGameplay.txtTimeEvent.text = (int)ev.timeToEnd + "s";
-                    GameEvent curEvent = gameEventDict[(int)id];
-                    curEvent.curHP = (int)sharedAttrData.curHP;
-
+                    else
+                    {
+                        UIManager._instance.uiGameplay.txtTimeEvent.text = (int)ev.timeToEnd + "s";
+                        curEvent = gameEventDict[(int)id];
+                        curEvent.curHP = (int)sharedAttrData.curHP;
+                    }
+                    
                     break;
                 case GameEventType.QuickTimeEvent:
                     break;
