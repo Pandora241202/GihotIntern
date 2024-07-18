@@ -81,6 +81,7 @@ public class GameEventManager
         if (info.timeToNextEvent<=2f)
         {
             //todo
+            UIManager._instance.uiGameplay.ShowText();
         }
         foreach (var ev in info.event_info)
         {

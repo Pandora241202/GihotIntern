@@ -16,6 +16,8 @@ public class UIGamePlay : MonoBehaviour
     public ItemEvent itemEvent;
     public GameObject goSpawnEvent;
     public Dictionary<int,GameObject> lsGOEvent = new Dictionary<int, GameObject>();
+    public GameObject goTextEvent;
+    public bool isShowText = false;
 
     public void OnSetUp(float maxHealth, float maxExp)
     {
@@ -24,6 +26,7 @@ public class UIGamePlay : MonoBehaviour
         sliderLevel.maxValue = maxExp;
         sliderLevel.value = 0;
         txtPing.text = "0ms";
+        goTextEvent.SetActive(false);
         // txtTimeEvent.text = "0s";
         // txtTimeEvent.gameObject.SetActive(false);
         txtLevel.text = Constants.PlayerBaseLevel.ToString();
@@ -41,6 +44,21 @@ public class UIGamePlay : MonoBehaviour
         sliderHealth.value = currentHealth;
     }
 
+    public void ShowText()
+    {
+        isShowText = !isShowText;
+        if (isShowText)
+        {
+            goTextEvent.SetActive(true);
+            
+            goTextEvent.transform.DOScale(Vector3.zero, 2f).OnComplete(() =>
+            {
+                goTextEvent.transform.localScale=Vector3.one;
+                goTextEvent.SetActive(false);
+            });
+        }
+        
+    }
     public void OnEventStart(int idEvent, int duration)
     {
         GameObject goItem = Instantiate(itemEvent.gameObject, goSpawnEvent.transform);
