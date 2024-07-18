@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
+using DG.Tweening;
 public class UIGamePlay : MonoBehaviour
 {
     public Slider sliderHealth;
@@ -12,6 +12,8 @@ public class UIGamePlay : MonoBehaviour
     [SerializeField] private Button btnPause;
     [SerializeField] private TextMeshProUGUI txtPing;
     public TextMeshProUGUI txtTimeEvent;
+    public GameObject goEvent;
+    public GameObject itemEvent;
     public void OnSetUp(float maxHealth, float maxExp)
     {
         sliderHealth.maxValue = maxHealth;
@@ -35,7 +37,20 @@ public class UIGamePlay : MonoBehaviour
         sliderHealth.maxValue = AllManager._instance.playerManager.GetMaxHealthFromLevel();
         sliderHealth.value = currentHealth;
     }
-    
+
+    public void OnEventStart(int count, int idEvent)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            GameObject goItem = Instantiate(itemEvent);
+            goEvent.transform.position = goEvent.transform.position;
+            goEvent.transform.DOMove(goEvent.transform.position, 1f).OnComplete(() =>
+            {
+                goItem.transform.SetParent(goEvent.transform);
+            });
+        }
+    }
+
     public void SetHealthSliderValue(float currentHealth)
     {
         sliderHealth.value = currentHealth;
