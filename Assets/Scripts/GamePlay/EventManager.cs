@@ -113,7 +113,7 @@ public class GameEventManager
                     else
                     {
                         UIManager._instance.uiGameplay.txtTimeEvent.gameObject.SetActive(true);
-                        
+                        UIManager._instance.uiGameplay.OnEventStart(1,(int)id);
                         gameEventDict.Add((int)id,new GameEvent( gameEventConfigs[2]));
                         UIManager._instance.uiGameplay.ChangeSliderEvent((int)sharedAttrData.maxHP);
                     }
