@@ -58,7 +58,7 @@ public class LevelUpConfig : ScriptableObject
                 finalOptions.Add(defaultOptions[i]);
             }
         }
-        Debug.Log("Final options: " + string.Join(", ", finalOptions.ToArray()));
+        //Debug.Log("Final options: " + string.Join(", ", finalOptions.ToArray()));
         additionalOptions.Clear();
     }
 
@@ -85,7 +85,7 @@ public class LevelUpConfig : ScriptableObject
             case "damage":
                 levelUpDict[buff]++;
                 var damageBoost = levelUpDict[buff];
-                Debug.Log("Level up: Damage increased by " + damageBoost);
+                //Debug.Log("Level up: Damage increased by " + damageBoost);
                 player.SetDamageBoost(damageBoost);
                 break;
             case "crit":

@@ -34,11 +34,11 @@ public class UIGamePlay : MonoBehaviour
 
     public void UpdateHealthSlider(float currentHealth)
     {
-        sliderHealth.value = currentHealth;
         sliderHealth.maxValue = AllManager._instance.playerManager.GetMaxHealthFromLevel();
+        sliderHealth.value = currentHealth;
     }
 
-    public void OnEventStart(int count,int idEvent)
+    public void OnEventStart(int count, int idEvent)
     {
         for (int i = 0; i < count; i++)
         {
@@ -49,6 +49,11 @@ public class UIGamePlay : MonoBehaviour
                 goItem.transform.SetParent(goEvent.transform);
             });
         }
+    }
+
+    public void SetHealthSliderValue(float currentHealth)
+    {
+        sliderHealth.value = currentHealth;
     }
     public void UpdatePingText(long ping)
     {
@@ -75,6 +80,5 @@ public class UIGamePlay : MonoBehaviour
     public void ChangeSliderEvent(int maxHP)
     {
         sliderHealth.maxValue = maxHP;
-        sliderHealth.value=maxHP;
     }
 }

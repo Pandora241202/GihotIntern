@@ -358,13 +358,13 @@ public class ShareAttrEventData
     public float curHP;
     public float maxHP;
 }
+
 [Serializable]
 public class ShareAttrEventDamaged
 {
     public int id = 2;
     public string event_name = "game event";
     public int damage;
-    
     public ShareAttrEventDamaged(int dmg)
     {
         this.damage = dmg;

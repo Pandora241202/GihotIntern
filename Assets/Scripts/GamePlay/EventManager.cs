@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameEvent
@@ -7,7 +6,8 @@ public class GameEvent
     public GameEventConfig config;
 
     public Vector3 anchorPos;
-
+    public int curHP;
+    public int maxHP;
     public GameEvent(GameEventConfig config)
     {
         this.config = config;
@@ -98,25 +98,18 @@ public class GameEventManager
                         gameEventDict.Remove((int)id);
                         return;
                     }
-                    //Debug.Log(sharedAttrData.curHP + " / " + sharedAttrData.maxHP+" TIME END: "+ev.timeToEnd);
-                    if (gameEventDict.ContainsKey((int)id))
+
+                    if (!gameEventDict.ContainsKey((int)id))
                     {
-                        UIManager._instance.uiGameplay.txtTimeEvent.text = ev.timeToEnd.ToString()+"s";
-                        GameEvent curEvent = gameEventDict[(int)id];
-                        
-                        AllManager._instance.playerManager.dictPlayers[Player_ID.MyPlayerID].SetHealth(sharedAttrData.curHP);
-                        
-                        UIManager._instance.uiGameplay.UpdateHealthSlider(sharedAttrData.curHP);
-                        Debug.Log(sharedAttrData.curHP);
-                        
+                        UIManager._instance.uiGameplay.txtTimeEvent.gameObject.SetActive(true);                     
+                        gameEventDict.Add((int)id,new GameEvent(gameEventConfigs[2]));
+                        gameEventDict[(int)id].maxHP = (int)sharedAttrData.maxHP;
                     }
-                    else
-                    {
-                        UIManager._instance.uiGameplay.txtTimeEvent.gameObject.SetActive(true);
-                        UIManager._instance.uiGameplay.OnEventStart(1,(int)id);
-                        gameEventDict.Add((int)id,new GameEvent( gameEventConfigs[2]));
-                        UIManager._instance.uiGameplay.ChangeSliderEvent((int)sharedAttrData.maxHP);
-                    }
+
+                    UIManager._instance.uiGameplay.txtTimeEvent.text = (int)ev.timeToEnd + "s";
+                    GameEvent curEvent = gameEventDict[(int)id];
+                    curEvent.curHP = (int)sharedAttrData.curHP;
+
                     break;
                 case GameEventType.QuickTimeEvent:
                     break;

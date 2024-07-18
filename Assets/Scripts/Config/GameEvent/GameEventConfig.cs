@@ -3,7 +3,6 @@
 public class GameEventConfig: ScriptableObject
 {
     [SerializeField] private float expGain;
-
     public float ExpGain => expGain;
 
     public virtual void Activate(GameEvent gameEvent) { } // Assign all need attribute for event in here

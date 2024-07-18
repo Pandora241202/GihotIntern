@@ -15,11 +15,11 @@ public class DmgBoost : PowerUpsConfig
     }
     public override void ApplyEffect()
     {
-        Debug.Log("DMG Boost apply effect");
+        //Debug.Log("DMG Boost apply effect");
     }
     public override void Deactivate()
     {
-        Debug.Log("DMG Boost deactivate");
+        //Debug.Log("DMG Boost deactivate");
         var player = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID];
         player.SetDamageBoost(1);
     }
