@@ -116,6 +116,11 @@ public class Player
 
     public float GetSpeed()
     {
+        GameEvent gameEvent = AllManager.Instance().gameEventManager.GetActiveGameEventByType(GameEventManager.GameEventType.Chain);
+        if (gameEvent != null) {
+            return gameEvent.speed;
+        }
+
         return AllManager.Instance().playerManager.GetSpeedFromLevel(config.BaseSpeed) * (1 + this.speedBoostAmount) * (1 + this.speedBoostByLevelUp) ;
     }
 

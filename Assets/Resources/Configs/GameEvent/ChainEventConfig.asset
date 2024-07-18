@@ -13,4 +13,8 @@ MonoBehaviour:
   m_Name: ChainEventConfig
   m_EditorClassIdentifier: 
   expGain: 0
-  defaultAnchorPos: {x: 0, y: 0, z: 0}
+  defaultAnchorPos: {x: 30, y: 0.5, z: -50}
+  anchorPrefab: {fileID: 688065044199964289, guid: ffe1bb2347eef6245936b23527a1c85c, type: 3}
+  connectLinePrefab: {fileID: 5508517291382613538, guid: 8efd5ffae7bf5d2418bde4f4d484156f, type: 3}
+  speed: 5
+  chainRange: 4

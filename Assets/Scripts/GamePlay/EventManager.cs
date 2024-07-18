@@ -1,18 +1,23 @@
 using System.Collections.Generic;
-using UnityEditor.Timeline.Actions;
 using UnityEngine;
-using static CreepManager;
 
 public class GameEvent
 {
     public GameEventConfig config;
 
-    public Vector3 anchorPos;
+    // Chain Event
+    public Transform anchorTrans;
+    public Dictionary<string, Transform> connectLineTransDict = new Dictionary<string, Transform>();
+    public float speed;
 
     public GameEvent(GameEventConfig config)
     {
         this.config = config;
-        config.Activate(this); // Assign all need attribute for event in here
+    }
+
+    public void Activate()
+    {
+        config.Activate(this);
     }
 
     public void Apply()
@@ -46,11 +51,12 @@ public class GameEventManager
         gameEventConfigs = allGameEventConfig.GameEventConfigs;
     }
 
-    public void ActivateEventByType(GameEventType type, int sharedId)
+    public void ActivateEventByType(GameEventType type)
     {
         GameEventConfig config = gameEventConfigs[(int) type];
         GameEvent gameEvent = new GameEvent(config);
-        gameEventDict.Add(sharedId, gameEvent);
+        gameEvent.Activate();
+        gameEventDict.Add((int)type, gameEvent);
     }
 
     public void MyUpdate()
@@ -66,5 +72,12 @@ public class GameEventManager
     {
         GameEvent gameEvent = gameEventDict[sharedId];
         gameEvent.End();
+    }
+
+    public GameEvent GetActiveGameEventByType(GameEventType type)
+    {
+        GameEvent gameEvent = null;
+        gameEventDict.TryGetValue((int) type, out gameEvent);
+        return gameEvent;
     }
 }

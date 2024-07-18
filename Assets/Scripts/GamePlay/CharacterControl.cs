@@ -15,7 +15,7 @@ public class CharacterControl : MonoBehaviour
     private int frame = 0;
     public Animator charAnim;
     public Vector3 input_velocity = Vector3.zero;
-    Vector3 final_velocity = Vector3.zero;
+    public Vector3 final_velocity = Vector3.zero;
     private bool collision = false;
     Vector3 normal = Vector3.zero;
     public float correctPositionTime = 0;

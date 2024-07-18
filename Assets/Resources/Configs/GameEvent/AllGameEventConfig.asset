@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8c4c85dc233b3449a57b1d78b9462bb, type: 3}
   m_Name: AllGameEventConfig
   m_EditorClassIdentifier: 
-  gameEventConfigs: []
+  gameEventConfigs:
+  - {fileID: 11400000, guid: 0453096a34cd96e4790d6b54c9142fda, type: 2}

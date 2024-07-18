@@ -537,6 +537,8 @@ public class SocketCommunication
             AllManager.Instance().playerManager.SpawnPlayer(all.data[i].spawn_pos, all.data[i].player_id, all.data[i].gun_id);
         }
 
+        AllManager.Instance().gameEventManager.ActivateEventByType(GameEventManager.GameEventType.Chain);
+
         AllManager.Instance().isPause = false;
         SendData<EventName> dataDoneSpawn = new SendData<EventName>(new EventName("spawn done"));
         Send(JsonUtility.ToJson(dataDoneSpawn));
