@@ -32,10 +32,14 @@ public class UIGamePlay : MonoBehaviour
 
     public void UpdateHealthSlider(float currentHealth)
     {
-        sliderHealth.value = currentHealth;
         sliderHealth.maxValue = AllManager._instance.playerManager.GetMaxHealthFromLevel();
+        sliderHealth.value = currentHealth;
     }
     
+    public void SetHealthSliderValue(float currentHealth)
+    {
+        sliderHealth.value = currentHealth;
+    }
     public void UpdatePingText(long ping)
     {
         if (ping < 50) txtPing.color = Color.green;
@@ -61,6 +65,5 @@ public class UIGamePlay : MonoBehaviour
     public void ChangeSliderEvent(int maxHP)
     {
         sliderHealth.maxValue = maxHP;
-        sliderHealth.value=maxHP;
     }
 }
