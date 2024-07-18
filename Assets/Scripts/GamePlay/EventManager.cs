@@ -74,7 +74,7 @@ public class GameEventManager
     public void ClearEventByType(int type, bool endState)
     {
         GameEvent gameEvent = gameEventDict[type];
-        if(endState) gameEvent.End(endState);
+        gameEvent.End(endState);
     }
 
     public void UpdateEventState(EventsInfo info)
