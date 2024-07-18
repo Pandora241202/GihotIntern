@@ -4024,6 +4024,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIGamePlay
       objectReference: {fileID: 0}
+    - target: {fileID: 813882249308739933, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5094929053485534286, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5094929053485534286, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6251122003325922472, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6251122003325922472, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c5a7b53c56579b344ad44a941e6ece2f, type: 3}
 --- !u!224 &999097887899217251
