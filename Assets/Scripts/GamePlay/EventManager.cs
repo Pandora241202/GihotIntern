@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GameEvent
 {
@@ -23,9 +24,9 @@ public class GameEvent
         config.Apply(this);
     }
 
-    public void End()
+    public void End(bool endState)
     {
-        config.End(this);
+        config.End(this, endState);
     }
 }
 
@@ -52,11 +53,13 @@ public class GameEventManager
         gameEventConfigs = allGameEventConfig.GameEventConfigs;
     }
 
-    public void ActivateEventByType(GameEventType type, int sharedId)
+    public void ActivateEventByType(GameEventType type, GameEventData ev)
     {
         GameEventConfig config = gameEventConfigs[(int)type];
         GameEvent gameEvent = new GameEvent(config);
-        gameEventDict.Add(sharedId, gameEvent);
+        gameEvent = new GameEvent(gameEventConfigs[ev.id]);
+        gameEvent.config.Activate(gameEvent, ev);
+        gameEventDict.Add((int)type, gameEvent);
     }
 
     public void MyUpdate()
@@ -68,10 +71,10 @@ public class GameEventManager
         }
     }
 
-    public void ClearEventBySharedId(int sharedId)
+    public void ClearEventByType(int type, bool endState)
     {
-        GameEvent gameEvent = gameEventDict[sharedId];
-        gameEvent.End();
+        GameEvent gameEvent = gameEventDict[type];
+        if(endState) gameEvent.End(endState);
     }
 
     public void UpdateEventState(EventsInfo info)
@@ -83,63 +86,26 @@ public class GameEventManager
             //todo
             UIManager._instance.uiGameplay.ShowText();
         }
+
         foreach (var ev in info.event_info)
         {
-            
-
-            GameEventType id = (GameEventType)ev.id;
-            GameEvent curEvent;
-            //Debug.Log(id + "/" + ev.id);
-            switch (id)
+            //GameEventType id = (GameEventType)ev.id;
+            if (!gameEventDict.ContainsKey(ev.id))
             {
-                case GameEventType.Chain:
-                    break;
-                case GameEventType.LimitedVision:
-                    break;
-                case GameEventType.SharedAttributes:
-                    ShareAttrEventData sharedAttrData = ev.share;
-
-                    if (ev.end)
-                    {
-                        if (ev.endState)
-                        {
-                            gameEventDict[(int)id].End();
-                        }
-                        else
-                        {
-                            AllManager._instance.playerManager.dictPlayers[Player_ID.MyPlayerID].isDead = true;
-                        }
-
-                        gameEventDict.Remove((int)id);
-                        return;
-                    }
-
-                    if (!gameEventDict.ContainsKey((int)id))
-                    {
-                        
-                        curEvent = new GameEvent(gameEventConfigs[2]);
-                        curEvent.id = 2;
-                        curEvent.timeEnd = ev.timeToEnd;
-                        gameEventDict.Add((int)id, curEvent);
-                        curEvent.maxHP = (int)sharedAttrData.maxHP;
-                        curEvent.curHP = (int)sharedAttrData.curHP;
-                        curEvent.config.Activate(curEvent);
-                        
-                    }
-                    else
-                    {
-                        curEvent = gameEventDict[(int)id];
-                        curEvent.curHP = (int)sharedAttrData.curHP;
-                        curEvent.timeEnd = ev.timeToEnd;
-                    }
-                    break;
-                case GameEventType.QuickTimeEvent:
-                    break;
-                case GameEventType.OnePermadeath:
-                    break;
-                
+               ActivateEventByType((GameEventType)ev.id, ev);
             }
-
+            else
+            {
+                if (ev.end)
+                {
+                    ClearEventByType(ev.id, ev.endState);
+                }
+                else
+                {
+                    GameEvent gameEvent = gameEventDict[ev.id];
+                    gameEvent.config.UpdateState(gameEvent, ev);
+                }
+            }
          
         }
     }
