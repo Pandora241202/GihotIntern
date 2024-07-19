@@ -21,7 +21,18 @@ public class UIManager : MonoBehaviour
  
     public static UIManager _instance { get; private set; }
 
+    public float sfxCDTime = 0.25f;
+    private float lastSfxTime = 0;
 
+    public void MyPlaySfx(int sfxIndex, float volume = 1.0f, float sfxCooldownTime = 0.25f)
+    {
+        sfxCDTime = sfxCooldownTime;
+        if (Time.time >= lastSfxTime + sfxCDTime)
+        {
+            PlaySfx(sfxIndex, volume);
+            lastSfxTime = Time.time;
+        }
+    }
     public void PauseGame()
     {
         uiPause.gameObject.SetActive(true);
@@ -56,12 +67,13 @@ public class UIManager : MonoBehaviour
 
     }
 
-    public void PlaySfx(int index)
+    public void PlaySfx(int index, float volume = 1f)
     {
         AllManager._instance.audioSource.clip = AllManager._instance.lsAudioClip[index];
+        AllManager._instance.audioSource.volume = volume;
         AllManager._instance.audioSource.Play();
     }
-        private void Update()
+    private void Update()
     {
         // Debug.Log(Player_ID.MyPlayerID);
     }

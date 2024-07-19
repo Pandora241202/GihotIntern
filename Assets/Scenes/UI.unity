@@ -5033,6 +5033,7 @@ MonoBehaviour:
   lsAudioClip:
   - {fileID: 8300000, guid: 1141feef254bf6044a522af6deda58af, type: 3}
   - {fileID: 8300000, guid: 3bc8a2f839f51c1468c7cd936a63289c, type: 3}
+  - {fileID: 8300000, guid: 3bc8a2f839f51c1468c7cd936a63289c, type: 3}
   audioSource: {fileID: 1856316314}
 --- !u!82 &5888400484667401863
 AudioSource:

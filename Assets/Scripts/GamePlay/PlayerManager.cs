@@ -220,7 +220,7 @@ public class Player
 
         if (Time.time >= lastFireTime + 1f / gunType.Firerate)
         {
-            UIManager._instance.PlaySfx(1);
+            UIManager._instance.MyPlaySfx(gunId + 1 , 0.5f, 0.15f); //Note: gunId - 1 is VERY temporarily since all audio is in a list in UIManager
             gunType.bulletConfig.Fire(gunTransform.position, curCreepTarget.transform.position, playerDmg, "PlayerBullet", playerId: id);
             lastFireTime = Time.time;
         }

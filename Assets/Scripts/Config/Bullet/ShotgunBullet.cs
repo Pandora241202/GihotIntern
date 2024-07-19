@@ -22,6 +22,5 @@ public class ShotgunBullet : BulletConfig
             bulletManager.bulletInfoList.Add(newBullet);
             bulletManager.bulletInfoDict.Add(obj.GetInstanceID(), newBullet);
         }
-
     }
 }
