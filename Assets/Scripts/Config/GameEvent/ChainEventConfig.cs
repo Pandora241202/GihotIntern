@@ -50,7 +50,7 @@ public class ChainEventConfig : GameEventConfig
         return IsStuck(vectors, sum, i - 1) || IsStuck(vectors, (sum - vectors[i].normalized).normalized, i - 1);
     }
 
-    public override void Apply(GameEvent gameEvent) 
+    public override void FixedApply(GameEvent gameEvent) 
     {
         Dictionary<string, Player> playersDict = AllManager.Instance().playerManager.dictPlayers;
 
@@ -63,7 +63,7 @@ public class ChainEventConfig : GameEventConfig
             Vector3 disVector = player.playerTrans.position - gameEvent.anchorTrans.position;
             disVector.y = 0;
             
-            if (disVector.magnitude - chainRange >= -0.001)
+            if (disVector.magnitude >= chainRange)
             {
                 disVectorOutOfRangeList.Add(disVector);
             }
@@ -81,10 +81,14 @@ public class ChainEventConfig : GameEventConfig
                 Vector3 disVector = newPos - gameEvent.anchorTrans.position;
                 disVector.y = 0;
                 
-                if (disVector.magnitude - chainRange >= -0.001)
+                if (disVector.magnitude > chainRange)
                 {
-                    player.playerTrans.gameObject.GetComponent<CharacterControl>().input_velocity = Vector3.zero;
-                    player.playerTrans.gameObject.GetComponent<CharacterControl>().lerpVertor = Vector3.zero;
+                    CharacterControl c = player.playerTrans.gameObject.GetComponent<CharacterControl>();
+                    
+                    Vector3 playerToAnchor = gameEvent.anchorTrans.position - player.playerTrans.position;
+                    playerToAnchor.y = 0;
+
+                    c.final_velocity = (playerToAnchor.normalized + c.final_velocity.normalized).normalized * speed;
                 }
             }
         }
@@ -100,7 +104,23 @@ public class ChainEventConfig : GameEventConfig
                 Vector3 disVector = newPos - gameEvent.anchorTrans.position;
                 disVector.y = 0;
 
-                if (disVector.magnitude - chainRange > -0.001)
+                if (disVector.magnitude >= chainRange)
+                {
+                    sumDis += disVector - disVector.normalized * chainRange;
+                }
+            }
+
+            Vector3 newAchorPos = gameEvent.anchorTrans.position + sumDis;
+
+            foreach (var pair in playersDict)
+            {
+                Player player = pair.Value;
+
+                Vector3 newPos = player.playerTrans.position + player.playerTrans.gameObject.GetComponent<CharacterControl>().final_velocity * Time.fixedDeltaTime;
+                Vector3 disVector = newPos - newAchorPos;
+                disVector.y = 0;
+
+                if (disVector.magnitude >= chainRange)
                 {
                     sumDis += disVector - disVector.normalized * chainRange;
                 }

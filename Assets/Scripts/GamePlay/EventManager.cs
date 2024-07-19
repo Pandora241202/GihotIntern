@@ -29,6 +29,11 @@ public class GameEvent
     {
         config.End(this);
     }
+
+    public void FixedApply()
+    {
+        config.FixedApply(this);
+    }
 }
 
 public class GameEventManager
@@ -65,6 +70,15 @@ public class GameEventManager
         {
             GameEvent gameEvent = pair.Value;
             gameEvent.Apply();
+        }
+    }
+
+    public void FixedUpdate()
+    {
+        foreach (var pair in gameEventDict)
+        {
+            GameEvent gameEvent = pair.Value;
+            gameEvent.FixedApply();
         }
     }
 

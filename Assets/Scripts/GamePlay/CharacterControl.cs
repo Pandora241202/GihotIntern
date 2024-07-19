@@ -161,16 +161,10 @@ public class CharacterControl : MonoBehaviour
 
         if (correctPositionTime < Time.fixedDeltaTime * 10)
         {
+            AllManager.Instance().gameEventManager.FixedUpdate();
             transform.position += final_velocity * Time.fixedDeltaTime;
             correctPositionTime += Time.fixedDeltaTime;
         }
-
-
-
-        
-
-
-
 
         if (input_velocity != Vector3.zero)
         {
