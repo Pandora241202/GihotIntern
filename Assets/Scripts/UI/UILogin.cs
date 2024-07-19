@@ -15,6 +15,7 @@ public class UILogin : MonoBehaviour
 
     public void OnLogin_Clicked()
     {
+        UIManager._instance.PlaySfx(0);
         Debug.Log("login");
         SendData<FirstConnect> data = new SendData<FirstConnect>(new FirstConnect(txtName.text));
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));

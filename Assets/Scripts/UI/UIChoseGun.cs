@@ -21,7 +21,7 @@ public class UIChoseGun : MonoBehaviour
         SendData<ChoseGunEvent> ev = new SendData<ChoseGunEvent>(new ChoseGunEvent(index));
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
         Debug.Log(index);
-        
+        UIManager._instance.PlaySfx(0);
         this.gameObject.SetActive(false);
     }
 }

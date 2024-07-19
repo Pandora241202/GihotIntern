@@ -220,6 +220,7 @@ public class Player
 
         if (Time.time >= lastFireTime + 1f / gunType.Firerate)
         {
+            UIManager._instance.PlaySfx(1);
             gunType.bulletConfig.Fire(gunTransform.position, curCreepTarget.transform.position, playerDmg, "PlayerBullet", playerId: id);
             lastFireTime = Time.time;
         }

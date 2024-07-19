@@ -9,6 +9,7 @@ public class UIPause : MonoBehaviour
 
     public void OnBtn_Clicked(int index)
     {
+        UIManager._instance.PlaySfx(0);
         switch (index)
         {
             case 0:

@@ -12,12 +12,13 @@ public class UIManager : MonoBehaviour
     public UIMainMenu uiMainMenu;
     public UILogin uiLogin;
     public UIChoseGun uiChoseGun;
-
+    
     public UILoading uiLoading;
 
     public UILevelUp uiLevelUp;
     public FixedJoystick _joystick;
     public FloatingJoystick _fjoystick;
+ 
     public static UIManager _instance { get; private set; }
 
 
@@ -55,6 +56,11 @@ public class UIManager : MonoBehaviour
 
     }
 
+    public void PlaySfx(int index)
+    {
+        AllManager._instance.audioSource.clip = AllManager._instance.lsAudioClip[index];
+        AllManager._instance.audioSource.Play();
+    }
         private void Update()
     {
         // Debug.Log(Player_ID.MyPlayerID);

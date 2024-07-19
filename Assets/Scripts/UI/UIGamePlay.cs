@@ -35,6 +35,7 @@ public class UIGamePlay : MonoBehaviour
 
     public void OnPause_Clicked()
     {
+        UIManager._instance.PlaySfx(0);
         SendData<PauseEvent> data = new SendData<PauseEvent>(new PauseEvent());
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
     }
