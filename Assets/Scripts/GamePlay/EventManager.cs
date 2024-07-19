@@ -4,12 +4,18 @@ using UnityEngine;
 public class GameEvent
 {
     public GameEventConfig config;
-
-    public Vector3 anchorPos;
-    public int curHP;
-    public int maxHP;
     public int id;
     public float timeEnd;
+
+    // ShareAttribute Event
+    public int curHP;
+    public int maxHP;
+
+    // Chain Event
+    public Transform anchorTrans;
+    public Dictionary<string, Transform> connectLineTransDict = new Dictionary<string, Transform>();
+    public float speed;
+
     public GameEvent(GameEventConfig config)
     {
         this.config = config;
@@ -26,6 +32,11 @@ public class GameEvent
     {
         config.End(this, endState);
     }
+
+    public void FixedApply()
+    {
+        config.FixedApply(this);
+    }
 }
 
 public class GameEventManager
@@ -33,7 +44,7 @@ public class GameEventManager
     private GameEventConfig[] gameEventConfigs;
 
     private Dictionary<int, GameEvent>
-        gameEventDict = new Dictionary<int, GameEvent>(); // key is the sharedId generate and manage by server
+        gameEventDict = new Dictionary<int, GameEvent>();
 
     public enum GameEventType
     {
@@ -44,7 +55,6 @@ public class GameEventManager
         QuickTimeEvent,
         RaidBoss
     }
-
 
     public GameEventManager(AllGameEventConfig allGameEventConfig)
     {
@@ -72,6 +82,7 @@ public class GameEventManager
     public void ClearEventByType(int type, bool endState)
     {
         GameEvent gameEvent = gameEventDict[type];
+        gameEventDict.Remove(type);
         gameEvent.End(endState);
     }
 
@@ -106,5 +117,21 @@ public class GameEventManager
             }
          
         }
+    }
+
+    public void FixedUpdate()
+    {
+        foreach (var pair in gameEventDict)
+        {
+            GameEvent gameEvent = pair.Value;
+            gameEvent.FixedApply();
+        }
+    }
+
+    public GameEvent GetActiveGameEventByType(GameEventType type)
+    {
+        GameEvent gameEvent = null;
+        gameEventDict.TryGetValue((int)type, out gameEvent);
+        return gameEvent;
     }
 }

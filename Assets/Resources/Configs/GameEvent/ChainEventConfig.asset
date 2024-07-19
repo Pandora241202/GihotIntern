@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60290dc3608f0cc4889383f382760e6d, type: 3}
   m_Name: ChainEventConfig
   m_EditorClassIdentifier: 
-  expGain: 0
-  defaultAnchorPos: {x: 0, y: 0, z: 0}
+  expGain: 100
+  defaultAnchorPos: {x: 30, y: 0.5, z: -50}
+  anchorPrefab: {fileID: 5661833669246185887, guid: 0943629e701a1ae4f8e042cf30a6334d, type: 3}
+  connectLinePrefab: {fileID: 667735137103338493, guid: 371338cbbac108f4da222e962106fb12, type: 3}
+  speed: 5
+  chainRange: 3
