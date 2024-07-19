@@ -391,14 +391,10 @@ public class RaidBossEventData
 [Serializable]
 public class QuickTimeEventData 
 {
-    public string currentEvent;
+    public int currentScore;
     public int goal;
-    public int startingScore;
-    public int enemyKill;
-    public int expGained;
-    public bool getHit;
-    public bool powerUpTaken;
 }
+
 
 [Serializable]
 public class GameStateData

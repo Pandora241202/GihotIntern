@@ -6,70 +6,36 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "QuickTimeEventConfig", menuName = "Config/GameEventConfig/QuickTimeEvent")]
 public class QuickTimeEventConfig : GameEventConfig
 {
-    public string[] quickTimeEvents = {"Kill Enemies", "Level Up"};
-    private string randomEvent;
-
-    // All Quick Time Events will have a time limit of 30 seconds
-    [SerializeField] private float timeLimit; 
-    public float TimeLimit => timeLimit;
-
-    // Event: Kill X enemies in 30 seconds  
-    [SerializeField] private int enemiesToKill;
-    [SerializeField] private int currentKills;
-
-    public string GetRandomQuickTimeEvent()
+    private int score;
+    private int goal;
+    public override void Activate(GameEvent gameEvent, GameEventData eventData)
     {
-        // Choose a random event name from the array
-        int randomIndex = UnityEngine.Random.Range(0, quickTimeEvents.Length);
-        return quickTimeEvents[randomIndex];
-    }
-    public override void Activate(GameEvent gameEvent)
-    {
-        base.Activate(gameEvent);
-        randomEvent = GetRandomQuickTimeEvent();
-        Debug.Log($"Activated Quick Time Event: {randomEvent}");
-        //TODO: time start(?)
-        switch (randomEvent)
-        {
-            case "Kill Enemies":
-                currentKills = 0;
-                enemiesToKill = UnityEngine.Random.Range(30, 50);
-                break;
-            case "Level Up":
-                break;
-            default:
-                break;
-        }
-    }
-    public override void End(GameEvent gameEvent)
-    {
-        base.End(gameEvent);
-        switch (randomEvent) 
-        {
-            case "Kill Enemies":
-                if (currentKills >= enemiesToKill)
-                {
-                    Debug.Log("Quick Time Event: Kill Enemies completed!");
-                    //TODO: add exp
-                }
-                else
-                {
-                    Debug.Log("Quick Time Event: Kill Enemies failed!");
-                }
-            break;
+        base.Activate(gameEvent, eventData);
+        score = eventData.quick.currentScore;
+        goal = eventData.quick.goal;
 
-            case "Level Up":
-            break;
-        }
-        randomEvent = "";
-    }
-    public void OnEnemyKilled()
-    {
-        if (randomEvent == "Kill Enemies")
-        {
-            currentKills++;
-            Debug.Log($"Enemies Killed: {currentKills}/{enemiesToKill}");
-        }
+        //render current and target score
     }
 
+
+    public override void Apply(GameEvent gameEvent)
+    {
+        base.Apply(gameEvent);
+        //update current and target score
+    }
+
+    public override void End(GameEvent gameEvent, bool endState)
+    {
+        base.End(gameEvent, endState);
+        if (endState) AllManager._instance.playerManager.ProcessExpGain(AllManager._instance.playerManager.expRequire);
+        //else do nothing cause event failed
+    }
+
+    public override void UpdateState(GameEvent gameEvent, GameEventData eventData)
+    {
+        base.UpdateState(gameEvent, eventData);
+        gameEvent.timeEnd = eventData.timeToEnd;
+        score = eventData.quick.currentScore;
+        Debug.Log(score);
+    }
 }
