@@ -18,6 +18,7 @@ public class UIGamePlay : MonoBehaviour
     public Dictionary<int,GameObject> lsGOEvent = new Dictionary<int, GameObject>();
     public GameObject goTextEvent;
     public bool isShowText = false;
+    
 
     public void OnSetUp(float maxHealth, float maxExp)
     {
@@ -70,6 +71,7 @@ public class UIGamePlay : MonoBehaviour
 
         goItem.transform.DOMove(targetPosition, 1f).SetEase(Ease.InOutBack).OnComplete(() =>
         {
+            Debug.Log(idEvent);
             goItem.transform.SetParent(goEvent.transform);
             goItem.transform.localScale = Vector3.one;
 

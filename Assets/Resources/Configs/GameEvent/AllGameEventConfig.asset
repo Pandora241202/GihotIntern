@@ -14,5 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameEventConfigs:
   - {fileID: 11400000, guid: 0453096a34cd96e4790d6b54c9142fda, type: 2}
+  - {fileID: 0}
   - {fileID: 11400000, guid: 20097aa9dbfd4524c82e0493afc8a383, type: 2}
-  - {fileID: 11400000, guid: 20097aa9dbfd4524c82e0493afc8a383, type: 2}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: f21478c6a16b4bd42a0e326f365682d0, type: 2}
+  - {fileID: 0}

@@ -388,10 +388,13 @@ public class RaidBossEventData
 
 }
 
+[Serializable]
 public class QuickTimeEventData 
 {
-
+    public int currentScore;
+    public int goal;
 }
+
 
 [Serializable]
 public class GameStateData
