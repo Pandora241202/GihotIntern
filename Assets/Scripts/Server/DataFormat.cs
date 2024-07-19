@@ -373,7 +373,7 @@ public class ShareAttrEventDamaged
 [Serializable]
 public class ChainEventData 
 {
-    
+
 }
 
 [Serializable]

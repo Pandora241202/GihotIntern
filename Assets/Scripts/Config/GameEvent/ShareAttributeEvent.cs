@@ -46,6 +46,5 @@ public class ShareAttributeEvent : GameEventConfig
     {
         base.UpdateState(gameEvent, eventData);
         gameEvent.curHP = (int)eventData.share.curHP;
-        gameEvent.timeEnd = eventData.timeToEnd;
     }
 }
