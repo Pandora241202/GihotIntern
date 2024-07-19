@@ -2,6 +2,23 @@
 All notable changes to this project will be documented in this file.
 
 For game design changelog, visit [GameDesign Changelog](https://docs.google.com/spreadsheets/d/1oSoVJ0jk9w2Vpz4AcT9sktsVrlLd9k-s05p6IKA5R1k/edit?gid=1113732660#gid=1113732660)
+
+## [1.0.4] - 19/07/2024
+### Added
+- Six new level up buff. Activate when the players level up. Each player can choose one permanent buff out of three random buffs that appear on the screen.
+- Two new coop event: `**Shared attributes**: All players will share attributes like HP, ...`; `**Quick time events**: The players must complete certain side objectives in a time frame: Kill X enemies, do not pick X power up.` When the players complete the coop event, their level will be increase by one.
+- Add a CRIT system for player.
+- Sound VFX: BGM, buttons / guns / enemies sounds.
+- UI for leveling up, coop events.
+
+### Changed
+- Rework server game state.
+- Change level up system to not based on level to avoid large amount of stat gained.
+
+### Fixed
+- Fix a bug where server not synchronizing when two player kill the same enemy or pick up a item at a same time.
+- Fix a bug where the item drop rate of enemies are always 100%.
+
 ## [1.0.3] - 12/07/2024
 ### Added
 - Six new pick-up items to boost the player - Using a dictionary to manage all items buff and duration through a `powerUpManager`.
