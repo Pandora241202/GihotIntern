@@ -1,16 +1,22 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GameEvent
 {
     public GameEventConfig config;
 
     public Vector3 anchorPos;
-
+    public int curHP;
+    public int maxHP;
+    public int id;
+    public float timeEnd;
     public GameEvent(GameEventConfig config)
     {
         this.config = config;
-        config.Activate(this); // Assign all need attribute for event in here
+        
+        //config.Activate(this); // Assign all need attribute for event in here
     }
 
     public void Apply()
@@ -18,16 +24,18 @@ public class GameEvent
         config.Apply(this);
     }
 
-    public void End()
+    public void End(bool endState)
     {
-        config.End(this);
+        config.End(this, endState);
     }
 }
 
 public class GameEventManager
 {
     private GameEventConfig[] gameEventConfigs;
-    private Dictionary<int, GameEvent> gameEventDict = new Dictionary<int, GameEvent>(); // key is the sharedId generate and manage by server
+
+    private Dictionary<int, GameEvent>
+        gameEventDict = new Dictionary<int, GameEvent>(); // key is the sharedId generate and manage by server
 
     public enum GameEventType
     {
@@ -39,64 +47,66 @@ public class GameEventManager
         RaidBoss
     }
 
+
     public GameEventManager(AllGameEventConfig allGameEventConfig)
     {
         gameEventConfigs = allGameEventConfig.GameEventConfigs;
     }
 
-    public void ActivateEventByType(GameEventType type, int sharedId)
+    public void ActivateEventByType(GameEventType type, GameEventData ev)
     {
-        GameEventConfig config = gameEventConfigs[(int) type];
+        GameEventConfig config = gameEventConfigs[(int)type];
         GameEvent gameEvent = new GameEvent(config);
-        gameEventDict.Add(sharedId, gameEvent);
+        gameEvent = new GameEvent(gameEventConfigs[ev.id]);
+        gameEvent.config.Activate(gameEvent, ev);
+        gameEventDict.Add((int)type, gameEvent);
     }
 
     public void MyUpdate()
     {
-        foreach (var pair in gameEventDict) 
+        foreach (var pair in gameEventDict)
         {
             GameEvent gameEvent = pair.Value;
             gameEvent.Apply();
         }
     }
 
-    public void ClearEventBySharedId(int sharedId)
+    public void ClearEventByType(int type, bool endState)
     {
-        GameEvent gameEvent = gameEventDict[sharedId];
-        gameEvent.End();
+        GameEvent gameEvent = gameEventDict[type];
+        gameEvent.End(endState);
     }
 
     public void UpdateEventState(EventsInfo info)
     {
         //process info
-        // Debug.Log("Time to next event: " + info.timeToNextEvent);
-        foreach(var ev in info.event_info)
+        //Debug.Log(info.timeToNextEvent);
+        if (info.timeToNextEvent<=2f)
         {
-            GameEventType id = (GameEventType)ev.id;
-            Debug.Log("Event is: " + id + "/" + ev.id);
-            switch(id)
+            //todo
+            UIManager._instance.uiGameplay.ShowText();
+        }
+
+        foreach (var ev in info.event_info)
+        {
+            //GameEventType id = (GameEventType)ev.id;
+            if (!gameEventDict.ContainsKey(ev.id))
             {
-                case GameEventType.Chain:
-                    break;
-                case GameEventType.LimitedVision:
-                    break;
-                case GameEventType.SharedAttributes:
-                    ShareAttrEventData sharedAttrData = ev.share;
-                    if (sharedAttrData != null) Debug.Log("Shared Attribute Data is not null");
-                    Debug.Log(sharedAttrData.curHP + " / " +  sharedAttrData.maxHP);
-                    break;
-                case GameEventType.QuickTimeEvent:
-                    Debug.Log("Quick Time Event quick: " + ev);
-                    QuickTimeEventData quickTimeData = ev.quick;
-                    Debug.Log("Current Event: " + quickTimeData.currentEvent);
-                    Debug.Log("Current Goal: " + quickTimeData.goal);
-                    Debug.Log("Current Starting Score: " + quickTimeData.startingScore);
-                    //_____________________________//
-                    Debug.Log("Enemies killed in the qte: " + quickTimeData.enemyKill);
-                    break;
-                case GameEventType.OnePermadeath:
-                    break;
+               ActivateEventByType((GameEventType)ev.id, ev);
             }
+            else
+            {
+                if (ev.end)
+                {
+                    ClearEventByType(ev.id, ev.endState);
+                }
+                else
+                {
+                    GameEvent gameEvent = gameEventDict[ev.id];
+                    gameEvent.config.UpdateState(gameEvent, ev);
+                }
+            }
+         
         }
     }
 }
