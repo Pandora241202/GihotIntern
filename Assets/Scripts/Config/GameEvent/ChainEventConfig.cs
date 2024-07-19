@@ -52,6 +52,17 @@ public class ChainEventConfig : GameEventConfig
         return IsStuck(vectors, sum, i - 1) || IsStuck(vectors, (sum - vectors[i].normalized).normalized, i - 1);
     }
 
+    public override void End(GameEvent gameEvent, bool endState)
+    {
+        base.End(gameEvent, endState);
+        Destroy(gameEvent.anchorTrans.gameObject);
+        foreach (var pair in gameEvent.connectLineTransDict)
+        {
+            Destroy(pair.Value.gameObject);
+        }
+        gameEvent.connectLineTransDict.Clear();
+    }
+
     public override void FixedApply(GameEvent gameEvent)
     {
         Dictionary<string, Player> playersDict = AllManager.Instance().playerManager.dictPlayers;
