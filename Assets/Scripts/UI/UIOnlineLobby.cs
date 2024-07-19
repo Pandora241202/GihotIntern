@@ -27,11 +27,13 @@ public class UIOnlineLobby : MonoBehaviour
 
     public void OnClose()
     {
+        UIManager._instance.PlaySfx(0);
         Debug.Log(gameObject.name);
         gameObject.SetActive(false);
     }
     public void OnPopUpCreate_Clicked()
     {
+        UIManager._instance.PlaySfx(0);
         popupCreate.SetActive(true);
     }
     public void OnSetUp()
@@ -39,6 +41,7 @@ public class UIOnlineLobby : MonoBehaviour
         popupCreate.SetActive(false);
         btnCloseCreatePU.onClick.AddListener(() =>
         {
+            UIManager._instance.PlaySfx(0);
             popupCreate.SetActive(false);
         });
     }
@@ -46,6 +49,7 @@ public class UIOnlineLobby : MonoBehaviour
 
     public void OnGetRoom_Clicked()
     {
+        UIManager._instance.PlaySfx(0);
         SendData<OnlineLobbyEvent> data = new SendData<OnlineLobbyEvent>(new OnlineLobbyEvent("get_rooms", true));
         
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
@@ -53,7 +57,7 @@ public class UIOnlineLobby : MonoBehaviour
     }
     public void OnClickCreateRoom_Clicked()
     {
-        
+        UIManager._instance.PlaySfx(0);
         SendData<OnlineLobbyEvent> data = new SendData<OnlineLobbyEvent>(new OnlineLobbyEvent("create_rooms", true, inRoomName.text, ddGameMode.options[ddGameMode.value].text));
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
         popupCreate.SetActive(false);

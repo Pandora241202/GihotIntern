@@ -28,6 +28,7 @@ public class UIDefeat : MonoBehaviour
     public void OnNextButtonClicked()
     {
         this.gameObject.SetActive(false);
+        UIManager._instance.PlaySfx(0);
         AllManager.Instance().StartCoroutine(AllManager.Instance().GameEnd());
     }
 }

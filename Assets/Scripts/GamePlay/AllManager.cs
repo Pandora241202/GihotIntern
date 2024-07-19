@@ -22,6 +22,8 @@ public class AllManager : MonoBehaviour
     public bool isPause = false;
     public bool isHost=false;
     public bool isLevelUp = false;
+    public List<AudioClip> lsAudioClip = new List<AudioClip>();
+    public AudioSource audioSource;
     public static AllManager Instance()
     {
         return _instance;
