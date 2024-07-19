@@ -64,7 +64,7 @@ public class UIGamePlay : MonoBehaviour
         GameObject goItem = Instantiate(itemEvent.gameObject, goSpawnEvent.transform);
         goItem.transform.position = goSpawnEvent.transform.position;
         goItem.transform.localScale = new Vector3(.3f, .3f, .3f);
-        goItem.GetComponent<ItemEvent>().OnSetUp(duration);
+        goItem.GetComponent<ItemEvent>().OnSetUp(idEvent,duration);
 
         Vector3 targetPosition = goEvent.transform.position;
 
