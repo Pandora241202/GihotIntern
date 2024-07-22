@@ -75,7 +75,7 @@ public class SocketCommunication
         lock(buffer)
         {
             buffer.AddRange(buf);
-            Debug.Log("buffer after read socket: " +  buffer.Count + "/buf len: " + buf.Length);
+            //Debug.Log("buffer after read socket: " +  buffer.Count + "/buf len: " + buf.Length);
         }
     }
 

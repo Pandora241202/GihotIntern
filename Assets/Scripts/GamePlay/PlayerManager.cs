@@ -14,7 +14,9 @@ public class Player
     public GameObject levelUpEffect;
     public float lastFireTime = 0f;
     public float lifeSteal;
-
+    public int dmgRecieved = 0;
+    public int hpGain = 0;
+   
     // Player stat 
     private float health;
     private float dmgBoostAmount;
@@ -39,7 +41,6 @@ public class Player
         activePowerUps = new Dictionary<AllDropItemConfig.PowerUpsType, float>();
         gunConfig = AllManager.Instance().gunConfig;
     }
-
     public float GetSpeedBoost()
     {
         return speedBoostAmount;
@@ -90,7 +91,7 @@ public class Player
         {
             AllManager.Instance().powerUpManager.DeactivatePowerUpByType(powerUp);
             activePowerUps.Remove(powerUp);
-            Debug.Log($"Deactivating power-up: {powerUp}");
+            //Debug.Log($"Deactivating power-up: {powerUp}");
         }
     }
 
@@ -117,7 +118,8 @@ public class Player
     public float GetSpeed()
     {
         GameEvent gameEvent = AllManager.Instance().gameEventManager.GetActiveGameEventByType(GameEventManager.GameEventType.Chain);
-        if (gameEvent != null) {
+        if (gameEvent != null)
+        {
             return gameEvent.speed;
         }
 
@@ -126,6 +128,7 @@ public class Player
 
     public void ChangeHealth(float healthChangeAmount)
     {
+        hpGain = (int)healthChangeAmount;
         health += healthChangeAmount;
         health = Mathf.Min(health, AllManager.Instance().playerManager.GetMaxHealthFromLevel());
         UIManager._instance.uiGameplay.UpdateHealthSlider(health);
@@ -164,6 +167,7 @@ public class Player
     {
         if(id == Player_ID.MyPlayerID)
         {
+            dmgRecieved = (int)dmg;
             health -= dmg;
             if (health <= 0)
             {
@@ -172,6 +176,7 @@ public class Player
             }
             UIManager._instance.uiGameplay.UpdateHealthSlider(health);
         }
+        
     }
 
     GameObject GetTagetObj()
@@ -221,6 +226,7 @@ public class Player
 
         if (Time.time >= lastFireTime + 1f / gunType.Firerate)
         {
+            UIManager._instance.MyPlaySfx(gunId + 1 , 0.5f, 0.15f); //Note: gunId - 1 is VERY temporarily since all audio is in a list in UIManager
             gunType.bulletConfig.Fire(gunTransform.position, curCreepTarget.transform.position, playerDmg, "PlayerBullet", playerId: id);
             lastFireTime = Time.time;
         }
@@ -258,7 +264,7 @@ public class PlayerManager
     public int expRequire = Constants.PlayerBaseExp;
     public float expBoostTime = 0;
     public float expBoostAmount; // Since all player share a single EXP bar, we use the variable here instead of in each player's class
-    
+    public bool isLevelUp;
     public void MyUpdate()
     {
         // foreach (var player in dictPlayers.Values)
@@ -283,6 +289,7 @@ public class PlayerManager
         UIManager._instance.uiGameplay.UpdateLevelSlider(exp);
         if (exp >= expRequire)
         {
+            isLevelUp = true;
             expRequire = Constants.PlayerBaseExp + (level - 1) * Constants.ExpIncrement + Constants.ScalingMultiplierExp * (level - 1) * (level - 1);
             level++;
             UIManager._instance.uiGameplay.LevelUpdateSlider(expRequire);
@@ -298,10 +305,10 @@ public class PlayerManager
             foreach (var pair in  dictPlayers)
             {
                 Player player = pair.Value;
-                player.ChangeHealth(GetMaxHealthFromLevel() - player.GetHealth());
+                if(player.id == Player_ID.MyPlayerID) player.ChangeHealth(GetMaxHealthFromLevel());
                 player.levelUpEffect = GameObject.Instantiate(player.config.LevelUpEffect, player.playerTrans.position, Quaternion.identity);
                
-                Debug.Log("final options real: " + string.Join(", ", levelUpConfig.finalOptions.ToArray()));
+                //Debug.Log("final options real: " + string.Join(", ", levelUpConfig.finalOptions.ToArray()));
                
             }
         }

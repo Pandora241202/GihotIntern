@@ -20,6 +20,7 @@ public class UILevelUp : MonoBehaviour
 
     public void OnItemLevelUp_Clicked(int index)
     {
+        UIManager._instance.PlaySfx(0);
         //TODO Hung
         // AllLevelUpConfig allLevelUpConfig = AllManager.Instance().playerManager.allLevelUpConfig;
         LevelUpConfig levelUpConfig = AllManager.Instance().playerManager.levelUpConfig;

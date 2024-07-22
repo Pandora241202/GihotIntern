@@ -4,6 +4,12 @@ using UnityEngine;
 public class GameEvent
 {
     public GameEventConfig config;
+    public int id;
+    public float timeEnd;
+
+    // ShareAttribute Event
+    public int curHP;
+    public int maxHP;
 
     // Chain Event
     public Transform anchorTrans;
@@ -13,6 +19,8 @@ public class GameEvent
     public GameEvent(GameEventConfig config)
     {
         this.config = config;
+        
+        //config.Activate(this); // Assign all need attribute for event in here
     }
 
     public void Activate()
@@ -25,9 +33,14 @@ public class GameEvent
         config.Apply(this);
     }
 
-    public void End()
+    public void End(bool endState)
     {
-        config.End(this);
+        config.End(this, endState);
+    }
+
+    public void FixedApply()
+    {
+        config.FixedApply(this);
     }
 
     public void FixedApply()
@@ -39,7 +52,9 @@ public class GameEvent
 public class GameEventManager
 {
     private GameEventConfig[] gameEventConfigs;
-    private Dictionary<int, GameEvent> gameEventDict = new Dictionary<int, GameEvent>(); // key is the sharedId generate and manage by server
+
+    private Dictionary<int, GameEvent>
+        gameEventDict = new Dictionary<int, GameEvent>();
 
     public enum GameEventType
     {
@@ -56,20 +71,61 @@ public class GameEventManager
         gameEventConfigs = allGameEventConfig.GameEventConfigs;
     }
 
-    public void ActivateEventByType(GameEventType type)
+    public void ActivateEventByType(GameEventType type, GameEventData ev)
     {
-        GameEventConfig config = gameEventConfigs[(int) type];
+        GameEventConfig config = gameEventConfigs[(int)type];
         GameEvent gameEvent = new GameEvent(config);
-        gameEvent.Activate();
+        gameEvent = new GameEvent(gameEventConfigs[ev.id]);
+        gameEvent.config.Activate(gameEvent, ev);
         gameEventDict.Add((int)type, gameEvent);
     }
 
     public void MyUpdate()
     {
-        foreach (var pair in gameEventDict) 
+        foreach (var pair in gameEventDict)
         {
             GameEvent gameEvent = pair.Value;
             gameEvent.Apply();
+        }
+    }
+
+    public void ClearEventByType(int type, bool endState)
+    {
+        GameEvent gameEvent = gameEventDict[type];
+        gameEventDict.Remove(type);
+        gameEvent.End(endState);
+    }
+
+    public void UpdateEventState(EventsInfo info)
+    {
+        //process info
+        //Debug.Log(info.timeToNextEvent);
+        if (info.timeToNextEvent<=2f)
+        {
+            //todo
+            UIManager._instance.uiGameplay.ShowText();
+        }
+
+        foreach (var ev in info.event_info)
+        {
+            //GameEventType id = (GameEventType)ev.id;
+            if (!gameEventDict.ContainsKey(ev.id))
+            {
+               ActivateEventByType((GameEventType)ev.id, ev);
+            }
+            else
+            {
+                if (ev.end)
+                {
+                    ClearEventByType(ev.id, ev.endState);
+                }
+                else
+                {
+                    GameEvent gameEvent = gameEventDict[ev.id];
+                    gameEvent.config.UpdateState(gameEvent, ev);
+                }
+            }
+         
         }
     }
 
@@ -82,16 +138,10 @@ public class GameEventManager
         }
     }
 
-    public void ClearEventBySharedId(int sharedId)
-    {
-        GameEvent gameEvent = gameEventDict[sharedId];
-        gameEvent.End();
-    }
-
     public GameEvent GetActiveGameEventByType(GameEventType type)
     {
         GameEvent gameEvent = null;
-        gameEventDict.TryGetValue((int) type, out gameEvent);
+        gameEventDict.TryGetValue((int)type, out gameEvent);
         return gameEvent;
     }
 }

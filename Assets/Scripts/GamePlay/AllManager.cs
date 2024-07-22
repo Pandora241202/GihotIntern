@@ -22,6 +22,8 @@ public class AllManager : MonoBehaviour
     public bool isPause = false;
     public bool isHost=false;
     public bool isLevelUp = false;
+    public List<AudioClip> lsAudioClip = new List<AudioClip>();
+    public AudioSource audioSource;
     public static AllManager Instance()
     {
         return _instance;
@@ -54,11 +56,14 @@ public class AllManager : MonoBehaviour
     private IEnumerator LoadScene(string sceneName, string mode)
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
-
+        UIManager._instance.uiLoading.gameObject.SetActive(true);
+        UIManager._instance.uiLoading.OnSetUp();
         while (!asyncLoad.isDone)
         {
+            UIManager._instance.uiLoading.OnProgress(asyncLoad.progress);
             yield return null;
         }
+        UIManager._instance.uiLoading.gameObject.SetActive(false);
         OnSceneLoaded(sceneName, mode);
         Debug.Log("Scene loaded!");
 
@@ -165,6 +170,8 @@ public class AllManager : MonoBehaviour
         creepManager.UpdateCreepsState(state.creep_spawn_infos, state.creep_destroy_infos);
 
         powerUpManager.UpdatePowerUpsState(state.power_up_pick_infos);
+
+        gameEventManager.UpdateEventState(state.game_event);
     }
 
     public IEnumerator UpdatePing()
@@ -172,10 +179,10 @@ public class AllManager : MonoBehaviour
         while(true)
         {
             yield return new WaitForSeconds(2);
-            Debug.Log(PingData.sum + "/" + PingData.pingCount);
+            //Debug.Log(PingData.sum + "/" + PingData.pingCount);
             UIManager._instance.uiGameplay.UpdatePingText(PingData.sum / PingData.pingCount);
             PingData.sum = 0;
-            PingData.pingCount = 0;
+            PingData.pingCount = 1;
         }
     }
 }
