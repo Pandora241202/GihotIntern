@@ -24877,8 +24877,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 2.8559818, y: 3.2905114, z: 2.152545}
+  m_Center: {x: 0.11786556, y: 1.1452557, z: -0.5762725}
 --- !u!54 &5449736931443136969
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -24978,8 +24978,8 @@ SkinnedMeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5984453468079513264}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
