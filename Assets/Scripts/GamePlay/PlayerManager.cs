@@ -29,6 +29,20 @@ public class Player
     private GameObject curCreepTarget = null;
     public bool isDead;
 
+    public Vector3 input_velocity = Vector3.zero;
+    public Vector3 final_velocity = Vector3.zero;
+    public bool collision = false;
+    Vector3 normal = Vector3.zero;
+    public bool isColliding = false;
+    public bool lerp = false;
+    public int frameLerp = 16;
+    public int elapseFrame = 0;
+    public Vector3 lerpVertor = Vector3.zero;
+    public Vector3 lerpPosition = Vector3.zero;
+    public bool cantMove = false;
+    public Dictionary<int, Vector3> collision_plane_normal_dict = new Dictionary<int, Vector3>();
+    private int frame = 0;
+
     public Player(string name, string id, int gunId, PlayerConfig config)
     {
         this.name = name;
@@ -248,6 +262,79 @@ public class Player
         GameObject gun = GameObject.Instantiate(gunType.gunPrefab, playerTrans.position, Quaternion.identity);
         gun.transform.SetParent(playerTrans.Find("Gun"));
     }
+
+    public void Lerp()
+    {
+        float speed = GetSpeed();
+
+        if ((lerpPosition - playerTrans.position).magnitude <= speed * Time.fixedDeltaTime)
+        {
+            lerp = false;
+            playerTrans.position = lerpPosition;
+            final_velocity = input_velocity;
+            return;
+        }
+
+        lerpPosition += input_velocity * Time.fixedDeltaTime;
+        final_velocity = (lerpVertor + input_velocity).normalized * speed;
+    }
+
+    public void CalculateVelocity()
+    {
+        if (lerp)
+        {
+            Lerp();
+        }
+        else
+        {
+            final_velocity = input_velocity;
+        }
+
+        normal = Vector3.zero;
+
+        float speed = AllManager.Instance().playerManager.dictPlayers[id].GetSpeed();
+
+        if (collision)
+        {
+            for (int i = 0; i < collision_plane_normal_dict.Count; i++)
+            {
+                normal += collision_plane_normal_dict.ElementAt(i).Value;
+            }
+
+            final_velocity = (normal + final_velocity.normalized).normalized * speed;
+        }
+
+        CharacterControl c = playerTrans.GetComponent<CharacterControl>();
+
+        if (input_velocity != Vector3.zero)
+        {
+            c.charAnim.SetBool("isRun", true);
+            c.goChar.transform.rotation = Quaternion.LookRotation(input_velocity);
+        }
+        else
+        {
+            c.charAnim.SetBool("isRun", false);
+        }
+
+
+        if (id != Player_ID.MyPlayerID) return;
+
+        if (frame % 3 == 0)
+        {
+            float horizontal = c.joystick.Horizontal;
+            float vertical = c.joystick.Vertical;
+
+            Vector3 direction = new Vector3(horizontal, 0, vertical).normalized;
+
+            Vector3 v = direction * speed;
+
+            SendData<PlayerState> data = new SendData<PlayerState>(new PlayerState(playerTrans.position, v,
+                Quaternion.LookRotation(direction), AllManager._instance.playerManager.dictPlayers[id], true));
+            SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
+        }
+
+        frame++;
+    }
 }
 
 public class PlayerManager
@@ -266,6 +353,8 @@ public class PlayerManager
     public float expBoostTime = 0;
     public float expBoostAmount; // Since all player share a single EXP bar, we use the variable here instead of in each player's class
     public bool isLevelUp;
+    public float correctPositionTime = 0;
+
     public void MyUpdate()
     {
         // foreach (var player in dictPlayers.Values)
@@ -279,6 +368,35 @@ public class PlayerManager
                 }
             }
         // }
+    }
+
+    public void MyFixedUpdate()
+    {
+        if (AllManager.Instance().isPause) return;
+
+        foreach (Player player in dictPlayers.Values)
+        {
+            if (player.playerTrans == null)
+            {
+                return;
+            }
+            player.CalculateVelocity();
+        }
+
+        if (correctPositionTime < Time.fixedDeltaTime * 10)
+        {
+            GameEvent gameEvent = AllManager.Instance().gameEventManager.GetActiveGameEventByType(GameEventManager.GameEventType.Chain);
+            if (gameEvent != null)
+            {
+                gameEvent.FixedApply();
+            }
+
+            foreach (Player player in dictPlayers.Values)
+            {
+                player.playerTrans.position += player.final_velocity * Time.fixedDeltaTime;
+            }
+            correctPositionTime += Time.fixedDeltaTime;
+        }
     }
 
     public void LateUpdate(){}
@@ -400,25 +518,25 @@ public class PlayerManager
             float speed = player.GetSpeed();
             player.isDead = state.isDead;
             CharacterControl c_Controller = player.playerTrans.gameObject.GetComponent<CharacterControl>();
-            c_Controller.input_velocity = state.velocity;
+            player.input_velocity = state.velocity;
             //c_Controller.goChar.transform.rotation = state.rotation;
-            if (!c_Controller.isColliding && c_Controller.id != Player_ID.MyPlayerID)
+            if (!player.isColliding && player.id != Player_ID.MyPlayerID)
             {
-                if ((player.playerTrans.position - state.position).magnitude <= Time.fixedDeltaTime * speed) 
+                if ((player.playerTrans.position - state.position).magnitude <= Time.fixedDeltaTime * speed)
                 {
-                    c_Controller.lerp = false;
-                    c_Controller.transform.position = state.position;
+                    player.lerp = false;
+                    player.playerTrans.position = state.position;
                 }
                 else
                 {
-                    c_Controller.lerp = true;
-                    c_Controller.elapseFrame = 0;
-                    c_Controller.lerpPosition = state.position;
-                    c_Controller.lerpVertor = (c_Controller.lerpPosition - player.playerTrans.position);
+                    player.lerp = true;
+                    player.elapseFrame = 0;
+                    player.lerpPosition = state.position;
+                    player.lerpVertor = (player.lerpPosition - player.playerTrans.position);
                 }
             }
 
-            c_Controller.correctPositionTime = 0;
+            correctPositionTime = 0;
             if (state.isFire) player.Shoot();
             if (state.isDead && !c_Controller.goCircleRes.activeSelf) OnDead(player.id);
             //if (player.id == state.player_id) Debug.Log(state.isDead + "/" + player.isDead);

@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -42,6 +40,23 @@ public class UIManager : MonoBehaviour
     {
         uiPause.gameObject.SetActive(false);
     }
+
+    public void ClearUI()
+    {
+        uiMainMenu.gameObject.SetActive(false);
+        uiGameplay.gameObject.SetActive(true);
+        foreach (GameObject item in uiGameplay.lsGOEvent.Values)
+        {
+            Destroy(item);
+        }
+    }
+
+    public void OnLoadGameScene()
+    {
+        uiMainMenu.gameObject.SetActive(false);
+        uiGameplay.gameObject.SetActive(true);
+    }
+
     private void Awake()
     {
         _joystick.gameObject.SetActive(false);

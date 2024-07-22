@@ -1,5 +1,6 @@
-﻿using UnityEngine;
+﻿
 using System.Collections.Generic;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "ChainEventConfig", menuName = "Config/GameEventConfig/ChainEvent")]
 public class ChainEventConfig : GameEventConfig
@@ -13,7 +14,7 @@ public class ChainEventConfig : GameEventConfig
     public override void Activate(GameEvent gameEvent, GameEventData eventData)
     {
         base.Activate(gameEvent, eventData);
-        
+
         gameEvent.anchorTrans = GameObject.Instantiate(anchorPrefab, defaultAnchorPos, Quaternion.identity).transform;
         gameEvent.speed = speed;
 
@@ -68,6 +69,7 @@ public class ChainEventConfig : GameEventConfig
         Dictionary<string, Player> playersDict = AllManager.Instance().playerManager.dictPlayers;
 
         List<Vector3> disVectorOutOfRangeList = new List<Vector3>();
+        List<Player> playerOutOfRangeList = new List<Player>();
 
         foreach (var pair in playersDict)
         {
@@ -76,15 +78,15 @@ public class ChainEventConfig : GameEventConfig
             Vector3 disVector = player.playerTrans.position - gameEvent.anchorTrans.position;
             disVector.y = 0;
 
-            if (disVector.magnitude >= chainRange)
+            if (disVector.magnitude > chainRange)
             {
-                disVectorOutOfRangeList.Add(disVector);
+                player.playerTrans.position = gameEvent.anchorTrans.position + (player.playerTrans.position - gameEvent.anchorTrans.position).normalized * chainRange;
             }
 
             ConnectPlayerAnchor(gameEvent.anchorTrans, disVector, gameEvent.connectLineTransDict[pair.Key]);
         }
 
-        if (IsStuck(disVectorOutOfRangeList, Vector3.zero, disVectorOutOfRangeList.Count - 1))
+        /*if (IsStuck(disVectorOutOfRangeList, Vector3.zero, disVectorOutOfRangeList.Count - 1))
         {
             foreach (var pair in playersDict)
             {
@@ -104,43 +106,63 @@ public class ChainEventConfig : GameEventConfig
                     c.final_velocity = (playerToAnchor.normalized + c.final_velocity.normalized).normalized * speed;
                 }
             }
-        }
-        else
+        }*/
+
+        Vector3 sumDis = Vector3.zero;
+
+        foreach (var pair in playersDict)
         {
-            Vector3 sumDis = Vector3.zero;
+            Player player = pair.Value;
 
-            foreach (var pair in playersDict)
+            Vector3 newPos = player.playerTrans.position + player.final_velocity * Time.fixedDeltaTime;
+            Vector3 disVector = newPos - gameEvent.anchorTrans.position;
+            disVector.y = 0;
+
+            if (disVector.magnitude > chainRange)
             {
-                Player player = pair.Value;
-
-                Vector3 newPos = player.playerTrans.position + player.playerTrans.gameObject.GetComponent<CharacterControl>().final_velocity * Time.fixedDeltaTime;
-                Vector3 disVector = newPos - gameEvent.anchorTrans.position;
-                disVector.y = 0;
-
-                if (disVector.magnitude >= chainRange)
-                {
-                    sumDis += disVector - disVector.normalized * chainRange;
-                }
+                //playerOutOfRangeList.Add(player);
+                sumDis += disVector - disVector.normalized * chainRange;
             }
-
-            Vector3 newAchorPos = gameEvent.anchorTrans.position + sumDis;
-
-            foreach (var pair in playersDict)
-            {
-                Player player = pair.Value;
-
-                Vector3 newPos = player.playerTrans.position + player.playerTrans.gameObject.GetComponent<CharacterControl>().final_velocity * Time.fixedDeltaTime;
-                Vector3 disVector = newPos - newAchorPos;
-                disVector.y = 0;
-
-                if (disVector.magnitude >= chainRange)
-                {
-                    sumDis += disVector - disVector.normalized * chainRange;
-                }
-            }
-
-            gameEvent.anchorTrans.position += sumDis;
         }
+
+        /*Vector3 newAchorPos = gameEvent.anchorTrans.position + sumDis;
+
+        foreach (var pair in playersDict)
+        {
+            Player player = pair.Value;
+
+            Vector3 newPos = player.playerTrans.position + player.playerTrans.gameObject.GetComponent<CharacterControl>().final_velocity * Time.fixedDeltaTime;
+            Vector3 disVector = newPos - newAchorPos;
+            disVector.y = 0;
+
+            if (disVector.magnitude > chainRange)
+            {
+                sumDis += disVector - disVector.normalized * chainRange;
+            }
+        }*/
+
+        /*foreach (var pair in playersDict)
+        {
+            Player player = pair.Value;
+
+            Vector3 newPos = player.playerTrans.position + player.final_velocity * Time.fixedDeltaTime;
+            Vector3 disVector = newPos - gameEvent.anchorTrans.position - sumDis;
+            disVector.y = 0;
+
+            if (disVector.magnitude - chainRange > 0.01)
+            {
+                foreach (Player p in playerOutOfRangeList)
+                {
+                    Vector3 playerToAnchor = gameEvent.anchorTrans.position - player.playerTrans.position;
+                    playerToAnchor.y = 0;
+
+                    p.final_velocity = (playerToAnchor.normalized + p.final_velocity.normalized).normalized * speed;
+                }
+                return;
+            }
+        }*/
+
+        gameEvent.anchorTrans.position += sumDis;
     }
 
     private void ConnectPlayerAnchor(Transform anchorTrans, Vector3 anchorToPlayer, Transform lineTrans)
