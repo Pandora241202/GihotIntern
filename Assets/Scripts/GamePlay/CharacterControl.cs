@@ -91,12 +91,15 @@ public class CharacterControl : MonoBehaviour
         isInvincible = false;
     }
 
-    Dictionary<int, Vector3> collision_plane_normal_dict = new Dictionary<int, Vector3>();
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Respawn"))
         {
             //timeRevive = 1f;
+            if (AllManager.Instance().playerManager.dictPlayers[id].isDead)
+            {
+                return;
+            }
             string player_id = other.gameObject.GetComponentInParent<CharacterControl>().id;
             SendData<ReviveEvent> data =  new SendData<ReviveEvent>(new ReviveEvent(player_id));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
