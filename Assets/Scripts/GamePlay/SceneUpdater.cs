@@ -30,6 +30,11 @@ public class SceneUpdater : MonoBehaviour
         gameEventManager.MyUpdate();
     }
 
+    private void FixedUpdate()
+    {
+        playerManager.MyFixedUpdate();
+    }
+
     private void LateUpdate()
     {
         if (AllManager.Instance().isPause) return;
