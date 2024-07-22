@@ -4852,8 +4852,8 @@ SkinnedMeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2225411837994027150}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
@@ -5126,8 +5126,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.77427197, y: 0.7748755, z: 0.85721684}
-  m_Center: {x: 0.008072456, y: 0.112562284, z: -0.07139178}
+  m_Size: {x: 0.77427197, y: 0.7810352, z: 0.85721684}
+  m_Center: {x: 0.008072456, y: 0.80502367, z: -0.07139178}
 --- !u!1 &9027600581957935158
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ public static class Constants
     public const int PlayerBaseLevel = 1;
     public const int ScalingMultiplierExp = 15;
     public const int ExpIncrement = 135;
-    public const int PlayerBaseMaxHealth = 10;
+    public const int PlayerBaseMaxHealth = 1000000;
 
     // Map constants
     public const float MapMaxX = 140.5f;
