@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class CharacterControl : MonoBehaviour
 {
     public Transform gunTransform;
-
+    public TextMeshProUGUI txtName;
     public GameObject goChar;
     //[SerializeField] public int gunId;
     [SerializeField] LayerMask creepLayerMask;

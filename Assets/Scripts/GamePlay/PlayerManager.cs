@@ -1,6 +1,7 @@
 ﻿using Cinemachine;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class Player
@@ -298,9 +299,8 @@ public class PlayerManager
             SendData<LevelUpEvent> data = new SendData<LevelUpEvent>(new LevelUpEvent());
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
             levelUpConfig.OpenMenu();
-            UIManager._instance.uiLevelUp.OnSetUp(levelUpConfig.finalOptions);
-            
-            
+            // UIManager._instance.uiLevelUp.OnSetUp(levelUpConfig.finalOptions);
+            UIManager._instance.OnInstanceLevel(levelUpConfig.finalOptions);
             
             foreach (var pair in  dictPlayers)
             {
@@ -349,7 +349,9 @@ public class PlayerManager
         player.playerTrans = GameObject.Instantiate(characterPrefab, position, Quaternion.identity).transform;
         player.playerTrans.gameObject.GetComponent<CharacterControl>().id = id;
         player.gunId = gun_id;
-        
+        player.playerTrans.gameObject.GetComponent<CharacterControl>().txtName.text=
+            player.name;
+     
         player.SetGunAndBullet();
         
         if (id == Player_ID.MyPlayerID)

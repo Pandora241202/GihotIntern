@@ -14,6 +14,7 @@ public class UIPause : MonoBehaviour
         {
             case 0:
                 //Setting
+                UIManager._instance.MuteBGM();
                 break;
             case 1:
                 //Resume
