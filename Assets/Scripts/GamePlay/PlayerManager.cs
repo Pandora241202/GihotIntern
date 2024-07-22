@@ -152,13 +152,13 @@ public class Player
     public float GetDmg()
     {
         float critRate = GetCritRate();
-
+        critRate += AllManager.Instance().levelUpConfig.critRateIncrements;
         GunType gunType = gunConfig.lsGunType[gunId];
         float dmg = AllManager.Instance().playerManager.GetDmgFromLevel(gunType.baseDamage, gunType.bulletMultiplier) * (dmgBoostAmount + 1);
 
         if (critRate >= 1 || Random.Range(0f, 1f) <= critRate) 
         {
-            return dmg * (1 + GetCritDmg());
+            return dmg * (1 + GetCritDmg() +AllManager.Instance().levelUpConfig.critDamageIncrements);
         }
   
         return dmg;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,21 +8,10 @@ using UnityEngine;
 // NOTE: all Level Up buff are PERMANENT (unlike pick-up buff, which is NOT permanent (has a duration))
 public class LevelUpConfig : ScriptableObject
 {
-    //every player start at level ONE (1)
-    public int level;
-    // all of the increase value below are general for ALL level. 
-    // each level may have other specific increase value.
-    // public int healthIncrease;
-    // public float speedIncrease;
-    // public float damageIncrease;
-    // public float critRateIncrease;
-    // public float critDamageIncrease;
-    // public float lifeStealIncrease;
-    // a list of some random weighted level up increments
-
-    // a list of variable for non base stat upgrade
+    // public int level;
+    public float critRateIncrements;
+    public float critDamageIncrements;
     public float warpAmount;
-
     public List<string> additionalOptions = new List<string>();
     public List<string> finalOptions = new List<string>();
 
@@ -47,7 +37,7 @@ public class LevelUpConfig : ScriptableObject
         for (int i = 0; i < defaultOptions.Count; i++)
         {
             string temp = defaultOptions[i];
-            int randomIndex = Random.Range(0, defaultOptions.Count);
+            int randomIndex = UnityEngine.Random.Range(0, defaultOptions.Count);
             defaultOptions[i] = defaultOptions[randomIndex];
             defaultOptions[randomIndex] = temp;
         }
@@ -71,34 +61,38 @@ public class LevelUpConfig : ScriptableObject
         {
             case "health":
                 levelUpDict[buff]++; // Note: increase level first, else first level = 0 -> 1 * 0 = 0
-                var healthBoost = levelUpDict[buff];
+                var healthBoost = Mathf.Floor(levelUpDict[buff] * 0.5f);
                 player.ChangeHealth(1  * healthBoost);
                 //to do: + max health
 
                 break;
             case "speed":
                 levelUpDict[buff]++;
-                var speedBoost = levelUpDict[buff];
+                var speedBoost = levelUpDict[buff] * 0.05f;
                 player.SetSpeedBoostByLevelUp(speedBoost);
                 break;
 
             case "damage":
                 levelUpDict[buff]++;
-                var damageBoost = levelUpDict[buff];
+                var damageBoost = Mathf.Floor(levelUpDict[buff] * 0.5f);
                 //Debug.Log("Level up: Damage increased by " + damageBoost);
                 player.SetDamageBoost(damageBoost);
                 break;
             case "crit":
             //TODO: Rebase then add this later @Hung
                 levelUpDict[buff]++;
+                var critRateIncrease = levelUpDict[buff] * 0.03f;
+                var critDamageIncrease = levelUpDict[buff] * 0.06f;
+                critRateIncrements += critRateIncrease;
+                critDamageIncrements += critDamageIncrease;
                 // level = levelUpDict[buff];
                 // critRateIncrease += critRateIncrements;
                 // critDamageIncrease += critDamageIncrements;
                 break;
             case "lifeSteal":
                 levelUpDict[buff]++;
-                var lifeStealBuff = levelUpDict[buff];
-                player.lifeSteal += 0.01f * lifeStealBuff;
+                var lifeStealBuff = levelUpDict[buff]  * 0.01f;
+                player.lifeSteal += lifeStealBuff;
                 break;
             default:
                 Debug.Log("No base buff applied");
@@ -138,7 +132,7 @@ public class LevelUpConfig : ScriptableObject
     public virtual string FinalChoice()
     {
         Debug.Log("final options list are: " + string.Join(", ", finalOptions.ToArray()));
-        string chosenOption = finalOptions[Random.Range(0, finalOptions.Count)];
+        string chosenOption = finalOptions[UnityEngine.Random.Range(0, finalOptions.Count)];
         Debug.Log("Chosen option: " + chosenOption);
         return chosenOption;
     }
@@ -148,6 +142,14 @@ public class LevelUpConfig : ScriptableObject
         RandomLevelUpChoice();
     }
 
+    public float getLevelUpCritRate()
+    {
+        return critRateIncrements;
+    }
+    public float getLevelUpCritDamage()
+    {
+        return critDamageIncrements;
+    }
     // Time Warp Level Up: PERMANENTLY decrease the speed of all creeps by a small amount
     public virtual void TimeWarpLevelUp(float warpAmount = 0) // Note: debuff -> decrease speed -> warpAmount is a negative number
     {

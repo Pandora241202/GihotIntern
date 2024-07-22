@@ -13,7 +13,7 @@ public class AllManager : MonoBehaviour
     [SerializeField] public PlayerConfig playerConfig;
     [SerializeField] public AllGameEventConfig allGameEventConfig;
     [SerializeField] GameObject characterPrefab;
-    [SerializeField] LevelUpConfig levelUpConfig;
+    [SerializeField] public LevelUpConfig levelUpConfig;
     public SceneUpdater sceneUpdater;
     public BulletManager bulletManager;
     public CreepManager creepManager;
