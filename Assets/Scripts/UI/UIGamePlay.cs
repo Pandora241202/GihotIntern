@@ -18,7 +18,7 @@ public class UIGamePlay : MonoBehaviour
     public Dictionary<int,GameObject> lsGOEvent = new Dictionary<int, GameObject>();
     public GameObject goTextEvent;
     public bool isShowText = false;
-    
+    public GameObject goWaiting;
 
     public void OnSetUp(float maxHealth, float maxExp)
     {

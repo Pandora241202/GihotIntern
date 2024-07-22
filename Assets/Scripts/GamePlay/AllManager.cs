@@ -161,7 +161,8 @@ public class AllManager : MonoBehaviour
             else
             {
                 isPause = false;
-                UIManager._instance.uiLevelUp.gameObject.SetActive(false);
+                UIManager._instance.uiGameplay.goWaiting.SetActive(false);
+                
             }
         }
 

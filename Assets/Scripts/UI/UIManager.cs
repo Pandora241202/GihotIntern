@@ -20,7 +20,8 @@ public class UIManager : MonoBehaviour
     public FloatingJoystick _fjoystick;
  
     public static UIManager _instance { get; private set; }
-
+    public GameObject prefUILevel;
+    public List<GameObject> lsLevelUp = new List<GameObject>();
     public float sfxCDTime = 0.25f;
     private float lastSfxTime = 0;
 
@@ -83,9 +84,24 @@ public class UIManager : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
+    public void OnInstanceLevel(List<string> lsLevelUp)
+    {
+        uiGameplay.goWaiting.SetActive(true);
+        GameObject on = GameObject.Instantiate(prefUILevel);
+        on.gameObject.GetComponent<UILevelUp>().OnSetUp(lsLevelUp);
+        on.gameObject.transform.SetParent(this.transform);
+        on.gameObject.GetComponent<RectTransform>().offsetMax=Vector2.zero;
+        on.gameObject.GetComponent<RectTransform>().offsetMin=Vector2.zero;
+    }
     public void OnLogin()
     {
         uiLogin.gameObject.SetActive(false);
         uiMainMenu.gameObject.SetActive(true);
+    }
+
+    public void MuteBGM()
+    {
+        gameObject.GetComponent<AudioSource>().mute = !gameObject.GetComponent<AudioSource>().mute;
+        AllManager._instance.audioSource.mute = !AllManager._instance.audioSource.mute;
     }
 }
