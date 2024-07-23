@@ -343,6 +343,7 @@ public class GameEventData
     public LimitedVisionEventData limited;
     public RaidBossEventData raid;
     public QuickTimeEventData quick;
+    public GoToPosEvent goToPos;
 }
 
 [Serializable]
@@ -370,6 +371,13 @@ public class ShareAttrEventDamaged
         this.damage = dmg;
     }
 }
+[Serializable]
+public class GoToPosEvent
+{
+    [field: SerializeField] public Vector3 target1;
+    [field: SerializeField] public Vector3 target2;
+}
+
 [Serializable]
 public class ChainEventData 
 {
