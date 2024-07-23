@@ -15,7 +15,7 @@ public class GameEventConfig: ScriptableObject
     public virtual void Apply(GameEvent gameEvent)  // Apply the event untill event end
     {
         GameObject item;
-        if (UIManager._instance.uiGameplay.lsGOEvent.TryGetValue(gameEvent.id, out item))
+        if (UIManager._instance.uiGameplay.lsGOEvent.TryGetValue(gameEvent.id,out item))
         {
             item.GetComponent<ItemEvent>().OnUpdateFill(gameEvent.timeEnd);
         }

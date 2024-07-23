@@ -26,34 +26,12 @@ public class SocketCommunication
     }
     Socket socket;
     //public string address = "192.168.6.165";
-    private string address = "127.0.0.1";
-    private int port = 9999;
+    public string address = "127.0.0.1";
+    public int port = 9999;
     private static List<byte> buffer = new List<byte>();
-    private delegate void EventHandler(string response);
-    private Dictionary<string, EventHandler> Event;
+
     public SocketCommunication()
     {
-        Event = new Dictionary<string, EventHandler>
-        {
-            {"provide session id", HandleSessionId },
-            {"provide id", HandleProvideId },
-            {"rooms", HandleRooms },
-            {"new player join", HandleNewPlayerJoin },
-            {"joined", HandleJoin },
-            {"pong", HandlePing},
-            {"kick", HandleKick },
-            {"disband", HandleKicked },
-            {"kicked", HandleKicked },
-            {"player leave", HandlePlayerLeave },
-            {"all player ready", HandleAllPlayerReady },
-            {"not all player ready", HandleNotAllPlayerReady },
-            {"start", HandleStart },
-            {"spawn player", HandleSpawnPlayer },
-            {"update game state", HandleUpdateGameState },
-            {"player out", HandlePlayerOut },
-            {"game end", HandleGameEnd }
-
-        };
         ConnectToServer();
     }
 
@@ -163,12 +141,85 @@ public class SocketCommunication
             {
                 continue;
             }
+
+
+            //Debug.Log(response);
             
             EventName _event = JsonUtility.FromJson<EventName>(response);
-            EventHandler handler;
-            if(Event.TryGetValue(_event.event_name, out handler))
+
+            switch (_event.event_name)
             {
-                handler(response);
+                case "provide session id":
+                    Dispatcher.EnqueueToMainThread(() => { HandleSessionId(response); });
+                    break;
+
+                case "provide id":
+                    //set player id in first connect
+                    Dispatcher.EnqueueToMainThread(() => { HandleProvideId(response); });
+                    break;
+
+                case "rooms":
+                    //get available rooms
+                    Dispatcher.EnqueueToMainThread(() => { HandleRooms(response); });
+                    break;
+
+                case "new player join":
+                    //other player join room
+                    Dispatcher.EnqueueToMainThread(() =>{ HandleNewPlayerJoin(response); });
+                    break;
+
+                case "joined":
+                    //join a room
+                    Dispatcher.EnqueueToMainThread(() => { HandleJoin(response); });
+                    break;
+
+                case "pong":
+                    //Debug.Log($"Ping: {PingData.stopwatch.ElapsedMilliseconds} ms");
+                    PingData.stopwatch.Stop();
+                    Dispatcher.EnqueueToMainThread(() => { HandlePing(response); });                      
+                    break;
+
+                case "kick":
+                    Dispatcher.EnqueueToMainThread(() => { HandleKick(response); });
+                    break;
+
+                case "disband":
+                case "kicked":
+                    Dispatcher.EnqueueToMainThread(() => { HandleKicked(response); });
+                    break;
+
+                case "player leave":
+                    Dispatcher.EnqueueToMainThread(() => { HandlePlayerLeave(response); });
+
+                    break;
+                case "all player ready":
+                    Dispatcher.EnqueueToMainThread(() => { HandleAllPlayerReady(response); });
+                    break;
+
+                case "not all player ready":
+                    Dispatcher.EnqueueToMainThread(() => { HandleNotAllPlayerReady(response); });
+                    break;
+
+                case "start":
+                    Dispatcher.EnqueueToMainThread(() => { HandleStart(response); });
+                    break;
+
+                case "spawn player":
+                    Dispatcher.EnqueueToMainThread(() => { HandleSpawnPlayer(response); });
+                    break;
+
+                case "update game state":
+                    Dispatcher.EnqueueToMainThread(() => { HandleUpdateGameState(response); });
+                    break;
+
+                case "player out":
+                    Dispatcher.EnqueueToMainThread(() => { HandlePlayerOut(response); });
+                    break;
+
+                case "game end":
+                    Dispatcher.EnqueueToMainThread(() => { HandleGameEnd(response); });
+                    break;
+
             }
         }
     }
@@ -210,10 +261,78 @@ public class SocketCommunication
             //Debug.Log(response);
             EventName _event = JsonUtility.FromJson<EventName>(response);
 
-            EventHandler handler;
-            if (Event.TryGetValue(_event.event_name, out handler))
+            switch (_event.event_name)
             {
-                handler(response);
+                case "provide session id":
+                    HandleSessionId(response);
+                    break;
+
+                case "provide id":
+                    //set player id in first connect
+                    HandleProvideId(response);
+                    break;
+
+                case "rooms":
+                    //get available rooms
+                    HandleRooms(response);
+                    break;
+
+                case "new player join":
+                    //other player join room
+                    HandleNewPlayerJoin(response);
+                    break;
+
+                case "joined":
+                    //join a room
+                    HandleJoin(response);
+                    break;
+
+                case "pong":
+                    //Debug.Log($"Ping: {PingData.stopwatch.ElapsedMilliseconds} ms");
+                    HandlePing(response);
+                    break;
+
+                case "kick":
+                    HandleKick(response);
+                    break;
+
+                case "disband":
+                case "kicked":
+                    HandleKicked(response);
+                    break;
+
+                case "player leave":
+                    HandlePlayerLeave(response);
+
+                    break;
+                case "all player ready":
+                    HandleAllPlayerReady(response);
+                    break;
+
+                case "not all player ready":
+                    HandleNotAllPlayerReady(response);
+                    break;
+
+                case "start":
+                    HandleStart(response);
+                    break;
+
+                case "spawn player":
+                    HandleSpawnPlayer(response);
+                    break;
+
+                case "update game state":
+                    HandleUpdateGameState(response);
+                    break;
+
+                case "player out":
+                    HandlePlayerOut(response);
+                    break;
+
+                case "game end":
+                    HandleGameEnd(response);
+                    break;
+
             }
 
             if (buffer.Count > 4) continue;
