@@ -55,6 +55,7 @@ public class UIManager : MonoBehaviour
     {
         uiMainMenu.gameObject.SetActive(false);
         uiGameplay.gameObject.SetActive(true);
+        uiGameplay.lsGOEvent.Clear();
     }
 
     private void Awake()

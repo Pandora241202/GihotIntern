@@ -77,15 +77,15 @@ public class AllManager : MonoBehaviour
         //powerUpManager = null;
         UIManager._instance.ClearUI();
         if (sceneName == "level1")
-        {
-            playerManager.FreshStart();
-            UIManager._instance.OnLoadGameScene();
+        { 
             sceneUpdater = GameObject.FindObjectOfType<SceneUpdater>();
             //Debug.Log(sceneUpdater);
             creepManager = sceneUpdater.creepManager;
             bulletManager = sceneUpdater.bulletManager;
             powerUpManager = sceneUpdater.powerUpManager;
             gameEventManager = sceneUpdater.gameEventManager;
+            UIManager._instance.OnLoadGameScene();
+            playerManager.FreshStart();
             SendData<EventName> ev = new SendData<EventName>(new EventName("done loading"));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
         }
