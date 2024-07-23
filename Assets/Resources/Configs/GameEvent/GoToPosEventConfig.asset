@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: GoToPosEventConfig
   m_EditorClassIdentifier: 
   expGain: 0
+  prefArrow: {fileID: 8022894906780453016, guid: fe6a48c2465142941aa964d12f3567bb, type: 3}

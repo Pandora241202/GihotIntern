@@ -2409,6 +2409,37 @@ Transform:
   m_Father: {fileID: 6476694979708368466}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6688705191336215418
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8404431796656991017}
+  m_Layer: 0
+  m_Name: SpawnArrowEvent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8404431796656991017
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6688705191336215418}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.55, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6769973144926382978}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6823035039531864013
 GameObject:
   m_ObjectHideFlags: 0
@@ -2940,6 +2971,7 @@ Transform:
   - {fileID: 300394385982345530}
   - {fileID: 116067529148170559}
   - {fileID: 4375739337990636055}
+  - {fileID: 8404431796656991017}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3013,6 +3045,7 @@ MonoBehaviour:
   joystick: {fileID: 0}
   id: 
   charAnim: {fileID: 7574242066490677593}
+  goSpawnArrowEvent: {fileID: 0}
   goCircleRes: {fileID: 8247781498532946235}
   timeRevive: 0
   isRevive: 0

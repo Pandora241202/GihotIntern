@@ -29,6 +29,8 @@ public class AllManager : MonoBehaviour
     
     public GameObject goEventGoTo;
     public List<GameObject> lsGoToEvent = new List<GameObject>();
+    public List<GameObject> lsArrow = new List<GameObject>();
+
     public static AllManager Instance()
     {
         return _instance;

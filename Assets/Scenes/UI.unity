@@ -4125,6 +4125,7 @@ MonoBehaviour:
   audioSource: {fileID: 1856316314}
   goEventGoTo: {fileID: 8240975537168439115, guid: 3a5f783635baa974ba8e82e6de35953c, type: 3}
   lsGoToEvent: []
+  lsArrow: []
 --- !u!82 &5888400484667401863
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4228,6 +4229,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1170851542}
     m_Modifications:
+    - target: {fileID: 7655869530660925609, guid: e49696933e1f3cd42838a693fe6a7fd4, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7655869530660925609, guid: e49696933e1f3cd42838a693fe6a7fd4, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7655869531685127528, guid: e49696933e1f3cd42838a693fe6a7fd4, type: 3}
       propertyPath: m_Name
       value: UIOnline

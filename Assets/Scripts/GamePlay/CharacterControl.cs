@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using TMPro;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ public class CharacterControl : MonoBehaviour
     public FloatingJoystick joystick;
     public string id;
     public Animator charAnim;
-
+    public GameObject goSpawnArrowEvent;
     private bool isInvincible = false;
     public GameObject goCircleRes;
     public float timeRevive;
