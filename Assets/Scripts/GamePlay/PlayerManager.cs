@@ -152,15 +152,17 @@ public class Player
     public float GetDmg()
     {
         float critRate = GetCritRate();
-
+        Debug.Log("Normal CR: " + critRate);
+        critRate += AllManager.Instance().levelUpConfig.critRateIncrements;
+        Debug.Log("CR after buff: " + critRate);
         GunType gunType = gunConfig.lsGunType[gunId];
         float dmg = AllManager.Instance().playerManager.GetDmgFromLevel(gunType.baseDamage, gunType.bulletMultiplier) * (dmgBoostAmount + 1);
 
         if (critRate >= 1 || Random.Range(0f, 1f) <= critRate) 
         {
-            return dmg * (1 + GetCritDmg());
+            return dmg * (1 + GetCritDmg() +AllManager.Instance().levelUpConfig.critDamageIncrements);
         }
-  
+
         return dmg;
     }
 
