@@ -377,7 +377,19 @@ public class GoToPosEvent
     [field: SerializeField] public Vector3 target1;
     [field: SerializeField] public Vector3 target2;
 }
-
+[Serializable]
+public class GoToPosEventData
+{
+    public string event_name = "game event";
+    public int id = 6;
+    public int target1 = 0;
+    public int target2 = 0;
+    public GoToPosEventData(int target)
+    {
+        if (target == 1) this.target1 = 1;
+        else this.target2 = 1;
+    }
+}
 [Serializable]
 public class ChainEventData 
 {
