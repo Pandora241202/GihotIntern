@@ -75,9 +75,9 @@ public class UIGamePlay : MonoBehaviour
             Debug.Log(idEvent);
             goItem.transform.SetParent(goEvent.transform);
             goItem.transform.localScale = Vector3.one;
-
-            lsGOEvent.Add(idEvent,goItem);
         });
+
+        lsGOEvent.Add(idEvent, goItem);
     }
 
 
