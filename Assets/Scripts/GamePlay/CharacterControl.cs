@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using TMPro;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ public class CharacterControl : MonoBehaviour
     public FloatingJoystick joystick;
     public string id;
     public Animator charAnim;
-
+    public GameObject goSpawnArrowEvent;
     private bool isInvincible = false;
     public GameObject goCircleRes;
     public float timeRevive;
@@ -132,6 +133,20 @@ public class CharacterControl : MonoBehaviour
             collide_point.y = transform.position.y;
             player.collision = true;
             player.collision_plane_normal_dict.Add(elementId, (transform.position - collide_point).normalized);
+        } 
+        else if (other.gameObject.CompareTag("GoToPosEvent"))
+        {
+            Debug.Log("Dap");
+            if (other.gameObject == AllManager._instance.lsGoToEvent[0])
+            {
+                SendData<GoToPosEventData> ev = new SendData<GoToPosEventData>(new GoToPosEventData(1,1));
+                SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
+            }
+            else
+            {
+                SendData<GoToPosEventData> ev = new SendData<GoToPosEventData>(new GoToPosEventData(2,1));
+                SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
+            }
         }
     }
 
@@ -167,6 +182,20 @@ public class CharacterControl : MonoBehaviour
             {
                 player.collision_plane_normal_dict.Remove(other.gameObject.GetInstanceID());
                 if (player.collision_plane_normal_dict.Count == 0) player.collision = false;
+            }
+        } 
+        else if (other.gameObject.CompareTag("GoToPosEvent"))
+        {
+            Debug.Log("Dap");
+            if (other.gameObject == AllManager._instance.lsGoToEvent[0])
+            {
+                SendData<GoToPosEventData> ev = new SendData<GoToPosEventData>(new GoToPosEventData(1,-1));
+                SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
+            }
+            else
+            {
+                SendData<GoToPosEventData> ev = new SendData<GoToPosEventData>(new GoToPosEventData(2,-1));
+                SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
             }
         }
     }

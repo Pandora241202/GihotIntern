@@ -12,6 +12,7 @@ TagManager:
   - Creep
   - Enemy
   - PowerUp
+  - GoToPosEvent
   layers:
   - Default
   - TransparentFX

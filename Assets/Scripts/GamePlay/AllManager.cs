@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Resources;
 using System.Text;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public class AllManager : MonoBehaviour
@@ -24,6 +26,11 @@ public class AllManager : MonoBehaviour
     public bool isLevelUp = false;
     public List<AudioClip> lsAudioClip = new List<AudioClip>();
     public AudioSource audioSource;
+    
+    public GameObject goEventGoTo;
+    public List<GameObject> lsGoToEvent = new List<GameObject>();
+    public List<GameObject> lsArrow = new List<GameObject>();
+
     public static AllManager Instance()
     {
         return _instance;
@@ -48,6 +55,15 @@ public class AllManager : MonoBehaviour
 
     }
 
+    public void SpawnGoToPosEvent(Vector3 posA,Vector3 posB)
+    {
+        GameObject gotoposA = Instantiate(goEventGoTo);
+        gotoposA.transform.position = posA;
+        GameObject gotoposB = Instantiate(goEventGoTo);
+        gotoposB.transform.position = posB;
+        lsGoToEvent.Add(gotoposA);
+        lsGoToEvent.Add(gotoposB);
+    }
     public void LoadSceneAsync(string sceneName, string mode = "")
     {
         StartCoroutine(LoadScene(sceneName, mode));

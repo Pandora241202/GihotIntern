@@ -53,7 +53,8 @@ public class GameEventManager
         SharedAttributes,
         OnePermadeath,
         QuickTimeEvent,
-        RaidBoss
+        RaidBoss,
+        GoToPos
     }
 
     public GameEventManager(AllGameEventConfig allGameEventConfig)
@@ -65,7 +66,7 @@ public class GameEventManager
     {
         GameEventConfig config = gameEventConfigs[(int)type];
         GameEvent gameEvent = new GameEvent(config);
-        gameEvent = new GameEvent(gameEventConfigs[ev.id]);
+        // gameEvent = new GameEvent(gameEventConfigs[ev.id]);
         gameEvent.config.Activate(gameEvent, ev);
         gameEventDict.Add((int)type, gameEvent);
     }

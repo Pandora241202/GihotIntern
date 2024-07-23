@@ -147,6 +147,7 @@ public class Player
         health += healthChangeAmount;
         health = Mathf.Min(health, AllManager.Instance().playerManager.GetMaxHealthFromLevel());
         UIManager._instance.uiGameplay.UpdateHealthSlider(health);
+        Debug.Log(AllManager.Instance().playerManager.GetMaxHealthFromLevel()+" "+health);
     }
 
     public float GetDmg()
@@ -182,6 +183,7 @@ public class Player
 
     public void ProcessDmg(float dmg)
     {
+        Debug.Log("Damdge: "+dmg+" Health: "+health);
         if(id == Player_ID.MyPlayerID)
         {
             dmgRecieved = (int)dmg;
@@ -193,7 +195,7 @@ public class Player
             }
             UIManager._instance.uiGameplay.UpdateHealthSlider(health);
         }
-        
+        Debug.Log("Damdge: "+dmg+" Health: "+health);
     }
 
     GameObject GetTagetObj()
