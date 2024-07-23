@@ -55,8 +55,6 @@ public class LevelUpConfig : ScriptableObject
     public virtual void ApplyBaseStat(string buff = "")
     {
         var player = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID];
-        // int level;
-       // Debug.Log(buff);
         switch (buff)
         {
             case "health":
@@ -79,15 +77,12 @@ public class LevelUpConfig : ScriptableObject
                 player.SetDamageBoost(damageBoost);
                 break;
             case "crit":
-            //TODO: Rebase then add this later @Hung
+
                 levelUpDict[buff]++;
-                var critRateIncrease = levelUpDict[buff] * 0.03f;
-                var critDamageIncrease = levelUpDict[buff] * 0.06f;
+                var critRateIncrease = levelUpDict[buff] * 0.02f;
+                var critDamageIncrease = levelUpDict[buff] * 0.04f;
                 critRateIncrements += critRateIncrease;
                 critDamageIncrements += critDamageIncrease;
-                // level = levelUpDict[buff];
-                // critRateIncrease += critRateIncrements;
-                // critDamageIncrease += critDamageIncrements;
                 break;
             case "lifeSteal":
                 levelUpDict[buff]++;
