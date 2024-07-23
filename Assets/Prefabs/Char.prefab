@@ -3010,17 +3010,9 @@ MonoBehaviour:
   creepLayerMask:
     serializedVersion: 2
     m_Bits: 128
+  joystick: {fileID: 0}
   id: 
   charAnim: {fileID: 7574242066490677593}
-  input_velocity: {x: 0, y: 0, z: 0}
-  final_velocity: {x: 0, y: 0, z: 0}
-  correctPositionTime: 0
-  isColliding: 0
-  lerp: 0
-  frameLerp: 16
-  elapseFrame: 0
-  lerpVertor: {x: 0, y: 0, z: 0}
-  lerpPosition: {x: 0, y: 0, z: 0}
   goCircleRes: {fileID: 8247781498532946235}
   timeRevive: 0
   isRevive: 0
@@ -3035,8 +3027,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.9467355, y: 2.7993736, z: 0.4361439}
-  m_Center: {x: 0.01884085, y: 0.48310518, z: 0.05981244}
+  m_Size: {x: 1.1389841, y: 2.7993736, z: 0.4361439}
+  m_Center: {x: -0.07728332, y: 0.48310518, z: 0.05981244}
 --- !u!54 &5929914348216510491
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3111,7 +3103,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8247781498532946235}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.67, z: 0}
+  m_LocalPosition: {x: 0, y: -0.83, z: 0}
   m_LocalScale: {x: 5, y: 0.05, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3125,7 +3117,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8247781498532946235}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &7304540673710656154
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3146,7 +3138,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: e6f4d75db0d90446589504ad879cb46e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
