@@ -134,6 +134,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 5639e7536f629884f907d06a418a7da6, type: 3}
   - {fileID: 21300000, guid: e5da668c6557abb47a17a303cf69943f, type: 3}
   - {fileID: 21300000, guid: 5e2805d1479227b499602a8f62f9a0e7, type: 3}
+  - {fileID: 21300000, guid: 5e2805d1479227b499602a8f62f9a0e7, type: 3}
+  - {fileID: 21300000, guid: 5e2805d1479227b499602a8f62f9a0e7, type: 3}
   goRemainPoint: {fileID: 4356674504354314721}
   txtPoint: {fileID: 4099396796447188150}
   duration: 0

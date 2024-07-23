@@ -384,10 +384,10 @@ public class GoToPosEventData
     public int id = 6;
     public int target1 = 0;
     public int target2 = 0;
-    public GoToPosEventData(int target)
+    public GoToPosEventData(int target,int value)
     {
-        if (target == 1) this.target1 = 1;
-        else this.target2 = 1;
+        if (target == 1) this.target1 = value;
+        else this.target2 = value;
     }
 }
 [Serializable]
