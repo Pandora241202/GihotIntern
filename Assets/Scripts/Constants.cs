@@ -7,8 +7,8 @@ public static class Constants
     // Player constants
     public const int PlayerBaseExp = 10;
     public const int PlayerBaseLevel = 1;
-    public const int ScalingMultiplierExp = 15;
-    public const int ExpIncrement = 135;
+    public const int ScalingMultiplierExp = 10;
+    public const int ExpIncrement = 100;
     public const int PlayerBaseMaxHealth = 10;
 
     // Map constants

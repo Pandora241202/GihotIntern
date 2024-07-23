@@ -240,7 +240,7 @@ GameObject:
   - component: {fileID: 308855179138957031}
   - component: {fileID: 2996321182252092757}
   m_Layer: 5
-  m_Name: txtName (1)
+  m_Name: txtDes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -853,6 +853,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 37de44bcb59b8174497def1957cc490b, type: 3}
   - {fileID: 21300000, guid: bb67b03c2969d104caba950c446f8c8d, type: 3}
   txtName: {fileID: 6207162520716109499}
+  txtDes: {fileID: 2996321182252092757}
   imgIcon: {fileID: 4827994448628986061}
 --- !u!1 &7033545228620497463
 GameObject:
