@@ -4100,8 +4100,9 @@ MonoBehaviour:
   isLevelUp: 0
   lsAudioClip:
   - {fileID: 8300000, guid: 1141feef254bf6044a522af6deda58af, type: 3}
-  - {fileID: 8300000, guid: 3bc8a2f839f51c1468c7cd936a63289c, type: 3}
-  - {fileID: 8300000, guid: 3bc8a2f839f51c1468c7cd936a63289c, type: 3}
+  - {fileID: 8300000, guid: 22a79801358e6884d8d6608e3b4ecc46, type: 3}
+  - {fileID: 8300000, guid: 745d1972f5260f242b68602246abf3f8, type: 3}
+  - {fileID: 8300000, guid: 4f152845e292da540bdfcb6d2df3cd31, type: 3}
   audioSource: {fileID: 1856316314}
 --- !u!82 &5888400484667401863
 AudioSource:
