@@ -11,6 +11,8 @@ public class GoToPosEventConfig : GameEventConfig
     public override void Activate(GameEvent gameEvent, GameEventData eventData)
     {
         base.Activate(gameEvent, eventData);
+        AllManager._instance.lsArrow.Clear();
+        AllManager._instance.lsGoToEvent.Clear();
         AllManager._instance.SpawnGoToPosEvent(eventData.goToPos.target1,eventData.goToPos.target2);
         GameObject goArrow = Instantiate(prefArrow);
        

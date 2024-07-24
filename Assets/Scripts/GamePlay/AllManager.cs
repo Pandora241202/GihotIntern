@@ -105,7 +105,7 @@ public class AllManager : MonoBehaviour
             droneManager = sceneUpdater.droneManager;
             UIManager._instance.OnLoadGameScene();
             playerManager.FreshStart();
-            if(playerManager.dictPlayers.Count==1) droneManager.SpawnDrone();
+      
             SendData<EventName> ev = new SendData<EventName>(new EventName("done loading"));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
         }
@@ -185,7 +185,7 @@ public class AllManager : MonoBehaviour
                 
             }
         }
-
+    
         playerManager.UpdatePlayersState(state.player_states);
 
         creepManager.UpdateCreepsState(state.creep_spawn_infos, state.creep_destroy_infos);
@@ -193,6 +193,7 @@ public class AllManager : MonoBehaviour
         powerUpManager.UpdatePowerUpsState(state.power_up_pick_infos);
 
         gameEventManager.UpdateEventState(state.game_event);
+        
     }
 
     public IEnumerator UpdatePing()

@@ -20,6 +20,7 @@ public class SceneUpdater : MonoBehaviour
         gameEventManager = new GameEventManager(AllManager.Instance().allGameEventConfig);
         droneManager = new DroneManager(AllManager.Instance().droneConfig);
         playerManager = AllManager.Instance().playerManager;
+        if(playerManager.dictPlayers.Count==1) droneManager.SpawnDrone();
     }
 
     // Update is called once per frame
@@ -31,6 +32,7 @@ public class SceneUpdater : MonoBehaviour
         powerUpManager.MyUpdate();
         playerManager.MyUpdate();
         gameEventManager.MyUpdate();
+        droneManager.MyUpdate();
     }
 
     private void FixedUpdate()
