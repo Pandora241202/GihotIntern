@@ -32,6 +32,7 @@ public class DroneManager
 
     public void MyUpdate()
     {
+        if(drone==null)return;
         playerTrans = AllManager._instance.playerManager.dictPlayers[Player_ID.MyPlayerID].playerTrans;
         MoveToTarget();
     }
