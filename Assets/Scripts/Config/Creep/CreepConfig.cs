@@ -73,11 +73,12 @@ public class CreepConfig : ScriptableObject
     {
         Dictionary<string, Player> dictPlayers = AllManager.Instance().playerManager.dictPlayers;
 
-        float minDis = DistanceBetween(dictPlayers.First().Value.playerTrans.position, creepTransform.position);
-        string playerIdToTarget = dictPlayers.First().Key;
+        float minDis = Mathf.Infinity;
+        string playerIdToTarget = null;
 
         foreach (var pair in dictPlayers)
         {
+            if (pair.Value.isDead) continue;
             Vector3 playerPos = pair.Value.playerTrans.position;
             float dis = DistanceBetween(playerPos, creepTransform.position);
             if (dis < minDis)

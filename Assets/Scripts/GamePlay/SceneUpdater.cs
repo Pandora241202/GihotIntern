@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SceneUpdater : MonoBehaviour
@@ -9,8 +7,8 @@ public class SceneUpdater : MonoBehaviour
     public PowerUpManager powerUpManager;
     public PlayerManager playerManager;
     public GameEventManager gameEventManager;
-
     public DroneManager droneManager;
+    public RenderManager renderManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +19,8 @@ public class SceneUpdater : MonoBehaviour
         droneManager = new DroneManager(AllManager.Instance().droneConfig);
         playerManager = AllManager.Instance().playerManager;
         if(playerManager.dictPlayers.Count==1) droneManager.SpawnDrone();
+        renderManager = new RenderManager(Camera.main, AllManager.Instance().treeLayerMask);
+
     }
 
     // Update is called once per frame
@@ -33,6 +33,7 @@ public class SceneUpdater : MonoBehaviour
         playerManager.MyUpdate();
         gameEventManager.MyUpdate();
         droneManager.MyUpdate();
+        renderManager.MyUpdate();
     }
 
     private void FixedUpdate()

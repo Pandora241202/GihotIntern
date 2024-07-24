@@ -13,6 +13,11 @@ public class Creep2Config : NotMovingCreepConfig
 
         (string playerId, float _) = GetNearestPlayerWithDis(creep.creepTrans);
 
+        if (playerId == null)
+        {
+            return;
+        }
+
         creep.creepTrans.rotation = Quaternion.LookRotation(dictPlayers[playerId].playerTrans.position - creep.creepTrans.position);
 
         if (creep.timer >= fireRate)
