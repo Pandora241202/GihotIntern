@@ -16,11 +16,13 @@ public class AllManager : MonoBehaviour
     [SerializeField] public AllGameEventConfig allGameEventConfig;
     [SerializeField] GameObject characterPrefab;
     [SerializeField] public LevelUpConfig levelUpConfig;
+    [SerializeField] public DroneConfig droneConfig;
     public SceneUpdater sceneUpdater;
     public BulletManager bulletManager;
     public CreepManager creepManager;
     public PowerUpManager powerUpManager;
     public GameEventManager gameEventManager;
+    public DroneManager droneManager;
     public bool isPause = false;
     public bool isHost=false;
     public bool isLevelUp = false;
@@ -100,8 +102,10 @@ public class AllManager : MonoBehaviour
             bulletManager = sceneUpdater.bulletManager;
             powerUpManager = sceneUpdater.powerUpManager;
             gameEventManager = sceneUpdater.gameEventManager;
+            droneManager = sceneUpdater.droneManager;
             UIManager._instance.OnLoadGameScene();
             playerManager.FreshStart();
+            if(playerManager.dictPlayers.Count==1) droneManager.SpawnDrone();
             SendData<EventName> ev = new SendData<EventName>(new EventName("done loading"));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
         }

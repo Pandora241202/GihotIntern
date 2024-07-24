@@ -9,6 +9,8 @@ public class SceneUpdater : MonoBehaviour
     public PowerUpManager powerUpManager;
     public PlayerManager playerManager;
     public GameEventManager gameEventManager;
+
+    public DroneManager droneManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +18,7 @@ public class SceneUpdater : MonoBehaviour
         bulletManager = new BulletManager(AllManager.Instance().gunConfig);
         powerUpManager = new PowerUpManager(AllManager.Instance().allDropItemConfig);
         gameEventManager = new GameEventManager(AllManager.Instance().allGameEventConfig);
+        droneManager = new DroneManager(AllManager.Instance().droneConfig);
         playerManager = AllManager.Instance().playerManager;
     }
 
