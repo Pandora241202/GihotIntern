@@ -12,13 +12,14 @@ public class LevelUpConfig : ScriptableObject
     public float critRateIncrements;
     public float critDamageIncrements;
     public float warpAmount;
-    public List<string> additionalOptions = new List<string>();
     public List<string> finalOptions = new List<string>();
 
     public Dictionary<string,int> levelUpDict = new Dictionary<string,int>()
-        {{"health",0},{"speed",0},{"damage",0},{"crit",0},{"lifeSteal",0}};
-    public List<string> defaultOptions = new List<string> { "health", "speed", "damage", "crit", "lifeSteal" };
+        {{"Health", 0},{"Speed", 0},{"Damage", 0},{"CRIT", 0},{"Life Steal", 0}, {"AOE Meteor", 0}, {"Time Warp", 0}, {"Poison Aura", 0}};
+    public List<string> defaultOptions = new List<string> { "Health", "Speed", "Damage", "CRIT", "Life Steal", "AOE Meteor" , "Time Warp", "Poison Aura"};
+    // public List<string> defaultOptions = new List<string> { "health", "speed", "AOEMeteor"};
     private bool isLoadedDict = false;
+    private int poisonAuraFrameCounter = 0;
     public void OnSetUpLevelUpDict()
     {
         foreach (var choice in defaultOptions)
@@ -29,11 +30,6 @@ public class LevelUpConfig : ScriptableObject
     public virtual void RandomLevelUpChoice()
     {
         finalOptions.Clear(); // Clear for each level
-        Debug.Log("Additional options: " + string.Join(", ", additionalOptions.ToArray()));
-        
-        //List<string> defaultOptions = new List<string> { "health" };
-        defaultOptions.AddRange(additionalOptions);
-
         for (int i = 0; i < defaultOptions.Count; i++)
         {
             string temp = defaultOptions[i];
@@ -48,88 +44,86 @@ public class LevelUpConfig : ScriptableObject
                 finalOptions.Add(defaultOptions[i]);
             }
         }
-        //Debug.Log("Final options: " + string.Join(", ", finalOptions.ToArray()));
-        additionalOptions.Clear();
     }
 
-    public virtual void ApplyBaseStat(string buff = "")
+    public virtual void ApplyBaseStat(string buff)
     {
         var player = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID];
-        switch (buff)
+        Debug.Log("Buff chosen: " + buff);
+        switch (buff) //Note: Reference to how UIItem/ItemLevelUp.cs (txtName.text) is set up
         {
-            case "health":
+            case "Health":
+            Debug.Log("Level Up Health called");
                 levelUpDict[buff]++; // Note: increase level first, else first level = 0 -> 1 * 0 = 0
                 var healthBoost = Mathf.Floor(levelUpDict[buff] * 0.5f);
                 player.ChangeHealth(1  * healthBoost);
                 //to do: + max health
 
                 break;
-            case "speed":
+            case "Speed":
+                Debug.Log("Level Up Speed called");
                 levelUpDict[buff]++;
                 var speedBoost = levelUpDict[buff] * 0.05f;
                 player.SetSpeedBoostByLevelUp(speedBoost);
                 break;
 
-            case "damage":
+            case "Damage":
+                Debug.Log("Level Up Damage called");
                 levelUpDict[buff]++;
                 var damageBoost = Mathf.Floor(levelUpDict[buff] * 0.5f);
-                //Debug.Log("Level up: Damage increased by " + damageBoost);
                 player.SetDamageBoost(damageBoost);
                 break;
-            case "crit":
 
+            case "CRIT":
+                Debug.Log("Level Up Crit called");
                 levelUpDict[buff]++;
                 var critRateIncrease = levelUpDict[buff] * 0.02f;
                 var critDamageIncrease = levelUpDict[buff] * 0.04f;
                 critRateIncrements += critRateIncrease;
                 critDamageIncrements += critDamageIncrease;
                 break;
-            case "lifeSteal":
+
+            case "Life Steal":
+                Debug.Log("Life Steal called");
                 levelUpDict[buff]++;
                 var lifeStealBuff = levelUpDict[buff]  * 0.01f;
                 player.lifeSteal += lifeStealBuff;
                 break;
+
+            case "AOE Meteor":
+
+                Debug.Log("AOE Meteor Strike called");
+                levelUpDict[buff]++;
+                var meteorDamage = levelUpDict[buff] * 15;
+                AOEMeteorStrikeLevelUp(meteorDamage, 15);
+                break;
+
+            case "SkillCD":
+                Debug.Log("SkillCD called");
+                break;
+
+            case "Health Regen":
+                Debug.Log("Health Regen called");
+                break;
+
+            case "Time Warp": 
+                Debug.Log("Time Warp called");
+                levelUpDict[buff]++;
+                var warpAmount = levelUpDict[buff] * 0.01f;
+                TimeWarpLevelUp(-warpAmount);
+                break;
+
+            case "Poison Aura":
+                Debug.Log("Poison Aura called");
+                levelUpDict[buff]++;
+                var poisonAuraDamage = levelUpDict[buff] * 5;
+                PoisonAuraLevelUp(poisonAuraDamage, 5, poisonAuraDamage);
+                break;
+
             default:
                 Debug.Log("No base buff applied");
                 break;
         }
-    }
-    public virtual void ApplyNonBaseStat(string buff = "")
-    {
-        Debug.Log("Applying additional options");
-        switch (buff)
-        {
-            //TODO: apply non base stat later
-            case "AOE Meteor":
-                Debug.Log("AOE Meteor Strike called");
-                // AOEMeteorStrikeLevelUp();
-                break;
-            case "SkillCD":
-                Debug.Log("SkillCD called");
-                break;
-            case "Health Regen":
-                Debug.Log("Health Regen called");
-                break;
-            case "Time Warp": 
-                Debug.Log("Time Warp called");
-                // TimeWarpLevelUp();
-                break;
-            case "Poison Aura":
-                Debug.Log("Poison Aura called");
-                break;
-            // TODO: etc
-            default:
-                Debug.Log("No non base buff applied");
-                break;
-        }
-    }
-    //TODO: implement this for each level up UI (player choose upgrade) @Quoc
-    public virtual string FinalChoice()
-    {
-        Debug.Log("final options list are: " + string.Join(", ", finalOptions.ToArray()));
-        string chosenOption = finalOptions[UnityEngine.Random.Range(0, finalOptions.Count)];
-        Debug.Log("Chosen option: " + chosenOption);
-        return chosenOption;
     }
     
     public virtual void OpenMenu()
@@ -148,18 +142,15 @@ public class LevelUpConfig : ScriptableObject
     // Time Warp Level Up: PERMANENTLY decrease the speed of all creeps by a small amount
     public virtual void TimeWarpLevelUp(float warpAmount = 0) // Note: debuff -> decrease speed -> warpAmount is a negative number
     {
-        Debug.Log("Time Warp Amount: "  + warpAmount);
         foreach (var creep in AllManager.Instance().creepManager.GetCreepActiveDict())
         {
             creep.Value.speed *= 1 + warpAmount;
         }
     }
 
-    // AOEMeteorStrikeLevelUp: deal damage to every creep inside player's radius.
-    public virtual void AOEMeteorStrikeLevelUp(int damage = 0, float radius = 0)
+    // AOEMeteorStrikeLevelUp: deal one instance of damage to every creep inside player's radius.
+    public virtual void AOEMeteorStrikeLevelUp(float damage = 0, float radius = 0)
     {
-        Debug.Log("AOE Meteor Damage Amount: "  + damage);
-        Debug.Log("radius of meteor: " + radius);
         Dictionary<int, Creep> activeCreeps = AllManager.Instance().creepManager.GetCreepActiveDict();
         var player = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID];
         var playerPosition = player.playerTrans;

@@ -34,10 +34,25 @@ public class ItemLevelUp : MonoBehaviour
                 txtDes.text = "Increase the CRIT Rate and CRIT Damage of the bullet.";
                 imgIcon.sprite = lsSpriteIcon[3];
                 break;
-            case "lifesteal":
+            case "lifeSteal":
                 txtName.text = "Life Steal";
                 txtDes.text = "Increase the chance of healing 1HP per hit.";
                 imgIcon.sprite = lsSpriteIcon[4];
+                break;
+            case "AOEMeteor":
+                txtName.text = "AOE Meteor";
+                txtDes.text = "Summon a meteor that deals high AOE damage.";
+                imgIcon.sprite = lsSpriteIcon[5];
+                break;
+            case "TimeWarp":
+                txtName.text = "Time Warp";
+                txtDes.text = "Slow the speed of enemies down";
+                imgIcon.sprite = lsSpriteIcon[6];
+                break;
+            case "PoisonAura":
+                txtName.text = "Poison Aura";
+                txtDes.text = "Create a poison aura that deals damage over time.";
+                imgIcon.sprite = lsSpriteIcon[7];
                 break;
             default:
                 break;

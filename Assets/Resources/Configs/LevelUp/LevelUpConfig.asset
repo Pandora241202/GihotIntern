@@ -12,19 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77aa659732b29714a90a9450e37698ff, type: 3}
   m_Name: LevelUpConfig
   m_EditorClassIdentifier: 
-  level: 0
-  healthIncrease: 0
-  speedIncrease: 0
-  damageIncrease: 0
-  critRateIncrease: 0
-  critDamageIncrease: 0
-  lifeStealIncrease: 0
+  critRateIncrements: 0
+  critDamageIncrements: 0
   warpAmount: 0
-  additionalOptions: []
-  finalOptions: []
-  defaultOptions:
-  - health
-  - speed
+  finalOptions:
+  - AOEMeteor
   - damage
+  - PoisonAura
+  defaultOptions:
+  - AOEMeteor
+  - damage
+  - PoisonAura
   - crit
-  - lifesteal
+  - speed
+  - TimeWarp
+  - lifeSteal
+  - Health

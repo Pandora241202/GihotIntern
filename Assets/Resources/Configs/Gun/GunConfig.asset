@@ -14,32 +14,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lsGunType:
   - numberOfBullet: 1
-    Firerate: 5
+    Firerate: 7
     baseDamage: 5
     bulletMultiplier: 4
     bulletConfig: {fileID: 11400000, guid: 6a1dae1fb069c1945bd6abbed9c0dea7, type: 2}
-    FireRange: 11
+    FireRange: 14
     gunPrefab: {fileID: 6774843256803546431, guid: 5dfd1a7d1a70bcf42b3d55b163ee81e5, type: 3}
     bulletPrefab: {fileID: 7654813223398360339, guid: e0c898925ffc25544bc467fa2b80f472, type: 3}
-    baseCritRateMultiplier: 0.4
-    baseCritDMGMultiplier: 0.7
+    baseCritRateMultiplier: 0.3
+    baseCritDMGMultiplier: 0.6
   - numberOfBullet: 1
-    Firerate: 10
+    Firerate: 12
     baseDamage: 1
     bulletMultiplier: 2
     bulletConfig: {fileID: 11400000, guid: d9aa816f213522c45b5a5243228b8ecc, type: 2}
-    FireRange: 8
+    FireRange: 18
     gunPrefab: {fileID: 2978130384556725872, guid: a01db512617565340865b82d5d717d71, type: 3}
     bulletPrefab: {fileID: 4236135470487450587, guid: 0e3b3c18d7237524e896c8ef281fe297, type: 3}
     baseCritRateMultiplier: 0.2
     baseCritDMGMultiplier: 0.2
   - numberOfBullet: 3
     Firerate: 3
-    baseDamage: 8
-    bulletMultiplier: 6
+    baseDamage: 6
+    bulletMultiplier: 5
     bulletConfig: {fileID: 11400000, guid: 5a6237f2bc2e34c489335df2f29de9fe, type: 2}
-    FireRange: 5
+    FireRange: 10
     gunPrefab: {fileID: 8901172656677072605, guid: a3b03fcc4b415f54c842abb0cb668aeb, type: 3}
     bulletPrefab: {fileID: 5369569127531060987, guid: 9ac1daa066569e1458306619695bf306, type: 3}
-    baseCritRateMultiplier: 0.6
-    baseCritDMGMultiplier: 1.2
+    baseCritRateMultiplier: 0.4
+    baseCritDMGMultiplier: 1
