@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SceneUpdater : MonoBehaviour
@@ -9,6 +7,7 @@ public class SceneUpdater : MonoBehaviour
     public PowerUpManager powerUpManager;
     public PlayerManager playerManager;
     public GameEventManager gameEventManager;
+    public RenderManager renderManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +16,7 @@ public class SceneUpdater : MonoBehaviour
         powerUpManager = new PowerUpManager(AllManager.Instance().allDropItemConfig);
         gameEventManager = new GameEventManager(AllManager.Instance().allGameEventConfig);
         playerManager = AllManager.Instance().playerManager;
+        renderManager = new RenderManager(Camera.main, AllManager.Instance().treeLayerMask);
     }
 
     // Update is called once per frame
@@ -28,6 +28,7 @@ public class SceneUpdater : MonoBehaviour
         powerUpManager.MyUpdate();
         playerManager.MyUpdate();
         gameEventManager.MyUpdate();
+        renderManager.MyUpdate();
     }
 
     private void FixedUpdate()

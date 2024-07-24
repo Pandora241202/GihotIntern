@@ -1,10 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Resources;
-using System.Text;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 public class AllManager : MonoBehaviour
 {
     public static AllManager _instance { get; private set; }
@@ -16,11 +14,13 @@ public class AllManager : MonoBehaviour
     [SerializeField] public AllGameEventConfig allGameEventConfig;
     [SerializeField] GameObject characterPrefab;
     [SerializeField] public LevelUpConfig levelUpConfig;
+    [SerializeField] public LayerMask treeLayerMask;
     public SceneUpdater sceneUpdater;
     public BulletManager bulletManager;
     public CreepManager creepManager;
     public PowerUpManager powerUpManager;
     public GameEventManager gameEventManager;
+    public RenderManager renderManager;
     public bool isPause = false;
     public bool isHost=false;
     public bool isLevelUp = false;
@@ -100,6 +100,7 @@ public class AllManager : MonoBehaviour
             bulletManager = sceneUpdater.bulletManager;
             powerUpManager = sceneUpdater.powerUpManager;
             gameEventManager = sceneUpdater.gameEventManager;
+            renderManager = sceneUpdater.renderManager;
             UIManager._instance.OnLoadGameScene();
             playerManager.FreshStart();
             SendData<EventName> ev = new SendData<EventName>(new EventName("done loading"));
