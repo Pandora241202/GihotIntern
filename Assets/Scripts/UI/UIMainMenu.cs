@@ -29,6 +29,7 @@ public class UIMainMenu : MonoBehaviour
         btnStart.onClick.AddListener(() =>
         {
             UIManager._instance.PlaySfx(0);
+            //if(AllManager._instance.playerManager.dictPlayers.Count==1) GameObject goDrone=Instantiate(DroneConfig)
             SendData<EventName> ev = new SendData<EventName>(new EventName("start"));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
         });
