@@ -97,7 +97,7 @@ public class LevelUpConfig : ScriptableObject
             case "AOE Meteor":
                 Debug.Log("AOE Meteor Strike called");
                 levelUpDict[buff]++;
-                var meteorDamage = levelUpDict[buff] * 15;
+                var meteorDamage = levelUpDict[buff] * 25;
                 AOEMeteorStrikeLevelUp(meteorDamage, 15);
                 break;
 
@@ -118,9 +118,6 @@ public class LevelUpConfig : ScriptableObject
 
             case "Poison Aura":
                 Debug.Log("Poison Aura called");
-                // levelUpDict[buff]++;
-                // var poisonAuraDamage = levelUpDict[buff] * 5;
-                // PoisonAuraLevelUp(poisonAuraDamage, 5, poisonAuraDamage);
                 break;
 
             default:
