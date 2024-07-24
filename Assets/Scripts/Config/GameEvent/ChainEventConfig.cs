@@ -37,22 +37,6 @@ public class ChainEventConfig : GameEventConfig
         }
     }
 
-    private bool IsStuck(List<Vector3> vectors, Vector3 sum, int i)
-    {
-        if (i == -1)
-        {
-            return false;
-        }
-
-        if (i == 0)
-        {
-            Vector3 v = sum - vectors[0].normalized;
-            return -0.1 <= v.magnitude && v.magnitude <= 0.1;
-        }
-
-        return IsStuck(vectors, sum, i - 1) || IsStuck(vectors, (sum - vectors[i].normalized).normalized, i - 1);
-    }
-
     public override void End(GameEvent gameEvent, bool endState)
     {
         base.End(gameEvent, endState);
@@ -68,8 +52,19 @@ public class ChainEventConfig : GameEventConfig
     {
         Dictionary<string, Player> playersDict = AllManager.Instance().playerManager.dictPlayers;
 
-        List<Vector3> disVectorOutOfRangeList = new List<Vector3>();
-        List<Player> playerOutOfRangeList = new List<Player>();
+        List<string> playerLeaveIdList = new List<string>();
+        foreach (var pair in gameEvent.connectLineTransDict)
+        {
+            if (!playersDict.ContainsKey(pair.Key))
+            {
+                playerLeaveIdList.Add(pair.Key);
+            }
+        }
+        foreach (string id in playerLeaveIdList)
+        {
+            Destroy(gameEvent.connectLineTransDict[id].gameObject.gameObject);
+            gameEvent.connectLineTransDict.Remove(id);
+        }
 
         foreach (var pair in playersDict)
         {
@@ -86,28 +81,6 @@ public class ChainEventConfig : GameEventConfig
             ConnectPlayerAnchor(gameEvent.anchorTrans, disVector, gameEvent.connectLineTransDict[pair.Key]);
         }
 
-        /*if (IsStuck(disVectorOutOfRangeList, Vector3.zero, disVectorOutOfRangeList.Count - 1))
-        {
-            foreach (var pair in playersDict)
-            {
-                Player player = pair.Value;
-
-                Vector3 newPos = player.playerTrans.position + player.playerTrans.gameObject.GetComponent<CharacterControl>().final_velocity * Time.fixedDeltaTime;
-                Vector3 disVector = newPos - gameEvent.anchorTrans.position;
-                disVector.y = 0;
-
-                if (disVector.magnitude > chainRange)
-                {
-                    CharacterControl c = player.playerTrans.gameObject.GetComponent<CharacterControl>();
-
-                    Vector3 playerToAnchor = gameEvent.anchorTrans.position - player.playerTrans.position;
-                    playerToAnchor.y = 0;
-
-                    c.final_velocity = (playerToAnchor.normalized + c.final_velocity.normalized).normalized * speed;
-                }
-            }
-        }*/
-
         Vector3 sumDis = Vector3.zero;
 
         foreach (var pair in playersDict)
@@ -120,47 +93,9 @@ public class ChainEventConfig : GameEventConfig
 
             if (disVector.magnitude > chainRange)
             {
-                //playerOutOfRangeList.Add(player);
                 sumDis += disVector - disVector.normalized * chainRange;
             }
         }
-
-        /*Vector3 newAchorPos = gameEvent.anchorTrans.position + sumDis;
-
-        foreach (var pair in playersDict)
-        {
-            Player player = pair.Value;
-
-            Vector3 newPos = player.playerTrans.position + player.playerTrans.gameObject.GetComponent<CharacterControl>().final_velocity * Time.fixedDeltaTime;
-            Vector3 disVector = newPos - newAchorPos;
-            disVector.y = 0;
-
-            if (disVector.magnitude > chainRange)
-            {
-                sumDis += disVector - disVector.normalized * chainRange;
-            }
-        }*/
-
-        /*foreach (var pair in playersDict)
-        {
-            Player player = pair.Value;
-
-            Vector3 newPos = player.playerTrans.position + player.final_velocity * Time.fixedDeltaTime;
-            Vector3 disVector = newPos - gameEvent.anchorTrans.position - sumDis;
-            disVector.y = 0;
-
-            if (disVector.magnitude - chainRange > 0.01)
-            {
-                foreach (Player p in playerOutOfRangeList)
-                {
-                    Vector3 playerToAnchor = gameEvent.anchorTrans.position - player.playerTrans.position;
-                    playerToAnchor.y = 0;
-
-                    p.final_velocity = (playerToAnchor.normalized + p.final_velocity.normalized).normalized * speed;
-                }
-                return;
-            }
-        }*/
 
         gameEvent.anchorTrans.position += sumDis;
     }
