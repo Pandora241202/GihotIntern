@@ -12,6 +12,11 @@ public class MoveFarPlayerCreepConfig : CreepConfig
 
         (string playerId, float minDis) = GetNearestPlayerWithDis(creep.creepTrans);
 
+        if (playerId == null)
+        {
+            return;
+        }
+
         if (minDis <= startMoveAwayDistance)
         {
             Vector3 rotateDir = creep.creepTrans.position - dictPlayers[playerId].playerTrans.position;

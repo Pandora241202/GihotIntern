@@ -13,6 +13,11 @@ public class Creep3Config : MoveTowardPlayerCreepConfig
 
         string playerId = base.RotateTowardPlayer(creep);
 
+        if (playerId == null)
+        {
+            return;
+        }
+
         if (creep.timer >= fireRate)
         {
             creep.animator.SetTrigger("isAttack");

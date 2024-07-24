@@ -25,6 +25,11 @@ public class Creep6Config : MoveTowardPlayerCreepConfig
 
         string playerId = base.RotateTowardPlayer(creep);
 
+        if (playerId != null)
+        {
+            return;
+        }
+
         if (creep.timer >= skillCD)
         {
             creep.animator.SetTrigger("isAttack");
