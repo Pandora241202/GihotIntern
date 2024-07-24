@@ -14,44 +14,44 @@ public class ItemLevelUp : MonoBehaviour
     {
         switch (name)
         {
-            case "health":
+            case "Health":
                 txtName.text = "Health";
                 txtDes.text = "Increase Player's Max Health Point.";
                 imgIcon.sprite = lsSpriteIcon[0];
                 break;
-            case "speed":
+            case "Speed":
                 txtName.text = "Speed";
                 txtDes.text = "Increase Player's Movement Speed.";
                 imgIcon.sprite = lsSpriteIcon[1];
                 break;
-            case "damage":
+            case "Damage":
                 txtName.text = "Damage";
                 txtDes.text = "Increase the base damage of the bullet.";
                 imgIcon.sprite = lsSpriteIcon[2];
                 break;
-            case "crit":
+            case "CRIT":
                 txtName.text = "CRIT";
                 txtDes.text = "Increase the CRIT Rate and CRIT Damage of the bullet.";
                 imgIcon.sprite = lsSpriteIcon[3];
                 break;
-            case "lifeSteal":
+            case "Life Steal":
                 txtName.text = "Life Steal";
-                txtDes.text = "Increase the chance of healing 1HP per hit.";
+                txtDes.text = "Increase the chance of healing 1 HP per hit.";
                 imgIcon.sprite = lsSpriteIcon[4];
                 break;
-            case "AOEMeteor":
-                txtName.text = "AOE Meteor";
-                txtDes.text = "Summon a meteor that deals high AOE damage.";
+            case "Fire Rate":
+                txtName.text = "Fire Rate";
+                txtDes.text = "Increase the fire rate of the bullet.";
                 imgIcon.sprite = lsSpriteIcon[5];
                 break;
-            case "TimeWarp":
-                txtName.text = "Time Warp";
-                txtDes.text = "Slow the speed of enemies down";
+            case "AOE Meteor":
+                txtName.text = "AOE Meteor";
+                txtDes.text = "Summon a meteor that deals high AOE damage.";
                 imgIcon.sprite = lsSpriteIcon[6];
                 break;
-            case "PoisonAura":
-                txtName.text = "Poison Aura";
-                txtDes.text = "Create a poison aura that deals damage over time.";
+            case "Time Warp":
+                txtName.text = "Time Warp";
+                txtDes.text = "Slow the speed of enemies down";
                 imgIcon.sprite = lsSpriteIcon[7];
                 break;
             default:

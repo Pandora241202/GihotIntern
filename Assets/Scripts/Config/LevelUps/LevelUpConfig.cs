@@ -15,11 +15,10 @@ public class LevelUpConfig : ScriptableObject
     public List<string> finalOptions = new List<string>();
 
     public Dictionary<string,int> levelUpDict = new Dictionary<string,int>()
-        {{"Health", 0},{"Speed", 0},{"Damage", 0},{"CRIT", 0},{"Life Steal", 0}, {"AOE Meteor", 0}, {"Time Warp", 0}, {"Poison Aura", 0}};
-    public List<string> defaultOptions = new List<string> { "Health", "Speed", "Damage", "CRIT", "Life Steal", "AOE Meteor" , "Time Warp", "Poison Aura"};
-    // public List<string> defaultOptions = new List<string> { "health", "speed", "AOEMeteor"};
+        {{"Health", 0},{"Speed", 0},{"Damage", 0},{"CRIT", 0},{"Life Steal", 0}, {"Fire Rate", 0}, {"AOE Meteor", 0}, {"Time Warp", 0}};
+    // public List<string> defaultOptions = new List<string> { "Health", "Speed", "Damage", "CRIT", "Life Steal","Fire Rate", "AOE Meteor" , "Time Warp", "Poison Aura"};
+    public List<string> defaultOptions = new List<string> { "Health", "Speed", "Fire Rate"};
     private bool isLoadedDict = false;
-    private int poisonAuraFrameCounter = 0;
     public void OnSetUpLevelUpDict()
     {
         foreach (var choice in defaultOptions)
@@ -90,8 +89,12 @@ public class LevelUpConfig : ScriptableObject
                 player.lifeSteal += lifeStealBuff;
                 break;
 
-            case "AOE Meteor":
+            case "Fire Rate":
+                Debug.Log("Fire Rate called");
+                levelUpDict[buff]++;
+                break;
 
+            case "AOE Meteor":
                 Debug.Log("AOE Meteor Strike called");
                 levelUpDict[buff]++;
                 var meteorDamage = levelUpDict[buff] * 15;
@@ -115,9 +118,9 @@ public class LevelUpConfig : ScriptableObject
 
             case "Poison Aura":
                 Debug.Log("Poison Aura called");
-                levelUpDict[buff]++;
-                var poisonAuraDamage = levelUpDict[buff] * 5;
-                PoisonAuraLevelUp(poisonAuraDamage, 5, poisonAuraDamage);
+                // levelUpDict[buff]++;
+                // var poisonAuraDamage = levelUpDict[buff] * 5;
+                // PoisonAuraLevelUp(poisonAuraDamage, 5, poisonAuraDamage);
                 break;
 
             default:
@@ -138,6 +141,11 @@ public class LevelUpConfig : ScriptableObject
     public float getLevelUpCritDamage()
     {
         return critDamageIncrements;
+    }
+    public float getLevelUpFireRate()
+    {
+        // return (int)levelUpDict["Fire Rate"] * 0.75f;
+        return levelUpDict["Fire Rate"] * 0.75f;
     }
     // Time Warp Level Up: PERMANENTLY decrease the speed of all creeps by a small amount
     public virtual void TimeWarpLevelUp(float warpAmount = 0) // Note: debuff -> decrease speed -> warpAmount is a negative number
@@ -160,7 +168,6 @@ public class LevelUpConfig : ScriptableObject
             if (distance <= radius)
             {
                 creep.Value.ProcessDmg(damage, Player_ID.MyPlayerID);
-                Debug.Log("Creep hit by meteor");
             }
         }
     }
