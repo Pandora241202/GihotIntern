@@ -9,6 +9,7 @@ public class SceneUpdater : MonoBehaviour
     public GameEventManager gameEventManager;
     public DroneManager droneManager;
     public RenderManager renderManager;
+    public EffectManager effectManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +22,7 @@ public class SceneUpdater : MonoBehaviour
         playerManager = AllManager.Instance().playerManager;
         if(playerManager.dictPlayers.Count==1) droneManager.SpawnDrone();
         renderManager = new RenderManager(Camera.main, AllManager.Instance().treeLayerMask);
+        effectManager = new EffectManager();
 
     }
 
