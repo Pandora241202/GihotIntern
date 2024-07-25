@@ -17,13 +17,16 @@ public class Player
     public float lifeSteal;
     public int dmgRecieved = 0;
     public int hpGain = 0;
-   
+
+    public int coin = 100;
     // Player stat 
     private float health;
     private float dmgBoostAmount;
     private float speedBoostAmount;
     private float speedBoostByLevelUp;
-
+    //Perm Update
+    public List<int> lsPermUpgrade = new List<int>() { 0, 2, 3, 4, 5,1 };
+    
     // Player state
     private Dictionary<AllDropItemConfig.PowerUpsType, float> activePowerUps;
     private GameObject curCreepTarget = null;

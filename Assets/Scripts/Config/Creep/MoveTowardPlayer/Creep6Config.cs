@@ -25,7 +25,7 @@ public class Creep6Config : MoveTowardPlayerCreepConfig
 
         string playerId = base.RotateTowardPlayer(creep);
 
-        if (playerId != null)
+        if (playerId == null)
         {
             return;
         }

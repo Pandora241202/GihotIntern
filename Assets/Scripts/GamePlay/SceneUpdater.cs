@@ -17,6 +17,7 @@ public class SceneUpdater : MonoBehaviour
         powerUpManager = new PowerUpManager(AllManager.Instance().allDropItemConfig);
         gameEventManager = new GameEventManager(AllManager.Instance().allGameEventConfig);
         droneManager = new DroneManager(AllManager.Instance().droneConfig);
+        
         playerManager = AllManager.Instance().playerManager;
         if(playerManager.dictPlayers.Count==1) droneManager.SpawnDrone();
         renderManager = new RenderManager(Camera.main, AllManager.Instance().treeLayerMask);

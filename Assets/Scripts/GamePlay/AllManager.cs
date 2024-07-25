@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 
 public class AllManager : MonoBehaviour
@@ -16,7 +17,7 @@ public class AllManager : MonoBehaviour
     [SerializeField] public LevelUpConfig levelUpConfig;
 
     [SerializeField] public DroneConfig droneConfig;
-
+    [SerializeField] public UpgradesConfig upgradeConfig;
     [SerializeField] public LayerMask treeLayerMask;
 
     public SceneUpdater sceneUpdater;
