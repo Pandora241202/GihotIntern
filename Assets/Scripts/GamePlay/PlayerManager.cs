@@ -541,7 +541,16 @@ public class PlayerManager
             }
 
             correctPositionTime = 0;
-            if (state.isFire) player.Shoot();
+            if (state.isFire)
+            {
+                player.Shoot();
+                if (dictPlayers.Count==1&&AllManager.Instance().droneManager.drone!=null)
+                {
+                    Debug.Log("Drone");
+                    AllManager.Instance().droneManager.Shoot();
+                }
+               
+            }
             if (state.isDead && !c_Controller.goCircleRes.activeSelf) OnDead(player.id);
             //if (player.id == state.player_id) Debug.Log(state.isDead + "/" + player.isDead);
             else if (!state.isDead && c_Controller.goCircleRes.activeSelf) OnRevive(player.id);

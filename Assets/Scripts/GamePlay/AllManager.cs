@@ -14,12 +14,19 @@ public class AllManager : MonoBehaviour
     [SerializeField] public AllGameEventConfig allGameEventConfig;
     [SerializeField] GameObject characterPrefab;
     [SerializeField] public LevelUpConfig levelUpConfig;
+
+    [SerializeField] public DroneConfig droneConfig;
+
     [SerializeField] public LayerMask treeLayerMask;
+
     public SceneUpdater sceneUpdater;
     public BulletManager bulletManager;
     public CreepManager creepManager;
     public PowerUpManager powerUpManager;
     public GameEventManager gameEventManager;
+
+    public DroneManager droneManager;
+
     public RenderManager renderManager;
     public bool isPause = false;
     public bool isHost=false;
@@ -100,9 +107,11 @@ public class AllManager : MonoBehaviour
             bulletManager = sceneUpdater.bulletManager;
             powerUpManager = sceneUpdater.powerUpManager;
             gameEventManager = sceneUpdater.gameEventManager;
+            droneManager = sceneUpdater.droneManager;
             renderManager = sceneUpdater.renderManager;
             UIManager._instance.OnLoadGameScene();
             playerManager.FreshStart();
+      
             SendData<EventName> ev = new SendData<EventName>(new EventName("done loading"));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
         }
@@ -182,7 +191,7 @@ public class AllManager : MonoBehaviour
                 
             }
         }
-
+    
         playerManager.UpdatePlayersState(state.player_states);
 
         creepManager.UpdateCreepsState(state.creep_spawn_infos, state.creep_destroy_infos);
@@ -190,6 +199,7 @@ public class AllManager : MonoBehaviour
         powerUpManager.UpdatePowerUpsState(state.power_up_pick_infos);
 
         gameEventManager.UpdateEventState(state.game_event);
+        
     }
 
     public IEnumerator UpdatePing()

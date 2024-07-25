@@ -25,7 +25,7 @@ public class SocketCommunication
         return instance;
     }
     Socket socket;
-    //public string address = "192.168.6.165";
+    // public string address = "192.168.6.165";
     private string address = "127.0.0.1";
     private int port = 9999;
     private static List<byte> buffer = new List<byte>();
