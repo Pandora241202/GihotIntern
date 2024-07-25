@@ -242,8 +242,8 @@ public class Player
         float playerDmg = GetDmg();
 
         GunType gunType = gunConfig.lsGunType[gunId];
-
-        if (Time.time >= lastFireTime + 1f / gunType.Firerate)
+        float Firerate = gunType.Firerate + AllManager.Instance().levelUpConfig.getLevelUpFireRate();
+        if (Time.time >= lastFireTime + 1f / Firerate)
         {
             UIManager._instance.MyPlaySfx(gunId + 1 , 0.5f, 0.15f); //Note: gunId - 1 is VERY temporarily since all audio is in a list in UIManager
             gunType.bulletConfig.Fire(gunTransform.position, curCreepTarget.transform.position, playerDmg, "PlayerBullet", playerId: id);
