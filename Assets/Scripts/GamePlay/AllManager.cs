@@ -24,10 +24,10 @@ public class AllManager : MonoBehaviour
     public CreepManager creepManager;
     public PowerUpManager powerUpManager;
     public GameEventManager gameEventManager;
-
     public DroneManager droneManager;
-
     public RenderManager renderManager;
+    public EffectManager effectManager;
+    
     public bool isPause = false;
     public bool isHost=false;
     public bool isLevelUp = false;
@@ -109,6 +109,7 @@ public class AllManager : MonoBehaviour
             gameEventManager = sceneUpdater.gameEventManager;
             droneManager = sceneUpdater.droneManager;
             renderManager = sceneUpdater.renderManager;
+            effectManager = sceneUpdater.effectManager;
             UIManager._instance.OnLoadGameScene();
             playerManager.FreshStart();
       
@@ -160,7 +161,7 @@ public class AllManager : MonoBehaviour
         {
             GameObject.Destroy(player.Value.playerTrans.gameObject);
         }
-       LoadSceneAsync("UI", "Room");
+        LoadSceneAsync("UI", "Room");
     }
     
     public void UpdateGameState(GameState gameState)
@@ -199,7 +200,8 @@ public class AllManager : MonoBehaviour
         powerUpManager.UpdatePowerUpsState(state.power_up_pick_infos);
 
         gameEventManager.UpdateEventState(state.game_event);
-        
+
+        effectManager.UpdateEffectsState();
     }
 
     public IEnumerator UpdatePing()
