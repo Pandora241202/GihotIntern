@@ -10,6 +10,7 @@ public class Creep5Config : MoveTowardPlayerCreepConfig
     {
         GameObject explosionObj = GameObject.Instantiate(explosion, creep.creepTrans.position, Quaternion.identity);
         creep.weaponObj = explosionObj;
+        AllManager.Instance().effectManager.AddEffect(creep.weaponObj);
         creep.UnSet();
     }
 
@@ -43,6 +44,7 @@ public class Creep5Config : MoveTowardPlayerCreepConfig
 
                 if (ps.isStopped)
                 {
+                    AllManager.Instance().effectManager.RemoveEffectById(creep.weaponObj.GetInstanceID());
                     Destroy(creep.weaponObj);
                     creep.weaponObj = null;
                     AllManager.Instance().creepManager.AddToDeactivateList(creep);
