@@ -14,26 +14,26 @@ public class ItemUpgrade : MonoBehaviour
     [SerializeField] private TextMeshProUGUI txtPrice;
     private UpgradesConfig _config;
     public int price;
-    public void OnSetUpItemUpgrade(int index,UpgradesConfig config)
+    public void OnSetUpItemUpgrade(int index, UpgradesConfig config, int value)
     {
         _config = config;
         txtName.text = config.lsUpgradesConfig[index].name;
         txtDes.text = config.lsUpgradesConfig[index].des;
-        if (AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].lsPermUpgrade[index] == 0)
+        PermUpdateInfo info = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].info;
+        if (value == 0)
         {
             Debug.Log("cc");
-            price = 100;
+            price = config.lsUpgradesConfig[index].basePrice;
         }
         else
         {
-            price = (config.lsUpgradesConfig[index].basePrice * AllManager.Instance().playerManager
-                .dictPlayers[Player_ID.MyPlayerID].lsPermUpgrade[index]);
+            price = (config.lsUpgradesConfig[index].basePrice * value);
         }
         txtPrice.text = price.ToString();
-        ChangeStar(AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].lsPermUpgrade[index],index);
+        ChangeStar(index, value);
     }
     
-    public void ChangeStar(int level,int index)
+    public void ChangeStar(int index,int level)
     {
         if (level == 0)
         {
@@ -44,7 +44,7 @@ public class ItemUpgrade : MonoBehaviour
         {
             price = _config.lsUpgradesConfig[index].basePrice * level;
         }
-
+        
         txtPrice.text = price.ToString();
         for (int i = 0; i < lsLevel.Count; i++)
         {

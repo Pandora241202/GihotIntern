@@ -31,6 +31,7 @@ public class SocketCommunication
     private static List<byte> buffer = new List<byte>();
     private delegate void EventHandler(string response);
     private Dictionary<string, EventHandler> Event;
+  
     public SocketCommunication()
     {
         Event = new Dictionary<string, EventHandler>
@@ -51,7 +52,8 @@ public class SocketCommunication
             {"spawn player", HandleSpawnPlayer },
             {"update game state", HandleUpdateGameState },
             {"player out", HandlePlayerOut },
-            {"game end", HandleGameEnd }
+            {"game end", HandleGameEnd },
+            {"update perm attr", HandleUpdatePerm }
 
         };
         ConnectToServer();
@@ -322,7 +324,7 @@ public class SocketCommunication
         First_Connect data = JsonUtility.FromJson<First_Connect>(response);
         Player_ID.MyPlayerID = data.id;
 
-        AllManager.Instance().playerManager.AddPlayer(data.player_name, data.id, data.gunId, AllManager.Instance().playerConfig);
+        AllManager.Instance().playerManager.AddPlayer(data.player_name, data.id, data.gunId, AllManager.Instance().playerConfig, data.info);
         UIManager._instance.OnLogin();
     }
 
@@ -441,6 +443,23 @@ public class SocketCommunication
         AllManager.Instance().playerManager.RemovePlayer(playerOut.player_id);
     }
 
+    private void HandleUpdatePerm(string response)
+    {
+        UpdatePerm updateField = JsonUtility.FromJson<UpdatePerm>(response);
+        Debug.Log(updateField.field + "/" + updateField.value);
+        PermUpdateInfo info = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].info;
+        switch(updateField.fieldAsString)
+        {
+            case "health": info.health = updateField.value; break;
+            case "coin": info.coin = updateField.value; break;
+            case "critdmg": info.critdmg = updateField.value; break;
+            case "critrate": info.critrate = updateField.value; break;
+            case "firerate": info.firerate = updateField.value; break;
+            case "damage": info.damage = updateField.value; break;
+            case "lifesteal": info.lifesteal = updateField.value; break;
+        }
+        UIManager._instance.uiUpgrade.lsLevelUpgrade[updateField.field].GetComponent<ItemUpgrade>().ChangeStar(updateField.field, updateField.value);
+    }
     private void HandleGameEnd(string response)
     {
         GameEnd end = JsonUtility.FromJson<GameEnd>(response);
