@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+
 using UnityEngine;
 [CreateAssetMenu(fileName = "DroneConfig", menuName = "Config/DroneConfig/DroneConfig")]
 public class DroneConfig : ScriptableObject

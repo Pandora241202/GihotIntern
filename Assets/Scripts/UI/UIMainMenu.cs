@@ -11,6 +11,7 @@ public class UIMainMenu : MonoBehaviour
     [SerializeField] private GameObject goOnline;
     [SerializeField] public Button btnOnline;
     [SerializeField] public Button btnChoseGun;
+    [SerializeField] public Button btnUpgrade;
     [SerializeField] private List<GameObject> lsBtnForPlayer = new List<GameObject>();
     [SerializeField] private List<ItemPlayerList> goPlayerList = new List<ItemPlayerList>();
     [SerializeField] public GameObject prefabListItem;
@@ -26,6 +27,11 @@ public class UIMainMenu : MonoBehaviour
         goOnline.SetActive(false);
         lsGOPlayer[0].SetActive(false);
         lsGOPlayer[1].SetActive(false);
+        btnUpgrade.onClick.AddListener(() =>
+        {
+            UIManager._instance.PlaySfx(0);
+            UIManager._instance.uiUpgrade.gameObject.SetActive(true);
+        });
         btnStart.onClick.AddListener(() =>
         {
             UIManager._instance.PlaySfx(0);

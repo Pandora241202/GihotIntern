@@ -114,6 +114,7 @@ class First_Connect
     public string id;
     public string player_name;
     public int gunId;
+    public PermUpdateInfo info;
 }
 
 [System.Serializable]
@@ -121,14 +122,34 @@ class Rooms
 {
     public Room[] rooms;
 }
-
-[System.Serializable]
+[Serializable]
+class UpdatePerm
+{
+    public int field;
+    public int value;
+    public string fieldAsString;
+}
+[Serializable]
+public class PermUpdateInfo
+{
+    public string event_name = "update attribute";
+    public string fieldToUpdate = "";
+    public int coin;
+    public int health;
+    public int critrate;
+    public int damage;
+    public int critdmg;
+    public int lifesteal;
+    public int firerate;
+}
+[Serializable]
 class SimplePlayerInfo
 {
     public string player_id;
     public string player_name;
     public string host_id;
     public int gun_id;
+    public PermUpdateInfo info;
 }
 
 [System.Serializable]

@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     public UILoading uiLoading;
 
     public UILevelUp uiLevelUp;
+    public UIUpGrade uiUpgrade;
     public FixedJoystick _joystick;
     public FloatingJoystick _fjoystick;
  
@@ -66,7 +67,7 @@ public class UIManager : MonoBehaviour
         uiMainMenu.OnSetUp();
         uiChoseGun.OnSetUp();
         uiLogin.OnSetUp();
-
+        
         uiLoading.OnSetUp();
 
         
@@ -113,6 +114,8 @@ public class UIManager : MonoBehaviour
     {
         uiLogin.gameObject.SetActive(false);
         uiMainMenu.gameObject.SetActive(true);
+        
+        uiUpgrade.OnSetUp(AllManager._instance.playerManager.dictPlayers[Player_ID.MyPlayerID]);
     }
 
     public void MuteBGM()

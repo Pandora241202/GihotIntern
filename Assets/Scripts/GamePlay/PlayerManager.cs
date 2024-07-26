@@ -17,13 +17,15 @@ public class Player
     public float lifeSteal;
     public int dmgRecieved = 0;
     public int hpGain = 0;
-   
+
     // Player stat 
     private float health;
     private float dmgBoostAmount;
     private float speedBoostAmount;
     private float speedBoostByLevelUp;
-
+    //Perm Update
+    //public List<int> lsPermUpgrade = new List<int>() { 0, 2, 3, 4, 5,1 };
+    
     // Player state
     private Dictionary<AllDropItemConfig.PowerUpsType, float> activePowerUps;
     private GameObject curCreepTarget = null;
@@ -42,8 +44,8 @@ public class Player
     public bool cantMove = false;
     public Dictionary<int, Vector3> collision_plane_normal_dict = new Dictionary<int, Vector3>();
     private int frame = 0;
-
-    public Player(string name, string id, int gunId, PlayerConfig config)
+    public PermUpdateInfo info;
+    public Player(string name, string id, int gunId, PlayerConfig config, PermUpdateInfo info)
     {
         this.name = name;
         this.id = id;
@@ -55,6 +57,7 @@ public class Player
         levelUpEffect = null;
         activePowerUps = new Dictionary<AllDropItemConfig.PowerUpsType, float>();
         gunConfig = AllManager.Instance().gunConfig;
+        this.info = info;
     }
     public float GetSpeedBoost()
     {
@@ -503,9 +506,9 @@ public class PlayerManager
     }
 
 
-    public void AddPlayer(string name, string id, int gunId, PlayerConfig playerConfig)
+    public void AddPlayer(string name, string id, int gunId, PlayerConfig playerConfig, PermUpdateInfo info = null)
     {
-        Player newPlayer = new Player(name, id, gunId, playerConfig);
+        Player newPlayer = new Player(name, id, gunId, playerConfig, info);
         dictPlayers.Add(id, newPlayer);
     }
 
