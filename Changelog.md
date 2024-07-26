@@ -3,6 +3,30 @@ All notable changes to this project will be documented in this file.
 
 For game design changelog, visit [GameDesign Changelog](https://docs.google.com/spreadsheets/d/1oSoVJ0jk9w2Vpz4AcT9sktsVrlLd9k-s05p6IKA5R1k/edit?gid=1113732660#gid=1113732660)
 
+## [1.0.5] - 26/07/2024
+### Added
+- Two additional new coop events:
+  > **Chained Together:** Players will be chained together and cannot move freely outside of the chain's length.
+  > **Capture The Point:** Players have to go to all certain points before the timer runs out.
+- Three new Level Up buffs: Fire Rate, AOE Meteor, and Time Warp.
+- Add a basic shop system to buy upgrades.
+- Add a drone for single-player gameplay.
+- Add halo effects for items.
+- Add object transparency for environmental props when the player moves behind it.
+
+### Changed
+- Refactor the Level Up buff system.
+- Adjust lighting and environment.
+- Adjust item size.
+
+### Fixed
+- Fix a bug where Level Up buff not applying due to wrong key matching.
+- Fix a bug where downed players can revive each other.
+- Fix a bug where gun sounds act abnormally.
+- Fix a bug where enemies still go toward downed players.
+- Fix a bug where choosing a gun before joining a room does not save the chosen gun.
+- Fix a bug where stacking speed buffs makes players run abnormally fast.
+
 ## [1.0.4] - 19/07/2024
 ### Added
 - Six new level-up buffs. Activate when the players level up. Each player can choose one permanent buff out of three random buffs that appear on the screen.
