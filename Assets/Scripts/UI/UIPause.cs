@@ -9,10 +9,12 @@ public class UIPause : MonoBehaviour
 
     public void OnBtn_Clicked(int index)
     {
+        UIManager._instance.PlaySfx(0);
         switch (index)
         {
             case 0:
                 //Setting
+                UIManager._instance.MuteBGM();
                 break;
             case 1:
                 //Resume

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Unity.Collections;
-using Unity.VisualScripting;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Creep
@@ -11,13 +8,11 @@ public class Creep
     public CreepManager.CreepType type;
     public int sharedId;
 
-    public int hp;
+    public float hp;
     public float speed;
     public int dmg;
 
     public int maxHp;
-    public int resetDmg;
-    public float resetSpeed;
 
     public float timer;
     public GameObject weaponObj;
@@ -25,7 +20,7 @@ public class Creep
  
     public Dictionary<int, Vector3> collision_plane_normal_dict = new Dictionary<int, Vector3>();
 
-    public Creep(Transform creepTrans, CreepManager.CreepType type, CreepConfig config, int sharedId)
+    public Creep(Transform creepTrans, CreepManager.CreepType type, CreepConfig config)
     {
         this.creepTrans = creepTrans;
         this.config = config;
@@ -33,18 +28,17 @@ public class Creep
         weaponObj = null;
         animator = creepTrans.gameObject.GetComponent<Animator>();
         creepTrans.gameObject.SetActive(false);
-        this.sharedId = sharedId;
+        this.sharedId = -1;
     }
 
-    public void Set(Vector3 pos, float time)
+    public void Set(Vector3 pos, float time, int shared_id)
     {
         hp = config.BaseHp + (int)(time / 60) * 5;
         dmg = config.BaseDmg + (int)(time / 60) * 2;
         speed = config.BaseSpeed;
-
         maxHp = config.BaseHp + (int)(time / 60) * 5;
-        resetDmg = config.BaseDmg + (int)(time / 60) * 2;
-        resetSpeed = config.BaseSpeed;
+
+        this.sharedId = shared_id;
 
         creepTrans.position = pos;
         creepTrans.gameObject.SetActive(true);
@@ -71,17 +65,27 @@ public class Creep
     {
         AllManager.Instance().playerManager.ProcessExpGain(this.config.Exp);
         CreepManager creepManager = AllManager.Instance().creepManager;
+        this.sharedId = -1;
         config.OnDead(this);
     }
 
-    public void ProcessDmg(int dmg, string bulletOwnerId)
+    public void ProcessDmg(float dmg, string bulletOwnerId)
     {
         hp -= dmg;
         animator.SetTrigger("isTakeDmg");
         if (hp <= 0 && bulletOwnerId == Player_ID.MyPlayerID)
         {
+            // Determine item drop
+            AllDropItemConfig.PowerUpsType? droppedPowerUp = config.DetermineDrop();
+            PowerUpSpawnInfo powerUpSpawnInfo = null;
+            if (droppedPowerUp != null)
+            {
+                powerUpSpawnInfo = new PowerUpSpawnInfo((AllDropItemConfig.PowerUpsType) droppedPowerUp, creepTrans.position);
+            }
+
+            if (this.sharedId == -1) return;
             // Send to server creep destroy
-            SendData<CreepDestroyInfo> data = new SendData<CreepDestroyInfo>(new CreepDestroyInfo(this.sharedId));
+            SendData<CreepDestroyInfo> data = new SendData<CreepDestroyInfo>(new CreepDestroyInfo(this.sharedId, powerUpSpawnInfo));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
         }
     }
@@ -91,9 +95,8 @@ public class CreepManager
 {
     Dictionary<int, Creep> creepActiveDict = new Dictionary<int, Creep>();
     List<Creep>[] creepNotActiveByTypeList = new List<Creep>[7];
-    List<int> allCreeps = new List<int>(); // used to store creep id share between players and server and map to instanceId
+    Dictionary<int, int> creepSharedIdDict = new Dictionary<int, int>(); // used to store creep id share between players and server and map to instanceId
     private List<int> creepIdsToDeactivate = new List<int>();
-    //private List<CreepSpawnInfo> needSpawnCreeps = new List<CreepSpawnInfo>();
     private CreepConfig[] creepConfigs;
 
     public enum CreepType
@@ -115,9 +118,8 @@ public class CreepManager
         CreepConfig config = GetCreepConfigByType(creepType);
         GameObject creepObj = GameObject.Instantiate(config.CreepPrefab);
         creepObj.layer = LayerMask.NameToLayer("creep");
-        Creep creep = new Creep(creepObj.transform, creepType, config, allCreeps.Count);
+        Creep creep = new Creep(creepObj.transform, creepType, config);
         creepNotActiveByTypeList[(int) creepType].Add(creep);
-        allCreeps.Add(creepObj.GetInstanceID());
     }
 
     public CreepManager(AllCreepConfig allCreepConfig)
@@ -162,7 +164,7 @@ public class CreepManager
         creepIdsToDeactivate.Add(creep.creepTrans.gameObject.GetInstanceID());
     }
 
-    public void ActivateCreep(Vector3 spawnPos, CreepType creepType, float time)
+    public void ActivateCreep(Vector3 spawnPos, CreepType creepType, float time, int sharedId)
     {
         // All creep of same type have been activated => Spawn new
         if (creepNotActiveByTypeList[(int)creepType].Count == 0)
@@ -172,8 +174,9 @@ public class CreepManager
 
         Creep creepNeedActive = creepNotActiveByTypeList[(int)creepType][0];
             
-        creepNeedActive.Set(spawnPos, time/1000f);
+        creepNeedActive.Set(spawnPos, time/1000f, sharedId);
         creepActiveDict.Add(creepNeedActive.creepTrans.gameObject.GetInstanceID(), creepNeedActive);
+        creepSharedIdDict.Add(sharedId, creepNeedActive.creepTrans.gameObject.GetInstanceID());
             
         creepNotActiveByTypeList[(int)creepType].RemoveAt(0);
     }
@@ -190,7 +193,7 @@ public class CreepManager
 
     public int MapSharedIdToInstanceId(int sharedId)
     {
-        return allCreeps[sharedId];
+        return creepSharedIdDict[sharedId];
     }
 
     public void SendCreepToDeadBySharedId(int sharedId)
@@ -202,6 +205,8 @@ public class CreepManager
         {
             return;
         }
+
+        creepSharedIdDict.Remove(sharedId);
 
         creep.OnDead();
     }
@@ -264,24 +269,49 @@ public class CreepManager
         creep.collision_plane_normal_dict.Add(mapElementId, (creep.creepTrans.position - collidePoint).normalized);
     }
 
-    public void MarkTargetCreepById(int creepId)
+    //public void MarkTargetCreepById(int creepId)
+    //{
+    //    Creep creep = GetActiveCreepById(creepId);
+
+    //    if (creep == null)
+    //    {
+    //        return;
+    //    }
+    //}
+
+    //public void UnmarkTargetCreepById(int creepId)
+    //{
+    //    Creep creep = GetActiveCreepById(creepId);
+
+    //    if (creep == null)
+    //    {
+    //        return;
+    //    }
+    //}
+
+    public void UpdateCreepsState(CreepSpawnInfo[] creepSpawnInfos, CreepDestroyInfo[] creepDestroyInfos)
     {
-        Creep creep = GetActiveCreepById(creepId);
-
-        if (creep == null)
+        if (creepSpawnInfos != null)
         {
-            return;
-        }
-    }
-
-    public void UnmarkTargetCreepById(int creepId)
-    {
-        Creep creep = GetActiveCreepById(creepId);
-
-        if (creep == null)
-        {
-            return;
+            foreach (CreepSpawnInfo creepSpawnInfo in creepSpawnInfos)
+            {
+                ActivateCreep(creepSpawnInfo.spawn_pos, (CreepManager.CreepType)creepSpawnInfo.type_int, creepSpawnInfo.time, creepSpawnInfo.shared_id);
+            }
         }
 
+        if (creepDestroyInfos != null)
+        {
+            Debug.Log("creepDestroyInfos: " + creepDestroyInfos.ToString());
+            foreach (CreepDestroyInfo creepDestroyInfo in creepDestroyInfos)
+            {
+                SendCreepToDeadBySharedId(creepDestroyInfo.shared_id);
+                
+                PowerUpSpawnInfo powerUpSpawnInfo = creepDestroyInfo.power_up_spawn_info;
+                if (powerUpSpawnInfo != null)
+                {
+                    AllManager.Instance().powerUpManager.SpawnPowerUp(powerUpSpawnInfo.spawn_pos, (AllDropItemConfig.PowerUpsType)powerUpSpawnInfo.type_int, powerUpSpawnInfo.shared_id);
+                }
+            }
+        }
     }
 }

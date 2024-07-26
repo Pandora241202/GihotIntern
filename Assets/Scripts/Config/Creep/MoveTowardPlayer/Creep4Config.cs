@@ -11,6 +11,11 @@ public class Creep4Config : MoveTowardPlayerCreepConfig
     {
         (string playerId, float dis) = GetNearestPlayerWithDis(creep.creepTrans);
 
+        if (playerId == null)
+        {
+            return;
+        }
+
         if (dis <= startIncreaseSpeedDis && creep.speed <= BaseSpeed)
         {
             creep.animator.SetTrigger("isAttack");

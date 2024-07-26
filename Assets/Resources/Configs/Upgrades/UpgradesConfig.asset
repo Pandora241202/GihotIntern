@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abc5f169b1bf0574aa944265b61c6731, type: 3}
+  m_Name: UpgradesConfig
+  m_EditorClassIdentifier: 
+  lsUpgradesConfig:
+  - name: MAX HEALTH
+    des: Max health increase by 5% per Level
+    basePrice: 100
+    priceScale: 2
+  - name: CRIT CHANCE
+    des: Increase crit chance by 2% per Level
+    basePrice: 500
+    priceScale: 2
+  - name: CRIT DAMAGE
+    des: Increase crit damage by 5% per Level
+    basePrice: 150
+    priceScale: 2
+  - name: DAMAGE
+    des: Increase base damage by 5% per Level
+    basePrice: 200
+    priceScale: 2
+  - name: LIFE STEAL
+    des: Increase the amount of health by 1 per Level
+    basePrice: 300
+    priceScale: 2
+  - name: FIRE RATE
+    des: Increase the ATK speed by 10% per Level
+    basePrice: 250
+    priceScale: 2

@@ -34,7 +34,8 @@ public class Creep7Config : MoveFarPlayerCreepConfig
             if (creepNeedHeal != null)
             {
                 creep.weaponObj = GameObject.Instantiate(healing, creepNeedHeal.creepTrans.position, Quaternion.identity);
-                
+                AllManager.Instance().effectManager.AddEffect(creep.weaponObj);
+
                 creepNeedHeal.hp += healAmount;
                 if (creepNeedHeal.hp > creepNeedHeal.maxHp)
                 {
@@ -56,9 +57,10 @@ public class Creep7Config : MoveFarPlayerCreepConfig
             {
                 if (ps.isStopped)
                 {
+                    AllManager.Instance().effectManager.RemoveEffectById(creep.weaponObj.GetInstanceID());
                     Destroy(creep.weaponObj);
                     creep.weaponObj = null;
-                    
+
                     if (creep.creepTrans.gameObject.activeInHierarchy == false)
                     {
                         AllManager.Instance().creepManager.AddToDeactivateList(creep);

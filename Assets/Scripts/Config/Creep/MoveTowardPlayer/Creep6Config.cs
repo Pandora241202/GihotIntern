@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Creep6Config", menuName = "Config/CreepConfig/MoveTowardPlayer/Creep6")]
@@ -26,10 +25,16 @@ public class Creep6Config : MoveTowardPlayerCreepConfig
 
         string playerId = base.RotateTowardPlayer(creep);
 
+        if (playerId == null)
+        {
+            return;
+        }
+
         if (creep.timer >= skillCD)
         {
             creep.animator.SetTrigger("isAttack");
             creep.weaponObj = GameObject.Instantiate(meteor, dictPlayers[playerId].playerTrans.position, Quaternion.identity);
+            AllManager.Instance().effectManager.AddEffect(creep.weaponObj);
             creep.timer = 0;
         }
         else
@@ -56,6 +61,7 @@ public class Creep6Config : MoveTowardPlayerCreepConfig
 
                 if (ps.isStopped)
                 {
+                    AllManager.Instance().effectManager.RemoveEffectById(creep.weaponObj.GetInstanceID());
                     Destroy(creep.weaponObj);
                     creep.weaponObj = null;
                     if (creep.creepTrans.gameObject.activeInHierarchy == false)

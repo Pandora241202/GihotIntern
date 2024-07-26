@@ -20,13 +20,15 @@ MonoBehaviour:
   dropItemConfigs:
   - powerUpType: 0
     dropChance: 0.1
-  - powerUpType: 12
-    dropChance: 0.2
   - powerUpType: 1
-    dropChance: 0.2
+    dropChance: 0.1
+  - powerUpType: 2
+    dropChance: 0.05
+  - powerUpType: 3
+    dropChance: 0.1
   - powerUpType: 4
-    dropChance: 0.2
-  - powerUpType: 11
-    dropChance: 0.2
+    dropChance: 0.05
+  - powerUpType: 5
+    dropChance: 0.05
   skillCD: 7
   meteor: {fileID: 1839445213900760, guid: 23f972538c5ab5b4f94000c5657b9754, type: 3}

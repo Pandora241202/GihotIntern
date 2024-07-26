@@ -9,6 +9,11 @@ public class MoveTowardPlayerCreepConfig : CreepConfig
 
         (string playerId, float _) = GetNearestPlayerWithDis(creep.creepTrans);
 
+        if (playerId == null)
+        {
+            return null;
+        }
+
         Vector3 rotateDir = dictPlayers[playerId].playerTrans.position - creep.creepTrans.position;
         rotateDir.y = 0;
         creep.creepTrans.rotation = Quaternion.LookRotation(rotateDir);

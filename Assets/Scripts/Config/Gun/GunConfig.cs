@@ -18,4 +18,6 @@ public class GunType
     public float FireRange;
     public GameObject gunPrefab;
     public GameObject bulletPrefab;
+    public float baseCritRateMultiplier;
+    public float baseCritDMGMultiplier;
 }

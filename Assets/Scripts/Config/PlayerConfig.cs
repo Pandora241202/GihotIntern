@@ -1,17 +1,33 @@
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 
 [CreateAssetMenu(fileName = "PlayerConfig", menuName = "Config/PlayerConfig")]
 public class PlayerConfig : ScriptableObject
 {
-    public SkillType skillType;
+    [SerializeField] SkillType skillType;
 
-    public float speed;
+    [SerializeField] float baseMaxHealth;
 
-    public GameObject levelUpEffect;
+    [SerializeField] float lifeSteal;
+
+    [SerializeField] float baseSpeed;
+
+    [SerializeField] GameObject levelUpEffect;
+
+    [SerializeField] LayerMask creepLayerMask;
+
+    public SkillType SkillType => skillType;
+
+    public float BaseMaxHealth => baseMaxHealth;
+
+    public float LifeSteal => lifeSteal;
+
+    public float BaseSpeed => baseSpeed;
+
+    public GameObject LevelUpEffect => levelUpEffect;
+
+    public LayerMask CreepLayerMask => creepLayerMask;
 }
+
 public enum SkillType
 {
     Tank,

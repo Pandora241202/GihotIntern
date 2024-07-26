@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
+
 public class AllManager : MonoBehaviour
 {
     public static AllManager _instance { get; private set; }
@@ -11,14 +12,33 @@ public class AllManager : MonoBehaviour
     [SerializeField] public AllCreepConfig allCreepConfig;
     [SerializeField] public AllDropItemConfig allDropItemConfig;
     [SerializeField] public PlayerConfig playerConfig;
+    [SerializeField] public AllGameEventConfig allGameEventConfig;
     [SerializeField] GameObject characterPrefab;
-    [SerializeField] AllLevelUpConfig AllLevelUpConfig;
+    [SerializeField] public LevelUpConfig levelUpConfig;
+
+    [SerializeField] public DroneConfig droneConfig;
+    [SerializeField] public UpgradesConfig upgradeConfig;
+    [SerializeField] public LayerMask treeLayerMask;
+
     public SceneUpdater sceneUpdater;
     public BulletManager bulletManager;
     public CreepManager creepManager;
     public PowerUpManager powerUpManager;
+    public GameEventManager gameEventManager;
+    public DroneManager droneManager;
+    public RenderManager renderManager;
+    public EffectManager effectManager;
+    
     public bool isPause = false;
     public bool isHost=false;
+    public bool isLevelUp = false;
+    public List<AudioClip> lsAudioClip = new List<AudioClip>();
+    public AudioSource audioSource;
+    
+    public GameObject goEventGoTo;
+    public List<GameObject> lsGoToEvent = new List<GameObject>();
+    public List<GameObject> lsArrow = new List<GameObject>();
+
     public static AllManager Instance()
     {
         return _instance;
@@ -31,7 +51,8 @@ public class AllManager : MonoBehaviour
     }
     private void Start()
     {
-        playerManager = new PlayerManager(characterPrefab, AllLevelUpConfig);
+        playerManager = new PlayerManager(characterPrefab, levelUpConfig);
+        StartCoroutine(UpdatePing());
     }
     private void Update()
     {
@@ -42,6 +63,15 @@ public class AllManager : MonoBehaviour
 
     }
 
+    public void SpawnGoToPosEvent(Vector3 posA,Vector3 posB)
+    {
+        GameObject gotoposA = Instantiate(goEventGoTo);
+        gotoposA.transform.position = posA;
+        GameObject gotoposB = Instantiate(goEventGoTo);
+        gotoposB.transform.position = posB;
+        lsGoToEvent.Add(gotoposA);
+        lsGoToEvent.Add(gotoposB);
+    }
     public void LoadSceneAsync(string sceneName, string mode = "")
     {
         StartCoroutine(LoadScene(sceneName, mode));
@@ -50,11 +80,14 @@ public class AllManager : MonoBehaviour
     private IEnumerator LoadScene(string sceneName, string mode)
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
-
+        UIManager._instance.uiLoading.gameObject.SetActive(true);
+        UIManager._instance.uiLoading.OnSetUp();
         while (!asyncLoad.isDone)
         {
+            UIManager._instance.uiLoading.OnProgress(asyncLoad.progress);
             yield return null;
         }
+        UIManager._instance.uiLoading.gameObject.SetActive(false);
         OnSceneLoaded(sceneName, mode);
         Debug.Log("Scene loaded!");
 
@@ -66,16 +99,21 @@ public class AllManager : MonoBehaviour
         //bulletManager = null;
         //creepManager = null;
         //powerUpManager = null;
+        UIManager._instance.ClearUI();
         if (sceneName == "level1")
-        {
-            playerManager.FreshStart();
-            UIManager._instance.uiMainMenu.gameObject.SetActive(false);
-            UIManager._instance.uiGameplay.gameObject.SetActive(true);
+        { 
             sceneUpdater = GameObject.FindObjectOfType<SceneUpdater>();
             //Debug.Log(sceneUpdater);
             creepManager = sceneUpdater.creepManager;
             bulletManager = sceneUpdater.bulletManager;
             powerUpManager = sceneUpdater.powerUpManager;
+            gameEventManager = sceneUpdater.gameEventManager;
+            droneManager = sceneUpdater.droneManager;
+            renderManager = sceneUpdater.renderManager;
+            effectManager = sceneUpdater.effectManager;
+            UIManager._instance.OnLoadGameScene();
+            playerManager.FreshStart();
+      
             SendData<EventName> ev = new SendData<EventName>(new EventName("done loading"));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
         }
@@ -124,7 +162,7 @@ public class AllManager : MonoBehaviour
         {
             GameObject.Destroy(player.Value.playerTrans.gameObject);
         }
-       LoadSceneAsync("UI", "Room");
+        LoadSceneAsync("UI", "Room");
     }
     
     public void UpdateGameState(GameState gameState)
@@ -137,13 +175,45 @@ public class AllManager : MonoBehaviour
             Debug.Log(state.resume.time);
         }
 
-        if(isPause != state.isPause)
+        if(isPause != state.isPause&&!state.isLevelUp)
         {
             isPause = state.isPause;
             if (isPause) UIManager._instance.PauseGame();
             else UIManager._instance.ResumeGame();
         }
 
+        if (isLevelUp != state.isLevelUp)
+        {
+            isLevelUp = state.isLevelUp;
+            if (isLevelUp) isPause = true;
+            else
+            {
+                isPause = false;
+                UIManager._instance.uiGameplay.goWaiting.SetActive(false);
+                
+            }
+        }
+    
         playerManager.UpdatePlayersState(state.player_states);
+
+        creepManager.UpdateCreepsState(state.creep_spawn_infos, state.creep_destroy_infos);
+
+        powerUpManager.UpdatePowerUpsState(state.power_up_pick_infos);
+
+        gameEventManager.UpdateEventState(state.game_event);
+
+        effectManager.UpdateEffectsState();
+    }
+
+    public IEnumerator UpdatePing()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(2);
+            //Debug.Log(PingData.sum + "/" + PingData.pingCount);
+            UIManager._instance.uiGameplay.UpdatePingText(PingData.sum / PingData.pingCount);
+            PingData.sum = 0;
+            PingData.pingCount = 1;
+        }
     }
 }

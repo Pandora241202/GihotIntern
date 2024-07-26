@@ -10,7 +10,7 @@ public class SpeedBoost : PowerUpsConfig
         Debug.Log("Speed Boost pickup");
         var player = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID];
         player.SetSpeedBoost(boostAmount);
-        player.AddPowerUp("SpeedBoost", duration);
+        player.AddPowerUp(AllDropItemConfig.PowerUpsType.SpeedBoost, duration);
         //TODO: Activate UI show Boost
     }
     public override void ApplyEffect()

@@ -11,6 +11,7 @@ public class UIMainMenu : MonoBehaviour
     [SerializeField] private GameObject goOnline;
     [SerializeField] public Button btnOnline;
     [SerializeField] public Button btnChoseGun;
+    [SerializeField] public Button btnUpgrade;
     [SerializeField] private List<GameObject> lsBtnForPlayer = new List<GameObject>();
     [SerializeField] private List<ItemPlayerList> goPlayerList = new List<ItemPlayerList>();
     [SerializeField] public GameObject prefabListItem;
@@ -26,8 +27,15 @@ public class UIMainMenu : MonoBehaviour
         goOnline.SetActive(false);
         lsGOPlayer[0].SetActive(false);
         lsGOPlayer[1].SetActive(false);
+        btnUpgrade.onClick.AddListener(() =>
+        {
+            UIManager._instance.PlaySfx(0);
+            UIManager._instance.uiUpgrade.gameObject.SetActive(true);
+        });
         btnStart.onClick.AddListener(() =>
         {
+            UIManager._instance.PlaySfx(0);
+          
             SendData<EventName> ev = new SendData<EventName>(new EventName("start"));
             SocketCommunication.GetInstance().Send(JsonUtility.ToJson(ev));
         });
@@ -35,6 +43,7 @@ public class UIMainMenu : MonoBehaviour
 
     public void OnChoseGun_Clicked()
     {
+        UIManager._instance.PlaySfx(0);
         UIManager._instance.uiChoseGun.gameObject.SetActive(true);
     }
     public void ShowPlayerBtn()
@@ -76,6 +85,7 @@ public class UIMainMenu : MonoBehaviour
 
     public void OnReady_Click(int i)
     { 
+        UIManager._instance.PlaySfx(0);
         SendData<PlayerIdEvent> data = new SendData<PlayerIdEvent>(new PlayerIdEvent("ready")); 
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
         if (i == 0)
@@ -95,6 +105,7 @@ public class UIMainMenu : MonoBehaviour
     }
     public void OnLeave_Clicked()
     {
+        UIManager._instance.PlaySfx(0);
         SendData<PlayerIdEvent> data = new SendData<PlayerIdEvent>(new PlayerIdEvent("leave"));
         SocketCommunication.GetInstance().Send(JsonUtility.ToJson(data));
         
@@ -154,6 +165,7 @@ public class UIMainMenu : MonoBehaviour
     
     public void OnBtnClick(int index)
     {
+        UIManager._instance.PlaySfx(0);
         if (index == 0)
         {
             lsGOPlayer[1].SetActive(true);
@@ -196,6 +208,7 @@ public class UIMainMenu : MonoBehaviour
     }
     public void OnOnline_Clicked()
     {
+        UIManager._instance.PlaySfx(0);
         goOnline.SetActive(true);
         UIManager._instance.uiOnlineLobby.btnGetRooms.onClick.Invoke();
     }
