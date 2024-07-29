@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class RenderManager
@@ -66,11 +65,10 @@ public class RenderManager
 
         for (int i = 0; i < mats.Length; i++)
         {
-            string path = AssetDatabase.GetAssetPath(mats[i]);
-            string matFileName = System.IO.Path.GetFileNameWithoutExtension(path);
+            string matName = mats[i].name;
 
-            string transparentMatFileName = matFileName.Insert(2, "T");
-            Material transparentMat = Resources.Load<Material>("Materials/" + transparentMatFileName);
+            string transparentMatName = matName.Insert(2, "T");
+            Material transparentMat = Resources.Load<Material>("Materials/" + transparentMatName);
 
             if (transparentMat == null)
             {
@@ -91,11 +89,10 @@ public class RenderManager
 
         for (int i = 0; i < mats.Length; i++)
         {
-            string path = AssetDatabase.GetAssetPath(mats[i]);
-            string matFileName = System.IO.Path.GetFileNameWithoutExtension(path);
+            string matName = mats[i].name;
 
-            string opaqueMatFileName = matFileName.Remove(2, 1);
-            Material opaqueMat = Resources.Load<Material>("Materials/" + opaqueMatFileName);
+            string opaqueMatName = matName.Remove(2, 1);
+            Material opaqueMat = Resources.Load<Material>("Materials/" + opaqueMatName);
 
             if (opaqueMat == null)
             {
