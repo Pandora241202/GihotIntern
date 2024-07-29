@@ -64,15 +64,15 @@ public class SocketCommunication
         socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
         await socket.ConnectAsync(address, port);
 
-        Thread readSocket = new Thread(SocketReadingThread);
-        readSocket.IsBackground = true;
-        readSocket.Start();
-        //AllManager.Instance().StartCoroutine(StartSocketReading());
+        //Thread readSocket = new Thread(SocketReadingThread);
+        //readSocket.IsBackground = true;
+        //readSocket.Start();
+        AllManager.Instance().StartCoroutine(StartSocketReading());
 
         Thread bufferProcessing = new Thread(ProcessBufferThread);
-        //bufferProcessing.IsBackground = true;
-        //bufferProcessing.Start();
-        AllManager.Instance().StartCoroutine(ProcessBuffer());
+        bufferProcessing.IsBackground = true;
+        bufferProcessing.Start();
+        //AllManager.Instance().StartCoroutine(ProcessBuffer());
 
         //Thread ping = new Thread(PingThread);
         //ping.IsBackground = true;
