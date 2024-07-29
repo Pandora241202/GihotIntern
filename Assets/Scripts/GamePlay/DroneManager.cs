@@ -56,6 +56,13 @@ public class DroneManager
         {
             Vector3 directionToPlayer = (playerTrans.position - drone.droneTrans.position).normalized;
             drone.droneTrans.position += directionToPlayer * 10f * Time.deltaTime;
+            if (target == null)
+            {
+               
+                drone.droneTrans.rotation =Quaternion.LookRotation(directionToPlayer);
+            }
+
+          
         }
        
         if (target != null)
@@ -68,7 +75,7 @@ public class DroneManager
                 drone.droneTrans.position += directionToTarget * 10f * Time.deltaTime;
                 Quaternion lookRotation = Quaternion.LookRotation(directionToTarget);
                 drone.droneTrans.rotation = lookRotation;
-                posSpawnBullet = drone.droneTrans.Find("posShoot").transform.position;
+                
             }
         }
     }
@@ -128,6 +135,7 @@ public class DroneManager
 
         if (Vector3.Distance(drone.droneTrans.position,targetObj.transform.position)<=gunType.FireRange)
         {
+            posSpawnBullet = drone.droneTrans.Find("posShoot").transform.position;
             UIManager._instance.MyPlaySfx(droneConfig.gunId + 1, 0.5f,
                 0.15f); //Note: gunId - 1 is VERY temporarily since all audio is in a list in UIManager
             Debug.Log("fire");

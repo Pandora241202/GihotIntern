@@ -97,8 +97,8 @@ public class LevelUpConfig : ScriptableObject
             case "AOE Meteor":
                 Debug.Log("AOE Meteor Strike called");
                 levelUpDict[buff]++;
-                var meteorDamage = levelUpDict[buff] * 25;
-                AOEMeteorStrikeLevelUp(meteorDamage, 15);
+                var meteorDamage = levelUpDict[buff] *90;
+                AOEMeteorStrikeLevelUp(meteorDamage, 25);
                 break;
 
             case "SkillCD":
