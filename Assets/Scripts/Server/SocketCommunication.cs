@@ -25,7 +25,7 @@ public class SocketCommunication
         return instance;
     }
     Socket socket;
-    //    public string address = "192.168.6.165";
+    //public string address = "192.168.6.165";
     private string address = "127.0.0.1";
     private int port = 9999;
     private static List<byte> buffer = new List<byte>();
@@ -338,9 +338,20 @@ public class SocketCommunication
     {
         SimplePlayerInfo playerInfo = JsonUtility.FromJson<SimplePlayerInfo>(response);
         AllManager.Instance().playerManager.AddPlayer(playerInfo.player_name, playerInfo.player_id, playerInfo.gun_id, AllManager.Instance().playerConfig);
-        UIManager._instance.uiMainMenu.HostChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
-    }
+        int i = 0;
+        foreach (var pair in AllManager.Instance().playerManager.dictPlayers)
+        {
+            if (pair.Key == Player_ID.MyPlayerID&&i==0)
+            {
+                UIManager._instance.uiMainMenu.HostChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
+                
+            }
 
+            i++;
+        }
+        UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
+        
+    }
     private void HandleJoin(string response)
     {
         SimplePlayerInfoList playerIn4List = JsonUtility.FromJson<SimplePlayerInfoList>(response);

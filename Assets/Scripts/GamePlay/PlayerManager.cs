@@ -24,6 +24,7 @@ public class Player
     private float speedBoostAmount;
     private float speedBoostByLevelUp;
     //Perm Update
+
     //public List<int> lsPermUpgrade = new List<int>() { 0, 2, 3, 4, 5,1 };
     
     // Player state
