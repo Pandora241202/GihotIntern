@@ -339,6 +339,11 @@ public class Score
     public int enemy_kill;
 }
 [Serializable]
+public class PongEvent
+{
+    public long time;
+}
+[Serializable]
 public class PingEvent
 {
     public string event_name = "ping";
