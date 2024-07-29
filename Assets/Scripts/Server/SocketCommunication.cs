@@ -74,10 +74,10 @@ public class SocketCommunication
         bufferProcessing.Start();
         //AllManager.Instance().StartCoroutine(ProcessBuffer());
 
-        Thread ping = new Thread(PingThread);
-        ping.IsBackground = true;
-        ping.Start();
-        //AllManager.Instance().StartCoroutine(Ping());
+        //Thread ping = new Thread(PingThread);
+        //ping.IsBackground = true;
+        //ping.Start();
+        AllManager.Instance().StartCoroutine(Ping());
     }
     private IEnumerator StartSocketReading()
     {
