@@ -10,10 +10,11 @@ using System.Linq;
 
 public class PingData
 {
-    public static long time = 0;
-    public static long sum = 0;
+    public static int sum = 0;
     public static int pingCount = 1;
     public static bool pinged = false;
+    public static long frameSend = 0;
+    public static long frame = 0;
 }
 
 public class SocketCommunication
@@ -149,6 +150,7 @@ public class SocketCommunication
             }
 
             if (buffer.Count > 4) continue;
+            PingData.frame++;
             yield return null;
         }
     }
@@ -221,8 +223,8 @@ public class SocketCommunication
             {
                 SendData<PingEvent> data = new SendData<PingEvent>(new PingEvent());
                 Send(JsonUtility.ToJson(data));
-                PingData.time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                 PingData.pinged  = true;
+                PingData.frameSend = PingData.frame;
             }
             yield return new WaitForSeconds(1);
         }
@@ -281,8 +283,7 @@ public class SocketCommunication
 
     private void HandlePing(string response)
     {
-        PongEvent pong = JsonUtility.FromJson<PongEvent>(response);
-        PingData.sum += pong.time - PingData.time;
+        PingData.sum += (int)((PingData.frame - PingData.frameSend) * Time.deltaTime * 1000);
         PingData.pingCount += 1;
         PingData.pinged = false;
     }
