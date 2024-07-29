@@ -64,15 +64,15 @@ public class SocketCommunication
         socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
         await socket.ConnectAsync(address, port);
 
-        //Thread readSocket = new Thread(SocketReadingThread);
-        //readSocket.IsBackground = true;
-        //readSocket.Start();
-        AllManager.Instance().StartCoroutine(StartSocketReading());
+        Thread readSocket = new Thread(SocketReadingThread);
+        readSocket.IsBackground = true;
+        readSocket.Start();
+        //AllManager.Instance().StartCoroutine(StartSocketReading());
 
-        //Thread bufferProcessing = new Thread(ProcessBufferThread);
-        //bufferProcessing.IsBackground = true;
-        //bufferProcessing.Start();
-        AllManager.Instance().StartCoroutine(ProcessBuffer());
+        Thread bufferProcessing = new Thread(ProcessBufferThread);
+        bufferProcessing.IsBackground = true;
+        bufferProcessing.Start();
+        //AllManager.Instance().StartCoroutine(ProcessBuffer());
 
         Thread ping = new Thread(PingThread);
         ping.IsBackground = true;
@@ -170,7 +170,7 @@ public class SocketCommunication
             EventHandler handler;
             if(Event.TryGetValue(_event.event_name, out handler))
             {
-                handler(response);
+                Dispatcher.EnqueueToMainThread(() => handler(response));
             }
         }
     }
@@ -302,14 +302,12 @@ public class SocketCommunication
     {
         while (true)
         {
-            if (Player_ID.SessionId != null && !PingData.pinged)
-            {
-                SendData<PingEvent> data = new SendData<PingEvent>(new PingEvent());
-                Send(JsonUtility.ToJson(data));
-                PingData.stopwatch.Restart();
-                PingData.pinged = true;
-            }
-            Thread.Sleep(100);
+            Thread.Sleep(1000);
+            if (PingData.pinged) return;
+            SendData<PingEvent> data = new SendData<PingEvent>(new PingEvent());
+            Send(JsonUtility.ToJson(data));
+            PingData.stopwatch.Restart();
+            PingData.pinged = true;
         }
     }
 
@@ -366,7 +364,7 @@ public class SocketCommunication
     private void HandlePing(string response)
     {
         PingData.sum += PingData.stopwatch.ElapsedMilliseconds;
-        PingData.pingCount += 2;
+        PingData.pingCount += 1;
         PingData.pinged = false;
     }
 
