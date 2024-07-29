@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class RenderManager
@@ -61,49 +62,49 @@ public class RenderManager
     {
         Renderer renderer = obj.GetComponent<Renderer>();
 
-        Material[] mats = renderer.materials;
+        Material[] mats = renderer.sharedMaterials;
 
-        foreach (Material mat in mats)
+        for (int i = 0; i < mats.Length; i++)
         {
-            mat.SetFloat("_Mode", 3);
-            mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-            mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-            mat.SetInt("_ZWrite", 0);
-            mat.DisableKeyword("_ALPHATEST_ON");
-            mat.EnableKeyword("_ALPHABLEND_ON");
-            mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-            mat.renderQueue = 3000;
+            string path = AssetDatabase.GetAssetPath(mats[i]);
+            string matFileName = System.IO.Path.GetFileNameWithoutExtension(path);
 
-            Color color = mat.GetColor("_Color");
-            color.a = 0.2f;
-            mat.SetColor("_Color", color);
+            string transparentMatFileName = matFileName.Insert(2, "T");
+            Material transparentMat = Resources.Load<Material>("Materials/" + transparentMatFileName);
 
-            mat.DisableKeyword("_EMISSION");
+            if (transparentMat == null)
+            {
+                continue;
+            }
+
+            mats[i] = transparentMat;
         }
+
+        renderer.sharedMaterials = mats;
     }
 
     public void SetOpaqueObj(GameObject obj)
     {
         Renderer renderer = obj.GetComponent<Renderer>();
 
-        Material[] mats = renderer.materials;
+        Material[] mats = renderer.sharedMaterials;
 
-        foreach (Material mat in mats)
+        for (int i = 0; i < mats.Length; i++)
         {
-            mat.SetFloat("_Mode", 0);
-            mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-            mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-            mat.SetInt("_ZWrite", 1);
-            mat.EnableKeyword("_ALPHATEST_ON");
-            mat.DisableKeyword("_ALPHABLEND_ON");
-            mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-            mat.renderQueue = 2000;
+            string path = AssetDatabase.GetAssetPath(mats[i]);
+            string matFileName = System.IO.Path.GetFileNameWithoutExtension(path);
 
-            Color color = mat.GetColor("_Color");
-            color.a = 1f;
-            mat.SetColor("_Color", color);
+            string opaqueMatFileName = matFileName.Remove(2, 1);
+            Material opaqueMat = Resources.Load<Material>("Materials/" + opaqueMatFileName);
 
-            mat.EnableKeyword("_EMISSION");
+            if (opaqueMat == null)
+            {
+                continue;
+            }
+
+            mats[i] = opaqueMat;
         }
+
+        renderer.sharedMaterials = mats;
     }
 }
