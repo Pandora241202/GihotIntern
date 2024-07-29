@@ -126,13 +126,15 @@ public class SocketCommunication
     //process buffer thread
     private void ProcessBufferThread()
     {
+        int i = 0;
         while (true)
         {
+            Debug.Log(i);
             if (buffer.Count < 4)
             {
                 continue;
             }
-
+            i++;
             //read first 4 bytes for data length
             int dataLength;
             lock (buffer)
