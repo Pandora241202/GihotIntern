@@ -11,6 +11,12 @@ public class UIUpGrade : MonoBehaviour
     public List<GameObject> lsLevelUpgrade = new List<GameObject>();
     [SerializeField] private Button btnClose;
 
+    public void ChangeCoin()
+    {
+        PermUpdateInfo info = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID].info;
+        txtCoin.text = info.coin.ToString();
+    }
+
     public void OnSetUp(Player player)
     {
         PermUpdateInfo info = player.info;

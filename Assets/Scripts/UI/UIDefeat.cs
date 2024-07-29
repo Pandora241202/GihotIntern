@@ -22,7 +22,9 @@ public class UIDefeat : MonoBehaviour
             ItemDefeat item = Instantiate(goItem, goMidBoard.transform);
             item.OnShowUp(AllManager._instance.playerManager.dictPlayers[arrScore.result[i].player_id].name,arrScore.result[i].enemy_kill);
             item.transform.SetParent(goMidBoard.transform);
+            if (arrScore.result[i].player_id == Player_ID.MyPlayerID) AllManager._instance.playerManager.dictPlayers[arrScore.result[i].player_id].info.coin += arrScore.result[i].enemy_kill;
         }
+        UIManager._instance.uiUpgrade.ChangeCoin();
     }
 
     public void OnNextButtonClicked()
