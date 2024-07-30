@@ -190,18 +190,19 @@ public class UIMainMenu : MonoBehaviour
     public void BackShowRoom(int index)
     {
         //btnOnline.gameObject.SetActive(true);
-        if (index == 1)
+        if (index == 0)
         {
             lsBtnForPlayer[0].SetActive(false);
             lsBtnForPlayer[1].SetActive(true);
-            HostChangeLobbyListName(AllManager._instance.playerManager.dictPlayers);
+            ChangeLobbyListName(AllManager._instance.playerManager.dictPlayers);
         }
         else
         {
             lsBtnForPlayer[0].SetActive(true);
             lsBtnForPlayer[1].SetActive(false);
             lsBtnReady[1].gameObject.SetActive(true);
-            ChangeLobbyListName(AllManager._instance.playerManager.dictPlayers);
+            HostChangeLobbyListName(AllManager._instance.playerManager.dictPlayers);
+            
         }
         lsGOPlayer[0].SetActive(false);
         lsGOPlayer[1].SetActive(true);
