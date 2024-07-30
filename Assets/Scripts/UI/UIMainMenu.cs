@@ -190,7 +190,7 @@ public class UIMainMenu : MonoBehaviour
     public void BackShowRoom(int index)
     {
         //btnOnline.gameObject.SetActive(true);
-        if (index == 0)
+        if (index == 1)
         {
             lsBtnForPlayer[0].SetActive(false);
             lsBtnForPlayer[1].SetActive(true);
