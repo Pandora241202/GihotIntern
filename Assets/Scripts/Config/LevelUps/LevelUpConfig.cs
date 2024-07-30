@@ -18,7 +18,6 @@ public class LevelUpConfig : ScriptableObject
         {{"Health", 0},{"Speed", 0},{"Damage", 0},{"CRIT", 0},{"Life Steal", 0}, {"Fire Rate", 0}, {"AOE Meteor", 0}, {"Time Warp", 0}};
     // public List<string> defaultOptions = new List<string> { "Health", "Speed", "Damage", "CRIT", "Life Steal","Fire Rate", "AOE Meteor" , "Time Warp", "Poison Aura"};
     public List<string> defaultOptions = new List<string> { "Health", "Speed", "Fire Rate"};
-    private bool isLoadedDict = false;
     public void OnSetUpLevelUpDict()
     {
         foreach (var choice in defaultOptions)
