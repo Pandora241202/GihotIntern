@@ -376,7 +376,7 @@ public class PlayerManager
     }
     public int exp = 0;
     public int level = Constants.PlayerBaseLevel;
-    public int expRequire = Constants.PlayerBaseExp ;
+    public int expRequire = Constants.PlayerBaseExp;
     public float expBoostTime = 0;
     public float expBoostAmount; // Since all player share a single EXP bar, we use the variable here instead of in each player's class
     public bool isLevelUp;
@@ -446,7 +446,7 @@ public class PlayerManager
         if (exp >= expRequire)
         {
             isLevelUp = true;
-            expRequire = Constants.PlayerBaseExp + (level - 1) * (int)(Constants.ExpIncrement * (1+ 0.5 * (GetNumberOfPlayer() -1))) +(int)( Constants.ScalingMultiplierExp * (1+ 0.5 * (GetNumberOfPlayer() -1))) * (level - 1) * (level - 1);
+            expRequire = Constants.PlayerBaseExp + (level - 1) * (int)(Constants.ExpIncrement * (1 + 0.5 * (GetNumberOfPlayer() - 1))) + (int)( Constants.ScalingMultiplierExp * (1 + 0.5 * (GetNumberOfPlayer() - 1))) * (level - 1) * (level - 1);
             level++;
             UIManager._instance.uiGameplay.LevelUpdateSlider(expRequire);
             exp = 0;
