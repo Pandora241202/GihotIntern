@@ -95,9 +95,10 @@ public class LevelUpConfig : ScriptableObject
             case "AOE Meteor":
                 Debug.Log("AOE Meteor Strike called");
                 levelUpDict[buff]++;
-                player.aoeMeteorObj = GameObject.Instantiate(aoeMeteorEffect, player.playerTrans.position, Quaternion.identity);
-                player.aoeMeteorObj.GetComponent<ParticleSystem>().Pause();
-                AllManager.Instance().effectManager.AddEffect(player.aoeMeteorObj);
+                GameObject aoeMeteorObj = GameObject.Instantiate(aoeMeteorEffect, player.playerTrans.position, Quaternion.identity);
+                aoeMeteorObj.GetComponent<ParticleSystem>().Pause();
+                player.aoeMeteorObjList.Add(aoeMeteorObj);
+                AllManager.Instance().effectManager.AddEffect(aoeMeteorObj);
                 break;
 
             case "SkillCD":

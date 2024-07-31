@@ -16,7 +16,7 @@ public class Player
     public float lifeSteal;
     public int dmgRecieved = 0;
     public int hpGain = 0;
-    public GameObject aoeMeteorObj;
+    public List<GameObject> aoeMeteorObjList = new List<GameObject>();
 
     // Player stat 
     private float health;
@@ -56,7 +56,6 @@ public class Player
         activePowerUps = new Dictionary<AllDropItemConfig.PowerUpsType, float>();
         gunConfig = AllManager.Instance().gunConfig;
         this.info = info;
-        this.aoeMeteorObj = null;
     }
     public float GetSpeedBoost()
     {
@@ -341,6 +340,28 @@ public class Player
 
         frame++;
     }
+
+    public void StrikeAoeMeteor()
+    {
+        for (int i = 0; i < aoeMeteorObjList.Count; i++)
+        {
+            ParticleSystem ps = aoeMeteorObjList[i].GetComponent<ParticleSystem>();
+            if (ps)
+            {
+                if (ps.time >= 1 && ps.time <= 1.5)
+                {
+                    AllManager.Instance().levelUpConfig.AOEMeteorStrikeLevelUp(aoeMeteorObjList[i].transform.position, 25);
+                }
+
+                if (ps.isStopped)
+                {
+                    AllManager.Instance().effectManager.RemoveEffectById(aoeMeteorObjList[i].GetInstanceID());
+                    GameObject.Destroy(aoeMeteorObjList[i]);
+                    aoeMeteorObjList.RemoveAt(i);
+                }
+            }
+        }
+    }
 }
 
 public class PlayerManager
@@ -377,24 +398,7 @@ public class PlayerManager
 
         foreach (Player player in dictPlayers.Values) 
         {
-            if (player.aoeMeteorObj != null)
-            {
-                ParticleSystem ps = player.aoeMeteorObj.GetComponent<ParticleSystem>();
-                if (ps)
-                {
-                    if (ps.time >= 1 && ps.time <= 1.5)
-                    {
-                        levelUpConfig.AOEMeteorStrikeLevelUp(player.aoeMeteorObj.transform.position, 25);
-                    }
-
-                    if (ps.isStopped)
-                    {
-                        AllManager.Instance().effectManager.RemoveEffectById(player.aoeMeteorObj.GetInstanceID());
-                        GameObject.Destroy(player.aoeMeteorObj);
-                        player.aoeMeteorObj = null;
-                    }
-                }
-            }
+            player.StrikeAoeMeteor();
         }
     }
 

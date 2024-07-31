@@ -30,4 +30,4 @@ MonoBehaviour:
     dropChance: 0
   - powerUpType: 5
     dropChance: 0.03
-  explosion: {fileID: 1535640691960112, guid: b345030ffc29a664cad1d2a6e384a252, type: 3}
+  explosion: {fileID: 384772117876879774, guid: 2c5b4b2be01f1844b94e504273a44ac0, type: 3}
