@@ -1,7 +1,6 @@
 ﻿using Cinemachine;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 
 public class Player
@@ -17,16 +16,14 @@ public class Player
     public float lifeSteal;
     public int dmgRecieved = 0;
     public int hpGain = 0;
+    public List<GameObject> aoeMeteorObjList = new List<GameObject>();
 
     // Player stat 
     private float health;
     private float dmgBoostAmount;
     private float speedBoostAmount;
     private float speedBoostByLevelUp;
-    //Perm Update
 
-    //public List<int> lsPermUpgrade = new List<int>() { 0, 2, 3, 4, 5,1 };
-    
     // Player state
     private Dictionary<AllDropItemConfig.PowerUpsType, float> activePowerUps;
     private GameObject curCreepTarget = null;
@@ -343,6 +340,28 @@ public class Player
 
         frame++;
     }
+
+    public void StrikeAoeMeteor()
+    {
+        for (int i = 0; i < aoeMeteorObjList.Count; i++)
+        {
+            ParticleSystem ps = aoeMeteorObjList[i].GetComponent<ParticleSystem>();
+            if (ps)
+            {
+                if (ps.time >= 1 && ps.time <= 1.5)
+                {
+                    AllManager.Instance().levelUpConfig.AOEMeteorStrikeLevelUp(aoeMeteorObjList[i].transform.position, 25);
+                }
+
+                if (ps.isStopped)
+                {
+                    AllManager.Instance().effectManager.RemoveEffectById(aoeMeteorObjList[i].GetInstanceID());
+                    GameObject.Destroy(aoeMeteorObjList[i]);
+                    aoeMeteorObjList.RemoveAt(i);
+                }
+            }
+        }
+    }
 }
 
 public class PlayerManager
@@ -376,6 +395,11 @@ public class PlayerManager
                 }
             }
         // }
+
+        foreach (Player player in dictPlayers.Values) 
+        {
+            player.StrikeAoeMeteor();
+        }
     }
 
     public void MyFixedUpdate()
