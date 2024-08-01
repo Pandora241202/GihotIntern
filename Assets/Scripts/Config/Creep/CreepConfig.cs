@@ -51,8 +51,6 @@ public class CreepConfig : ScriptableObject
         }
 
         creep.creepTrans.Translate((creep.creepTrans.forward + normal).normalized * creep.speed * Time.deltaTime, Space.World);
-
-        //creepTransform.Translate(creepTransform.forward * creep.speed * Time.deltaTime, Space.World);
     }
 
     public virtual void Attack(Creep creep) { }
