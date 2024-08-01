@@ -11,7 +11,7 @@ public class PlayerConfig : ScriptableObject
 
     [SerializeField] float baseSpeed;
 
-    [SerializeField] GameObject levelUpEffect;
+    [SerializeField] GameObject levelUpEffect;  
 
     [SerializeField] LayerMask creepLayerMask;
 

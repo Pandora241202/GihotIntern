@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,13 +10,13 @@ public class LevelUpConfig : ScriptableObject
     public float critRateIncrements;
     public float critDamageIncrements;
     public float warpAmount;
+    public GameObject aoeMeteorEffect;
     public List<string> finalOptions = new List<string>();
 
     public Dictionary<string,int> levelUpDict = new Dictionary<string,int>()
         {{"Health", 0},{"Speed", 0},{"Damage", 0},{"CRIT", 0},{"Life Steal", 0}, {"Fire Rate", 0}, {"AOE Meteor", 0}, {"Time Warp", 0}};
     // public List<string> defaultOptions = new List<string> { "Health", "Speed", "Damage", "CRIT", "Life Steal","Fire Rate", "AOE Meteor" , "Time Warp", "Poison Aura"};
     public List<string> defaultOptions = new List<string> { "Health", "Speed", "Fire Rate"};
-    private bool isLoadedDict = false;
     public void OnSetUpLevelUpDict()
     {
         foreach (var choice in defaultOptions)
@@ -97,8 +95,10 @@ public class LevelUpConfig : ScriptableObject
             case "AOE Meteor":
                 Debug.Log("AOE Meteor Strike called");
                 levelUpDict[buff]++;
-                var meteorDamage = levelUpDict[buff] * 25;
-                AOEMeteorStrikeLevelUp(meteorDamage, 15);
+                GameObject aoeMeteorObj = GameObject.Instantiate(aoeMeteorEffect, player.playerTrans.position, Quaternion.identity);
+                aoeMeteorObj.GetComponent<ParticleSystem>().Pause();
+                player.aoeMeteorObjList.Add(aoeMeteorObj);
+                AllManager.Instance().effectManager.AddEffect(aoeMeteorObj);
                 break;
 
             case "SkillCD":
@@ -154,14 +154,13 @@ public class LevelUpConfig : ScriptableObject
     }
 
     // AOEMeteorStrikeLevelUp: deal one instance of damage to every creep inside player's radius.
-    public virtual void AOEMeteorStrikeLevelUp(float damage = 0, float radius = 0)
+    public virtual void AOEMeteorStrikeLevelUp(Vector3 center, float radius = 0)
     {
+        int damage = levelUpDict["AOE Meteor"] * 90;
         Dictionary<int, Creep> activeCreeps = AllManager.Instance().creepManager.GetCreepActiveDict();
-        var player = AllManager.Instance().playerManager.dictPlayers[Player_ID.MyPlayerID];
-        var playerPosition = player.playerTrans;
         foreach (var creep in activeCreeps)
         {
-            var distance = Vector3.Distance(playerPosition.position, creep.Value.creepTrans.position);
+            var distance = Vector3.Distance(center, creep.Value.creepTrans.position);
             if (distance <= radius)
             {
                 creep.Value.ProcessDmg(damage, Player_ID.MyPlayerID);

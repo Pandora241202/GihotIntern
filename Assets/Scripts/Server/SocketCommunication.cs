@@ -10,10 +10,11 @@ using System.Linq;
 
 public class PingData
 {
-    public static System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
-    public static long sum = 0;
+    public static int sum = 0;
     public static int pingCount = 1;
     public static bool pinged = false;
+    public static long frameSend = 0;
+    public static long frame = 0;
 }
 
 public class SocketCommunication
@@ -25,7 +26,7 @@ public class SocketCommunication
         return instance;
     }
     Socket socket;
-        public string address = "192.168.6.165";
+    public string address = "192.168.6.20";
     //private string address = "127.0.0.1";
     private int port = 9999;
     private static List<byte> buffer = new List<byte>();
@@ -71,13 +72,13 @@ public class SocketCommunication
 
         //Thread bufferProcessing = new Thread(ProcessBufferThread);
         //bufferProcessing.IsBackground = true;
-        //bufferProcessing.Start();
+       // bufferProcessing.Start();
         AllManager.Instance().StartCoroutine(ProcessBuffer());
 
-        Thread ping = new Thread(PingThread);
-        ping.IsBackground = true;
-        ping.Start();
-        //AllManager.Instance().StartCoroutine(Ping());
+        //Thread ping = new Thread(PingThread);
+        //ping.IsBackground = true;
+        //ping.Start();
+        AllManager.Instance().StartCoroutine(Ping());
     }
     private IEnumerator StartSocketReading()
     {
@@ -104,76 +105,6 @@ public class SocketCommunication
         }
     }
 
-    //socket read thread
-    private async void SocketReadingThread()
-    {
-        while (true)
-        {
-            if (socket.Available == 0)
-            {
-                continue;
-            }
-            byte[] buf = new byte[socket.Available];
-            await socket.ReceiveAsync(buf, SocketFlags.None);
-            lock (buffer)
-            {
-                buffer.AddRange(buf);
-                //Debug.Log("buffer after read socket: " + buffer.Count + "/buf len: " + buf.Length);
-            }
-        }
-    }
-
-    //process buffer thread
-    private void ProcessBufferThread()
-    {
-        while (true)
-        {
-            if (buffer.Count < 4)
-            {
-                continue;
-            }
-
-            //read first 4 bytes for data length
-            int dataLength;
-            lock (buffer)
-            {
-                byte[] lengthField = buffer.Take(4).ToArray();
-                dataLength = BitConverter.ToInt32(lengthField, 0);
-            }
-
-            while (buffer.Count < dataLength + 5)
-            {
-                continue;
-            }
-    
-;           //data
-            string response;
-            byte sum;
-            byte[] dataField;
-            lock (buffer)
-            {
-                dataField = buffer.Skip(4).Take(dataLength).ToArray();
-                response = Encoding.UTF8.GetString(dataField);
-                sum = buffer[dataLength + 4];
-                //Debug.Log(response + "/data len: " + dataLength + "/buffer len: " + buffer.Count);
-                buffer.RemoveRange(0, 4 + dataLength + 1);
-                //Debug.Log("buffer after remove: "+buffer.Count);
-            }
-           
-
-            if (!CheckSum(dataField, sum))
-            {
-                continue;
-            }
-            
-            EventName _event = JsonUtility.FromJson<EventName>(response);
-            EventHandler handler;
-            if(Event.TryGetValue(_event.event_name, out handler))
-            {
-                handler(response);
-            }
-        }
-    }
 
     private IEnumerator ProcessBuffer()
     {
@@ -219,6 +150,7 @@ public class SocketCommunication
             }
 
             if (buffer.Count > 4) continue;
+            PingData.frame++;
             yield return null;
         }
     }
@@ -291,27 +223,13 @@ public class SocketCommunication
             {
                 SendData<PingEvent> data = new SendData<PingEvent>(new PingEvent());
                 Send(JsonUtility.ToJson(data));
-                PingData.stopwatch.Restart();
                 PingData.pinged  = true;
+                PingData.frameSend = PingData.frame;
             }
             yield return new WaitForSeconds(1);
         }
     }
 
-    private void PingThread()
-    {
-        while (true)
-        {
-            if (Player_ID.SessionId != null && !PingData.pinged)
-            {
-                SendData<PingEvent> data = new SendData<PingEvent>(new PingEvent());
-                Send(JsonUtility.ToJson(data));
-                PingData.stopwatch.Restart();
-                PingData.pinged = true;
-            }
-            Thread.Sleep(100);
-        }
-    }
 
     private void HandleSessionId(string response)
     {
@@ -338,9 +256,13 @@ public class SocketCommunication
     {
         SimplePlayerInfo playerInfo = JsonUtility.FromJson<SimplePlayerInfo>(response);
         AllManager.Instance().playerManager.AddPlayer(playerInfo.player_name, playerInfo.player_id, playerInfo.gun_id, AllManager.Instance().playerConfig);
-        UIManager._instance.uiMainMenu.HostChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
+        if (AllManager.Instance().isHost)
+        {
+            UIManager._instance.uiMainMenu.HostChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
+        }
+        else UIManager._instance.uiMainMenu.ChangeLobbyListName(AllManager.Instance().playerManager.dictPlayers);
+        
     }
-
     private void HandleJoin(string response)
     {
         SimplePlayerInfoList playerIn4List = JsonUtility.FromJson<SimplePlayerInfoList>(response);
@@ -354,8 +276,8 @@ public class SocketCommunication
 
     private void HandlePing(string response)
     {
-        PingData.sum += PingData.stopwatch.ElapsedMilliseconds;
-        PingData.pingCount += 2;
+        PingData.sum += (int)((PingData.frame - PingData.frameSend) * Time.deltaTime * 1000);
+        PingData.pingCount += 1;
         PingData.pinged = false;
     }
 

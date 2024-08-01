@@ -15,6 +15,7 @@ MonoBehaviour:
   critRateIncrements: 0.02
   critDamageIncrements: 0.04
   warpAmount: 0
+  aoeMeteorEffect: {fileID: 8378648546881499446, guid: e51e64f18a969874981f0f60ef68a29d, type: 3}
   finalOptions:
   - 
   - 

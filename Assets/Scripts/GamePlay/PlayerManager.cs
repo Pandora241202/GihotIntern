@@ -1,7 +1,6 @@
 ﻿using Cinemachine;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 
 public class Player
@@ -17,15 +16,14 @@ public class Player
     public float lifeSteal;
     public int dmgRecieved = 0;
     public int hpGain = 0;
-
+    public List<GameObject> aoeMeteorObjList = new List<GameObject>();
+    private Transform shootPoint;
     // Player stat 
     private float health;
     private float dmgBoostAmount;
     private float speedBoostAmount;
     private float speedBoostByLevelUp;
-    //Perm Update
-    //public List<int> lsPermUpgrade = new List<int>() { 0, 2, 3, 4, 5,1 };
-    
+
     // Player state
     private Dictionary<AllDropItemConfig.PowerUpsType, float> activePowerUps;
     private GameObject curCreepTarget = null;
@@ -248,8 +246,9 @@ public class Player
         float Firerate = gunType.Firerate + AllManager.Instance().levelUpConfig.getLevelUpFireRate();
         if (Time.time >= lastFireTime + 1f / Firerate)
         {
+          
             UIManager._instance.MyPlaySfx(gunId + 1 , 0.5f, 0.15f); //Note: gunId - 1 is VERY temporarily since all audio is in a list in UIManager
-            gunType.bulletConfig.Fire(gunTransform.position, curCreepTarget.transform.position, playerDmg, "PlayerBullet", playerId: id);
+            gunType.bulletConfig.Fire(shootPoint.position, curCreepTarget.transform.position, playerDmg, "PlayerBullet", playerId: id);
             lastFireTime = Time.time;
         }
         
@@ -267,6 +266,7 @@ public class Player
     {
         GunType gunType = gunConfig.lsGunType[gunId];
         GameObject gun = GameObject.Instantiate(gunType.gunPrefab, playerTrans.position, Quaternion.identity);
+        shootPoint = gun.transform.Find("ShootPoint");
         gun.transform.SetParent(playerTrans.Find("Gun"));
     }
 
@@ -342,6 +342,28 @@ public class Player
 
         frame++;
     }
+
+    public void StrikeAoeMeteor()
+    {
+        for (int i = 0; i < aoeMeteorObjList.Count; i++)
+        {
+            ParticleSystem ps = aoeMeteorObjList[i].GetComponent<ParticleSystem>();
+            if (ps)
+            {
+                if (ps.time >= 1 && ps.time <= 1.5)
+                {
+                    AllManager.Instance().levelUpConfig.AOEMeteorStrikeLevelUp(aoeMeteorObjList[i].transform.position, 25);
+                }
+
+                if (ps.isStopped)
+                {
+                    AllManager.Instance().effectManager.RemoveEffectById(aoeMeteorObjList[i].GetInstanceID());
+                    GameObject.Destroy(aoeMeteorObjList[i]);
+                    aoeMeteorObjList.RemoveAt(i);
+                }
+            }
+        }
+    }
 }
 
 public class PlayerManager
@@ -375,6 +397,11 @@ public class PlayerManager
                 }
             }
         // }
+
+        foreach (Player player in dictPlayers.Values) 
+        {
+            player.StrikeAoeMeteor();
+        }
     }
 
     public void MyFixedUpdate()
@@ -408,6 +435,11 @@ public class PlayerManager
 
     public void LateUpdate(){}
     
+    public int GetNumberOfPlayer()
+    {
+        return dictPlayers.Count;
+    }
+
     public void ProcessExpGain(int expGain)
     {
         expGain = (int)(expGain * (1 + expBoostAmount));
@@ -416,7 +448,7 @@ public class PlayerManager
         if (exp >= expRequire)
         {
             isLevelUp = true;
-            expRequire = Constants.PlayerBaseExp + (level - 1) * Constants.ExpIncrement + Constants.ScalingMultiplierExp * (level - 1) * (level - 1);
+            expRequire = Constants.PlayerBaseExp + (level - 1) * (int)(Constants.ExpIncrement * (1 + 0.5 * (GetNumberOfPlayer() - 1))) + (int)( Constants.ScalingMultiplierExp * (1 + 0.5 * (GetNumberOfPlayer() - 1))) * (level - 1) * (level - 1);
             level++;
             UIManager._instance.uiGameplay.LevelUpdateSlider(expRequire);
             exp = 0;
@@ -432,9 +464,7 @@ public class PlayerManager
                 Player player = pair.Value;
                 if(player.id == Player_ID.MyPlayerID) player.ChangeHealth(GetMaxHealthFromLevel());
                 player.levelUpEffect = GameObject.Instantiate(player.config.LevelUpEffect, player.playerTrans.position, Quaternion.identity);
-               
                 //Debug.Log("final options real: " + string.Join(", ", levelUpConfig.finalOptions.ToArray()));
-               
             }
         }
     }

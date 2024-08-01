@@ -2501,6 +2501,7 @@ GameObject:
   - component: {fileID: 1170851539}
   - component: {fileID: 1170851543}
   - component: {fileID: 5888400484667401862}
+  - component: {fileID: 5888400484667401864}
   - component: {fileID: 5888400484667401863}
   m_Layer: 5
   m_Name: UIManager
@@ -3638,7 +3639,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 4.710022, y: -9.159973}
+  m_AnchoredPosition: {x: 4.709961, y: -9.159912}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1621389466
@@ -5602,6 +5603,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIMain
       objectReference: {fileID: 0}
+    - target: {fileID: 1359267924718437830, guid: 24ef6289b78b150429cf4c54e69fd3c0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1359267924718437849, guid: 24ef6289b78b150429cf4c54e69fd3c0, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6496,6 +6501,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &5888400484667401864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1170851538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef8526dddb722d145989c38852a6b001, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7655869532498624332
 PrefabInstance:
   m_ObjectHideFlags: 0

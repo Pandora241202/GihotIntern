@@ -28,7 +28,7 @@ public class Creep5Config : MoveTowardPlayerCreepConfig
 
             if (ps != null)
             {
-                if (ps.time >= 0.8 && ps.time <= 1)
+                if (ps.time >= 1 && ps.time <= 1.5)
                 {
                     Dictionary<string, Player> dictPlayers = AllManager.Instance().playerManager.dictPlayers;
 

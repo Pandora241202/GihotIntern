@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ShotgunBullet
   m_EditorClassIdentifier: 
   bulletName: ShotgunBullet
-  speed: 8
+  speed: 20
   bulletTimeToLive: 2
   bulletBaseCR: 0.6
   bulletBaseCD: 1.2
