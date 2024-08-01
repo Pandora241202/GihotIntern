@@ -45,6 +45,7 @@ public class ChainEventConfig : GameEventConfig
         {
             Destroy(pair.Value.gameObject);
         }
+        AllManager._instance.playerManager.ProcessExpGain(AllManager._instance.playerManager.expRequire);
         gameEvent.connectLineTransDict.Clear();
     }
 

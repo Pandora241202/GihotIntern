@@ -17,7 +17,7 @@ public class Player
     public int dmgRecieved = 0;
     public int hpGain = 0;
     public List<GameObject> aoeMeteorObjList = new List<GameObject>();
-
+    private Transform shootPoint;
     // Player stat 
     private float health;
     private float dmgBoostAmount;
@@ -246,8 +246,9 @@ public class Player
         float Firerate = gunType.Firerate + AllManager.Instance().levelUpConfig.getLevelUpFireRate();
         if (Time.time >= lastFireTime + 1f / Firerate)
         {
+          
             UIManager._instance.MyPlaySfx(gunId + 1 , 0.5f, 0.15f); //Note: gunId - 1 is VERY temporarily since all audio is in a list in UIManager
-            gunType.bulletConfig.Fire(gunTransform.position, curCreepTarget.transform.position, playerDmg, "PlayerBullet", playerId: id);
+            gunType.bulletConfig.Fire(shootPoint.position, curCreepTarget.transform.position, playerDmg, "PlayerBullet", playerId: id);
             lastFireTime = Time.time;
         }
         
@@ -265,6 +266,7 @@ public class Player
     {
         GunType gunType = gunConfig.lsGunType[gunId];
         GameObject gun = GameObject.Instantiate(gunType.gunPrefab, playerTrans.position, Quaternion.identity);
+        shootPoint = gun.transform.Find("ShootPoint");
         gun.transform.SetParent(playerTrans.Find("Gun"));
     }
 
