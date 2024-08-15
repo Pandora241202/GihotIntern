@@ -25,7 +25,9 @@ public class SocketCommunication
         return instance;
     }
     Socket socket;
-    public string address = "192.168.6.180";
+
+    public string address = "192.168.1.226";
+
     //private string address = "127.0.0.1";
     private int port = 9999;
     private static List<byte> buffer = new List<byte>();
@@ -64,20 +66,20 @@ public class SocketCommunication
         socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
         await socket.ConnectAsync(address, port);
 
-        //Thread readSocket = new Thread(SocketReadingThread);
-        //readSocket.IsBackground = true;
-        //readSocket.Start();
-        AllManager.Instance().StartCoroutine(StartSocketReading());
+        Thread readSocket = new Thread(SocketReadingThread);
+        readSocket.IsBackground = true;
+        readSocket.Start();
+        //AllManager.Instance().StartCoroutine(StartSocketReading());
 
         Thread bufferProcessing = new Thread(ProcessBufferThread);
         bufferProcessing.IsBackground = true;
         bufferProcessing.Start();
         //AllManager.Instance().StartCoroutine(ProcessBuffer());
 
-        //Thread ping = new Thread(PingThread);
-        //ping.IsBackground = true;
-        //ping.Start();
-        AllManager.Instance().StartCoroutine(Ping());
+        Thread ping = new Thread(PingThread);
+        ping.IsBackground = true;
+        ping.Start();
+        //AllManager.Instance().StartCoroutine(Ping());
     }
     private IEnumerator StartSocketReading()
     {
@@ -111,6 +113,7 @@ public class SocketCommunication
         {
             if (socket.Available == 0)
             {
+                Thread.Sleep(25);
                 continue;
             }
             byte[] buf = new byte[socket.Available];
@@ -126,15 +129,14 @@ public class SocketCommunication
     //process buffer thread
     private void ProcessBufferThread()
     {
-        int i = 0;
         while (true)
         {
-            Debug.Log(i);
             if (buffer.Count < 4)
             {
+                Thread.Sleep(25);
                 continue;
             }
-            i++;
+         
             //read first 4 bytes for data length
             int dataLength;
             lock (buffer)
@@ -145,6 +147,7 @@ public class SocketCommunication
 
             while (buffer.Count < dataLength + 5)
             {
+                Thread.Sleep(25);
                 continue;
             }
     
@@ -174,6 +177,7 @@ public class SocketCommunication
             {
                 Dispatcher.EnqueueToMainThread(() => handler(response));
             }
+           // Thread.Sleep(1);
         }
     }
 
@@ -302,14 +306,15 @@ public class SocketCommunication
 
     private void PingThread()
     {
+        Thread.Sleep(1000);
         while (true)
         {
-            Thread.Sleep(1000);
-            if (PingData.pinged) return;
+            if (PingData.pinged) continue;
             SendData<PingEvent> data = new SendData<PingEvent>(new PingEvent());
             Send(JsonUtility.ToJson(data));
             PingData.stopwatch.Restart();
             PingData.pinged = true;
+            Thread.Sleep(100);
         }
     }
 
